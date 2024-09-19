@@ -1,0 +1,20 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class YBotAnimController : MonoBehaviour
+{
+
+    public Animator Animator;
+
+    void Start()
+    {
+        Animator = GetComponent<Animator>();    
+    }
+
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Space)) Animator.SetBool("IsRunning", true);
+        else Animator.SetBool("IsRunning", false);
+    }
+}
