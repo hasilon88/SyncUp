@@ -30,6 +30,7 @@ public class ColorSync : MonoBehaviour
 
     //Adaptive interpolation helps with low volume (frequencies from 0 - 0.2, which would only be 0 to 20%)
     //Adaptive interporlation is bad when switching music in real time or not gradually lowering volume
+    //this issue can be "fixed" by lowering [LastSamplesBuffer] 
     private Color GetAdaptivePercentageBasedSampleColor(float currentMaxFrequency, float averageMaxFrequency, float averageFrequency, params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.yellow, Color.red };
