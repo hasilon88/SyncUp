@@ -6,8 +6,13 @@ public class ColorSync : MonoBehaviour
 {
 
     public AudioManager AudioManager;
+    //Tempo will set the rithm by allowing color change on GameObject only n number frames
+    //a higher tempo means that the last color might stay for a longer period of time (depends on the music)
+    [Range(1, 32)]
     public byte Tempo = 4;
     public Color CurrentColor;
+    //The spectrum of colors (ideally, there should at least be 8 colors in the array) that we can set in the unity editor
+    [SerializeField]
     public Color[] ColorsRange;
 
     private Dictionary<float, Color> GetColorPercentageDictionary(Color[] colors)
@@ -24,7 +29,8 @@ public class ColorSync : MonoBehaviour
     }
 
     //Adaptive interpolation helps with low volume (frequencies from 0 - 0.2, which would only be 0 to 20%)
-    public Color GetAdaptivePercentageBasedSampleColor(float currentMaxFrequency, float averageMaxFrequency, float averageFrequency, params Color[] colors)
+    //Adaptive interporlation is bad when switching music in real time or not gradually lowering volume
+    private Color GetAdaptivePercentageBasedSampleColor(float currentMaxFrequency, float averageMaxFrequency, float averageFrequency, params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.yellow, Color.red };
         //getting percentage representation of current frequency to averageMaxFrequency
@@ -45,7 +51,8 @@ public class ColorSync : MonoBehaviour
     }
 
     //NOT ADAPTIVE (will need a higher [CurrentMaxFrequencyMultiplier] to be able to return colors from 0 to 100%)
-    public Color GetPercentageBasedSampleColor(float currentMaxFrequency, params Color[] colors)
+    //has not been tested yet
+    private Color GetPercentageBasedSampleColor(float currentMaxFrequency, params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.yellow, Color.red };
         float currentMaxFrequencyPercentage = currentMaxFrequency * 100;
