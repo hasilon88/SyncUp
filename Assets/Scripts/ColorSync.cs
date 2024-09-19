@@ -9,11 +9,6 @@ public class ColorSync : MonoBehaviour
     public byte Tempo = 4;
     public Color CurrentColor;
     public Color[] ColorsRange;
-    
-    void Start()
-    {
-        
-    }
 
     private Dictionary<float, Color> GetColorPercentageDictionary(Color[] colors)
     {
@@ -28,7 +23,7 @@ public class ColorSync : MonoBehaviour
         return colorsPercentages;
     }
 
-    public Color GetSampleColor(float currentMaxFrequency, float averageMaxFrequency, float averageFrequency, params Color[] colors)
+    public Color GetAdaptivePercentageBasedSampleColor(float currentMaxFrequency, float averageMaxFrequency, float averageFrequency, params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.yellow, Color.red };
         //getting percentage representation of current frequency to averageMaxFrequency
@@ -48,6 +43,22 @@ public class ColorSync : MonoBehaviour
         return AdjustSampleColorToDifference(nColor, tempDiff);
     }
 
+    public Color GetPercentageBasedSampleColor(float currentMaxFrequency, params Color[] colors)
+    {
+        if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.yellow, Color.red };
+        float currentMaxFrequencyPercentage = currentMaxFrequency * 100;
+        Dictionary<float, Color> colorsPercentages = GetColorPercentageDictionary(colors);
+        Color nColor = colorsPercentages.First().Value;
+        float tempDiff = currentMaxFrequencyPercentage - colorsPercentages.First().Key;
+        foreach (KeyValuePair<float, Color> value in colorsPercentages)
+            if (((currentMaxFrequencyPercentage - value.Key) < tempDiff) && (currentMaxFrequencyPercentage - value.Key > 0))
+            {
+                tempDiff = value.Key;
+                nColor = value.Value;
+            }
+        return AdjustSampleColorToDifference(nColor, tempDiff);
+    }
+
     private Color AdjustSampleColorToDifference(Color color, float diff)
     {
         diff = diff/100f;
@@ -57,18 +68,13 @@ public class ColorSync : MonoBehaviour
         return color;
     }
 
-    public Color GetSimpleSampleColor(float currentMaxFrequency)
-    {
-        return new Color(0.4f - currentMaxFrequency, 0.5f - currentMaxFrequency, 0.30f - currentMaxFrequency, 1);
-    }
-
-    
     void Update()
     {
-        this.CurrentColor = this.GetSampleColor(
-                    this.AudioManager.CurrentMaxFrequency,
-                    this.AudioManager.AverageMaxSampleFrequency,
-                    this.AudioManager.AverageSampleFrequency,
-                    this.ColorsRange);
+        this.CurrentColor =
+            this.GetAdaptivePercentageBasedSampleColor(
+                        this.AudioManager.CurrentMaxFrequency,
+                        this.AudioManager.AverageMaxSampleFrequency,
+                        this.AudioManager.AverageSampleFrequency,
+                        this.ColorsRange);
     }
 }

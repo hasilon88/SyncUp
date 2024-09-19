@@ -7,9 +7,10 @@ using System.Linq;
 public class AudioManager : MonoBehaviour
 {
 
+    //Wrapper for the Windows audio session API (CSCore) 
     private WasapiLoopbackCapture loopBack = new WasapiLoopbackCapture();
 
-    //array of avaible devices
+    //array of avaible audio devices
     private MMDeviceCollection devices;
 
     //the array containing the data fetched by CSCore (implementation of Windows audio session API)
@@ -32,8 +33,12 @@ public class AudioManager : MonoBehaviour
     //the current most hearable sample 
     public float CurrentMaxFrequency = 0;
 
+    //To Compensate for low volume
+    public float CurrentMaxFrequencyMultiplier = 1;
+
     //the index in the list of currently active audio devices
-    public byte AudioEndPoint = 0;
+    //Should be second element of the array(1) by default?
+    public byte AudioEndPoint = 1;
 
     public DataFlow DataFlow = DataFlow.All;
 
@@ -44,7 +49,6 @@ public class AudioManager : MonoBehaviour
         this.devices = MMDeviceEnumerator.EnumerateDevices(this.DataFlow, this.DeviceState);
         this.loopBack.Device = this.devices[this.AudioEndPoint];
         this.lastSamples = new float[this.LastSamplesBuffer];
-        //this.ListDevices();
         this.InitializeLoopback();
     }
 
@@ -57,16 +61,16 @@ public class AudioManager : MonoBehaviour
             //BlockCopy takes blocks of bytes (4 bytes for floats) in the byte data array
             //returned by [_event.Data], assembles them in binary and converts the results into floats
             //by diving it by Int32.Max() -> 2 147 483 647
-            Buffer.BlockCopy(_event.Data, 0, audioBuffer, 0, _event.Data.Length);
-            //Getting the most hearable sample in the float[]
-            this.CurrentMaxFrequency = audioBuffer.Max();
+            Buffer.BlockCopy(_event.Data, 0, this.audioBuffer, 0, _event.Data.Length);
+            //Getting the loudest sample in the float[]
+            this.CurrentMaxFrequency = this.audioBuffer.Max() * this.CurrentMaxFrequencyMultiplier;
         }; 
         loopBack.Start();
     }
 
     private float[] Displace(float[] initialArray, float nSample)
     {
-        //Is Size of initial array in order to be able add the new sample
+        //Is Size of initial array in order to be able add the new sample at the end
         float[] temp = new float[initialArray.Length];
         for (int elem = 0; elem < initialArray.Length - 1; elem++)
             temp[elem] = initialArray[elem + 1];    
@@ -76,12 +80,11 @@ public class AudioManager : MonoBehaviour
 
     private void AddLastSample()
     {
-        if (this.lastSamplesIndex < this.lastSamples.Length)
-            this.lastSamples[this.lastSamplesIndex++] = this.CurrentMaxFrequency;
+        if (this.lastSamplesIndex < this.lastSamples.Length) this.lastSamples[this.lastSamplesIndex++] = this.CurrentMaxFrequency;
         else this.lastSamples = this.Displace(this.lastSamples, this.CurrentMaxFrequency);
     }
 
-    public void ListDevices()
+    public void ListDevicesDebug()
     {
         foreach (MMDevice device in devices) Debug.Log(device);
     }
