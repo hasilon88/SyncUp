@@ -23,6 +23,7 @@ public class ColorSync : MonoBehaviour
         return colorsPercentages;
     }
 
+    //Adaptive interpolation helps with low volume (frequencies from 0 - 0.2, which would only be 0 to 20%)
     public Color GetAdaptivePercentageBasedSampleColor(float currentMaxFrequency, float averageMaxFrequency, float averageFrequency, params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.yellow, Color.red };
@@ -43,6 +44,7 @@ public class ColorSync : MonoBehaviour
         return AdjustSampleColorToDifference(nColor, tempDiff);
     }
 
+    //NOT ADAPTIVE (will need a higher [CurrentMaxFrequencyMultiplier] to be able to return colors from 0 to 100%)
     public Color GetPercentageBasedSampleColor(float currentMaxFrequency, params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.yellow, Color.red };
