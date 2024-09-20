@@ -9,9 +9,13 @@ public class ColorSync : MonoBehaviour
     public Color CurrentColor;
     public Color[] ColorsRange;
 
+    private void Start()
+    {
+        foreach (Color c in this.ColorsRange) Debug.Log(c);
+    }
     private Color GetAdaptivePercentageBasedSampleColor(params Color[] colors)
     {
-        if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.black, Color.red };
+        if (colors == null || colors.Length == 0) colors = ColorSpectrums.DEFAULT_SPECTRUM;
         Color nColor = colors[0];
         float currentToMaxAverageFrequencyPercentage = this.AudioManager.CurrentToMaxFrequencyPercentage;
         float partPercentage = 100f / colors.Length;
