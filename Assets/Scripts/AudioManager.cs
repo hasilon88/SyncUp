@@ -18,7 +18,8 @@ public class AudioManager : MonoBehaviour
     //the array containing the data fetched by CSCore (implementation of Windows audio session API)
     private float[] audioBuffer;
 
-    //how many samples the [Average sample] will be based on 
+    //last n [CurrentMaxFrequency]
+    //the higher this value, the more precised will the environment be(works better with songs that change beat frequently)
     public byte LastSamplesBuffer = 64;
 
     private byte lastSamplesIndex;
