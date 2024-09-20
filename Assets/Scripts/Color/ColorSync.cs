@@ -9,11 +9,11 @@ public class ColorSync : MonoBehaviour
     public Color CurrentColor;
     public Color[] ColorsRange;
 
-    private Color GetAdaptivePercentageBasedSampleColor(float currentMaxFrequency, float averageMaxFrequency, float averageFrequency, params Color[] colors)
+    private Color GetAdaptivePercentageBasedSampleColor(params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = new Color[3] { Color.white, Color.black, Color.red };
         Color nColor = colors[0];
-        float currentToMaxAverageFrequencyPercentage = (currentMaxFrequency * 100f) / averageMaxFrequency;
+        float currentToMaxAverageFrequencyPercentage = this.AudioManager.CurrentToMaxFrequencyPercentage;
         float partPercentage = 100f / colors.Length;
         float percentageDifference;
         float nextPercentageDifference;
@@ -43,11 +43,6 @@ public class ColorSync : MonoBehaviour
 
     void Update()
     {
-        this.CurrentColor =
-            this.GetAdaptivePercentageBasedSampleColor(
-                        this.AudioManager.CurrentMaxFrequency,
-                        this.AudioManager.AverageMaxSampleFrequency,
-                        this.AudioManager.AverageSampleFrequency,
-                        this.ColorsRange);
+        this.CurrentColor = this.GetAdaptivePercentageBasedSampleColor(this.ColorsRange);
     }
 }

@@ -11,7 +11,7 @@ public class AnimationSync : MonoBehaviour
 
     void Update()
     {
-        if (this.FPSManager.FrameCount % this.Tempo == 0) 
-            this.AnimationSpeed = 1.0f + (AudioManager.CurrentMaxFrequency/AudioManager.AverageMaxSampleFrequency);
+        if (this.FPSManager.FrameCount % this.Tempo == 0)
+            this.AnimationSpeed = 1.0f + this.AudioManager.CurrentToMaxFrequencyPercentage / 100f;
     }
 }

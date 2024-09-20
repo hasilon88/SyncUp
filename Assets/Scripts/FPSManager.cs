@@ -16,11 +16,6 @@ public class FPSManager : MonoBehaviour
         Application.targetFrameRate = this.FPSLock;
     }
 
-    private void AlternateUpdate()
-    {
-
-    }
-
     //Source: https://discussions.unity.com/t/how-do-i-find-the-frames-per-second-of-my-game/14717/2
     void Update()
     {

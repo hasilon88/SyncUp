@@ -20,7 +20,8 @@ public class AudioManager : MonoBehaviour
 
     //last n [CurrentMaxFrequency]
     //the higher this value, the more precised will the environment be(works better with songs that change beat frequently)
-    public byte LastSamplesBuffer = 64;
+    [Range(16, 1024)]
+    public short LastSamplesBuffer = 128;
 
     private byte lastSamplesIndex;
 
@@ -28,16 +29,20 @@ public class AudioManager : MonoBehaviour
     private float[] lastSamples;
 
     //Average of n [LastSamplesBuffer] of samples
-    public float AverageSampleFrequency;
+    public float LastSamplesAverage;
 
     //Most hearable sample in [LastSamplesBuffer]
-    public float AverageMaxSampleFrequency;
+    public float LastSamplesMaxFrequency;
 
     //the current most hearable sample 
     public float CurrentMaxFrequency = 0;
 
     //To Compensate for low volume
     public float CurrentMaxFrequencyMultiplier = 1;
+
+    //the result of (CurrentMaxFrequency*100)/LastSamplesMaxFrequency
+    //signifies the frequency relative to Max() of lastSamples (to fix low volume issues that would only return 0 - 0.20 frequencies)
+    public float CurrentToMaxFrequencyPercentage;
 
     //the index in the list of currently active audio devices
     //Should be second element of the array(1) by default?
@@ -99,7 +104,8 @@ public class AudioManager : MonoBehaviour
     public void Update()
     {
         this.AddLastSample();
-        this.AverageMaxSampleFrequency = this.lastSamples.Max();
-        this.AverageSampleFrequency = this.lastSamples.Average();
+        this.LastSamplesMaxFrequency = this.lastSamples.Max();
+        this.LastSamplesAverage = this.lastSamples.Average();
+        this.CurrentToMaxFrequencyPercentage = ((this.CurrentMaxFrequency * 100)/this.LastSamplesMaxFrequency);
     }
 }
