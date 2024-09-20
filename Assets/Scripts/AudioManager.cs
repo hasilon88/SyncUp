@@ -69,7 +69,7 @@ public class AudioManager : MonoBehaviour
             //Getting the loudest sample in the float[]
             maxFrequencyBuffer = this.audioBuffer.Max();
             //to handle E notation floats -> 9.040459E-06 returned when no sound is being played
-            if (maxFrequencyBuffer > 0.0001100110011001101) this.CurrentMaxFrequency = this.audioBuffer.Max() * this.CurrentMaxFrequencyMultiplier;
+            if (maxFrequencyBuffer > 0.01) this.CurrentMaxFrequency = this.audioBuffer.Max() * this.CurrentMaxFrequencyMultiplier;
             else this.CurrentMaxFrequency = 0f;
         }; 
         loopBack.Start();

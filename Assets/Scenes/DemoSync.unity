@@ -154,7 +154,56 @@ Transform:
   - {fileID: 865110158}
   - {fileID: 1296975442}
   - {fileID: 618673812}
+  - {fileID: 406168881}
   m_Father: {fileID: 887621144}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &406168879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 406168881}
+  - component: {fileID: 406168880}
+  m_Layer: 0
+  m_Name: AnimationSyncManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &406168880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406168879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46dbb8af587e7c44da148f2bfcdb11ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioManager: {fileID: 1296975441}
+  AnimationSpeed: 0
+  FPSManager: {fileID: 618673811}
+  Tempo: 16
+--- !u!4 &406168881
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406168879}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 136250586}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &618673810
 GameObject:
@@ -311,7 +360,7 @@ GameObject:
   - component: {fileID: 865110158}
   - component: {fileID: 865110157}
   m_Layer: 0
-  m_Name: ColorManager
+  m_Name: ColorSyncManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,7 +378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f025d9d45b22e304390444165ddb94e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tempo: 1
+  Tempo: 16
   AudioManager: {fileID: 1296975441}
   CurrentColor: {r: 1, g: 1, b: 1, a: 0}
   ColorsRange:
@@ -697,10 +746,10 @@ PrefabInstance:
       addedObject: {fileID: 1608985981}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5661686b1bf573049891fbbdc4b49094, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1608985982}
+      addedObject: {fileID: 1608985983}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5661686b1bf573049891fbbdc4b49094, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1608985983}
+      addedObject: {fileID: 1608985984}
   m_SourcePrefab: {fileID: 100100000, guid: 5661686b1bf573049891fbbdc4b49094, type: 3}
 --- !u!4 &1608985979 stripped
 Transform:
@@ -733,23 +782,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1608985982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1608985980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46dbb8af587e7c44da148f2bfcdb11ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Animator: {fileID: 0}
-  AudioManager: {fileID: 1296975441}
-  AnimationSpeed: 0
-  FPSManager: {fileID: 618673811}
-  Tempo: 16
 --- !u!114 &1608985983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,7 +794,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 792151db0bc5dfb4abad95afb245be1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 0}
+--- !u!114 &1608985984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608985980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec8867198efbfb408e8623184baaa98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationSync: {fileID: 406168880}
 --- !u!4 &1975691329 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9026127661064216447, guid: d77dfe9be9a3ad144b3f85e36c4a4c28, type: 3}

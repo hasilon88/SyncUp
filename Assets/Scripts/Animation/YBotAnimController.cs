@@ -5,7 +5,7 @@ using UnityEngine;
 public class YBotAnimController : MonoBehaviour
 {
 
-    public Animator Animator;
+    private Animator Animator;
 
     void Start()
     {
