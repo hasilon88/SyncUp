@@ -329,8 +329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f025d9d45b22e304390444165ddb94e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AudioManager: {fileID: 1296975441}
   Tempo: 1
+  AudioManager: {fileID: 1296975441}
   CurrentColor: {r: 1, g: 1, b: 1, a: 0}
   ColorsRange:
   - {r: 0.83396226, g: 0.627832, b: 0.76108706, a: 0}
@@ -339,8 +339,7 @@ MonoBehaviour:
   - {r: 0.79622644, g: 0.32900676, b: 0.7367078, a: 0}
   - {r: 0.82641506, g: 0.33524382, b: 0.6434297, a: 0}
   - {r: 0.85660374, g: 0.38627982, b: 0.38627982, a: 0}
-  - {r: 0.86415094, g: 0.21359201, b: 0.21359201, a: 0}
-  - {r: 0.82641506, g: 0.10447132, b: 0.10447132, a: 0}
+  - {r: 0.8396226, g: 0.2732734, b: 0.2732734, a: 0}
   - {r: 1, g: 0, b: 0, a: 0}
 --- !u!4 &865110158
 Transform:

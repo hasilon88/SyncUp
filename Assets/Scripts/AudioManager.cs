@@ -57,6 +57,7 @@ public class AudioManager : MonoBehaviour
     public void InitializeLoopback()
     {
         loopBack.Initialize();
+        float maxFrequencyBuffer;
         loopBack.DataAvailable += (sender, _event) =>
         {
             this.audioBuffer = new float[_event.Data.Length / 4];
@@ -65,7 +66,10 @@ public class AudioManager : MonoBehaviour
             //by diving it by Int32.Max() -> 2 147 483 647
             Buffer.BlockCopy(_event.Data, 0, this.audioBuffer, 0, _event.Data.Length);
             //Getting the loudest sample in the float[]
-            this.CurrentMaxFrequency = this.audioBuffer.Max() * this.CurrentMaxFrequencyMultiplier;
+            maxFrequencyBuffer = this.audioBuffer.Max();
+            if (maxFrequencyBuffer > 0) this.CurrentMaxFrequency = this.audioBuffer.Max() * this.CurrentMaxFrequencyMultiplier;
+            else this.CurrentMaxFrequency = 0f;
+            //Debug.Log(this.CurrentMaxFrequency);
         }; 
         loopBack.Start();
     }
