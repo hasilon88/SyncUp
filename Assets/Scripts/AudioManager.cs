@@ -6,6 +6,8 @@ using System.Linq;
 
 public class AudioManager : MonoBehaviour
 {
+    //TEMPO FROM THE MUSIC
+    //AS LONG AS IT COMES FROM THE SEQUENCE
 
     //Wrapper for the Windows audio session API (CSCore) 
     private WasapiLoopbackCapture loopBack = new WasapiLoopbackCapture();
