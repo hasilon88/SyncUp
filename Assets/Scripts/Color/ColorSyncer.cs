@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Syncer : MonoBehaviour
+public class ColorSyncer : MonoBehaviour
 {
     private Renderer Renderer;
     public ColorSync ColorSync;
