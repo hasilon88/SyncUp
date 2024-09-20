@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Syncer : MonoBehaviour
 {
-    public Renderer Renderer;
+    private Renderer Renderer;
     public ColorSync ColorSync;
 
     void Start()
