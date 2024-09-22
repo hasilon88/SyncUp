@@ -1,18 +1,17 @@
 using UnityEngine;
 
-public class ColorSync : MonoBehaviour
+public class ColorSync : SyncObject
 {
 
-    [Range(1, 32)]
-    public byte Tempo = 4;
-    public AudioManager AudioManager;
     public Color CurrentColor;
     public Color[] ColorsRange;
+
 
     private void Start()
     {
         foreach (Color c in this.ColorsRange) Debug.Log(c);
     }
+
     private Color GetAdaptivePercentageBasedSampleColor(params Color[] colors)
     {
         if (colors == null || colors.Length == 0) colors = ColorSpectrums.DEFAULT_SPECTRUM;
@@ -47,6 +46,7 @@ public class ColorSync : MonoBehaviour
 
     void Update()
     {
-        this.CurrentColor = this.GetAdaptivePercentageBasedSampleColor(this.ColorsRange);
+        if (this.FPSManager.FrameCount % this.FrameTempo == 0)
+            this.CurrentColor = this.GetAdaptivePercentageBasedSampleColor(this.ColorsRange);
     }
 }
