@@ -9,7 +9,7 @@ public class ColorSync : SyncObject
 
     private void Start()
     {
-        foreach (Color c in this.ColorsRange) Debug.Log(c);
+        //foreach (Color c in this.ColorsRange) Debug.Log(c);
     }
 
     private Color GetAdaptivePercentageBasedSampleColor(params Color[] colors)
@@ -46,7 +46,7 @@ public class ColorSync : SyncObject
 
     void Update()
     {
-        if (this.FPSManager.FrameCount % this.FrameTempo == 0)
+        if (this.FPSManager.FrameCount % this.AudioManager.LastSamplesTempo == 0)
             this.CurrentColor = this.GetAdaptivePercentageBasedSampleColor(this.ColorsRange);
     }
 }

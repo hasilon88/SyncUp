@@ -3,11 +3,10 @@ using CSCore.SoundIn;
 using CSCore.CoreAudioAPI;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour
 {
-    //TEMPO FROM THE MUSIC
-    //AS LONG AS IT COMES FROM THE SEQUENCE
 
     //Wrapper for the Windows audio session API (CSCore) 
     private WasapiLoopbackCapture loopBack = new WasapiLoopbackCapture();
@@ -34,6 +33,14 @@ public class AudioManager : MonoBehaviour
     //Most hearable sample in [LastSamplesBuffer]
     public float LastSamplesMaxFrequency;
 
+    //The "Tempo" of [lastSamples]
+    //Indicates how many times in average the frequencies are equivalent (more exactly in the same range)
+    public int LastSamplesTempo = 1;
+
+    //What is considered "Equivalent" (ex: 0.33 -> 0.34 isn't a noticable change), the n percent of the initial value (40 - 10 and 40 + 10 = (30 - 50))
+    [Range(0.1f, 1f)]
+    public float LastSamplesTempoDifferentialPercentage = 0.20f;
+
     //the current most hearable sample 
     public float CurrentMaxFrequency = 0;
 
@@ -43,6 +50,7 @@ public class AudioManager : MonoBehaviour
     //the result of (CurrentMaxFrequency*100)/LastSamplesMaxFrequency
     //signifies the frequency relative to Max() of lastSamples (to fix low volume issues that would only return 0 - 0.20 frequencies)
     public float CurrentToMaxFrequencyPercentage;
+
 
     //the index in the list of currently active audio devices
     //Should be second element of the array(1) by default?
@@ -101,11 +109,31 @@ public class AudioManager : MonoBehaviour
         foreach (MMDevice device in devices) Debug.Log(device);
     }
 
+    public int GetLastSamplesTempo(float[] samples)
+    {
+        List<int> tempoValues = new List<int>();
+        float percentagePart;
+        int tempoValue = 0;
+        for (int elem = 0; elem < samples.Length - 1; elem++)
+        {
+            percentagePart = samples[elem] * this.LastSamplesTempoDifferentialPercentage;
+            if (samples[elem + 1] >= samples[elem] - percentagePart && samples[elem + 1] <= samples[elem] + percentagePart) tempoValue++;
+            else if (tempoValue > 0)
+            {
+                tempoValues.Add(tempoValue);
+                tempoValue = 0;
+            }
+
+        }
+        return tempoValues.Count > 0 ? (int)tempoValues.Average() : 1;
+    }
+
     public void Update()
     {
         this.AddLastSample();
         this.LastSamplesMaxFrequency = this.lastSamples.Max();
         this.LastSamplesAverage = this.lastSamples.Average();
         this.CurrentToMaxFrequencyPercentage = ((this.CurrentMaxFrequency * 100)/this.LastSamplesMaxFrequency);
+        this.LastSamplesTempo = GetLastSamplesTempo(this.lastSamples);
     }
 }

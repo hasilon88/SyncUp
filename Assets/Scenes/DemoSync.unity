@@ -188,8 +188,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FrameTempo: 4
   AudioManager: {fileID: 1296975441}
-  AnimationSpeed: 0
   FPSManager: {fileID: 618673811}
+  AnimationSpeed: 0
 --- !u!4 &406168881
 Transform:
   m_ObjectHideFlags: 0
@@ -380,9 +380,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FrameTempo: 1
   AudioManager: {fileID: 1296975441}
-  CurrentColor: {r: 1, g: 1, b: 1, a: 0}
-  ColorsRange: []
   FPSManager: {fileID: 618673811}
+  CurrentColor: {r: 0.9150943, g: 0.8503471, b: 0.8917853, a: 1}
+  ColorsRange: []
 --- !u!4 &865110158
 Transform:
   m_ObjectHideFlags: 0
@@ -561,6 +561,8 @@ MonoBehaviour:
   LastSamplesBuffer: 128
   LastSamplesAverage: 0
   LastSamplesMaxFrequency: 0
+  LastSamplesTempo: 0
+  LastSamplesTempoDifferentialPercentage: 0.167
   CurrentMaxFrequency: 0
   CurrentMaxFrequencyMultiplier: 1
   CurrentToMaxFrequencyPercentage: 0

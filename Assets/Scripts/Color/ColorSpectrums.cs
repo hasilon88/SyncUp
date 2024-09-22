@@ -5,7 +5,9 @@ using UnityEngine;
 public class ColorSpectrums
 {
 
-    public static Color[] DEFAULT_SPECTRUM = new Color[8] {
+    public static Color[] DEFAULT_SPECTRUM = new Color[] {
+        new Color(0.915f, 0.850f, 0.891f),
+        new Color(0.877f, 0.782f, 0.843f),
         new Color(0.834f, 0.628f, 0.761f),
         new Color(0.713f, 0.526f, 0.648f),
         new Color(0.766f, 0.455f, 0.693f),
