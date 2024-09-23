@@ -6,5 +6,16 @@ public class SyncObject : MonoBehaviour
     public int FrameTempo = 4;
     public AudioManager AudioManager;
     public FPSManager FPSManager;
+    protected delegate void Callback();
+
+    protected void OnLastSamplesTempo(Callback cb)
+    {
+        if (this.FPSManager.FrameCount % this.AudioManager.LastSamplesTempo == 0) cb();
+    }
+
+    protected void OnFrameTempo(Callback cb)
+    {
+        if (this.FPSManager.FrameCount % this.FrameTempo == 0) cb();
+    }
 
 }

@@ -46,7 +46,9 @@ public class ColorSync : SyncObject
 
     void Update()
     {
-        if (this.FPSManager.FrameCount % this.AudioManager.LastSamplesTempo == 0)
+        this.OnLastSamplesTempo(() =>
+        {
             this.CurrentColor = this.GetAdaptivePercentageBasedSampleColor(this.ColorsRange);
+        });
     }
 }

@@ -52,6 +52,8 @@ public class AudioManager : MonoBehaviour
     public float CurrentToMaxFrequencyPercentage;
 
 
+    public float MinimumCapturableFrequency = 0.001f;
+
     //the index in the list of currently active audio devices
     //Should be second element of the array(1) by default?
     public byte AudioEndPoint = 1;
@@ -82,7 +84,7 @@ public class AudioManager : MonoBehaviour
             //Getting the loudest sample in the float[]
             maxFrequencyBuffer = this.audioBuffer.Max();
             //to handle E notation floats -> 9.040459E-06 returned when no sound is being played
-            if (maxFrequencyBuffer > 0.01) this.CurrentMaxFrequency = this.audioBuffer.Max() * this.CurrentMaxFrequencyMultiplier;
+            if (maxFrequencyBuffer > this.MinimumCapturableFrequency) this.CurrentMaxFrequency = this.audioBuffer.Max() * this.CurrentMaxFrequencyMultiplier;
             else this.CurrentMaxFrequency = 0f;
         }; 
         loopBack.Start();
