@@ -7,10 +7,9 @@ public class AnimationSync : SyncObject
 
     void Update()
     {
-        this.OnLastSamplesTempo(() =>
+        if (this.FPSManager.FrameCount % this.AudioManager.LastSamplesTempo == 0)
         {
-            this.AnimationSpeed = 1.0f + this.AudioManager.CurrentToMaxFrequencyPercentage;
-        });
-            
+            this.AnimationSpeed = 1.0f + this.AudioManager.CurrentToMaxFrequencyPercentage/100f;
+        }
     }
 }

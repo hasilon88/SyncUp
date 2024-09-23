@@ -42,7 +42,7 @@ public class AudioManager : MonoBehaviour
     public float LastSamplesTempoDifferentialPercentage = 0.20f;
 
     //the current most hearable sample 
-    public float CurrentMaxFrequency = 0;
+    public float CurrentMaxFrequency;
 
     //To Compensate for low volume
     public float CurrentMaxFrequencyMultiplier = 1;
@@ -51,7 +51,7 @@ public class AudioManager : MonoBehaviour
     //signifies the frequency relative to Max() of lastSamples (to fix low volume issues that would only return 0 - 0.20 frequencies)
     public float CurrentToMaxFrequencyPercentage;
 
-
+    [Range(0.0001f, 0.001f)]
     public float MinimumCapturableFrequency = 0.001f;
 
     //the index in the list of currently active audio devices
@@ -65,7 +65,8 @@ public class AudioManager : MonoBehaviour
     private void Awake()
     {
         //needs to be set in Awake() to avoid /division by 0 exception
-        this.LastSamplesTempo = 1;   
+        this.LastSamplesTempo = 1;
+        this.CurrentMaxFrequency = 0;
     }
 
     public void Start()
@@ -131,7 +132,6 @@ public class AudioManager : MonoBehaviour
                 tempoValues.Add(tempoValue);
                 tempoValue = 0;
             }
-
         }
         return tempoValues.Count > 0 ? (int)tempoValues.Average() : 1;
     }

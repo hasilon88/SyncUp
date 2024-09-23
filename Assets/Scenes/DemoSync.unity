@@ -479,7 +479,7 @@ MonoBehaviour:
   AudioManager: {fileID: 1296975441}
   FPSManager: {fileID: 618673811}
   CurrentColor: {r: 0.9150943, g: 0.8503471, b: 0.8917853, a: 1}
-  ColorsRange: []
+  ColorSpectrum: []
 --- !u!4 &865110158
 Transform:
   m_ObjectHideFlags: 0
@@ -658,6 +658,7 @@ MonoBehaviour:
   CurrentMaxFrequency: 0
   CurrentMaxFrequencyMultiplier: 1
   CurrentToMaxFrequencyPercentage: 0
+  MinimumCapturableFrequency: 0.001
   AudioEndPoint: 1
   DataFlow: 2
   DeviceState: 1

@@ -14,6 +14,7 @@ public class YBotDynamicAnimController : MonoBehaviour
 
     void Update()
     {
-        this.animator.SetFloat("frequencyPercentage", this.AudioManager.CurrentToMaxFrequencyPercentage);
+        if (this.FPSManager.FrameCount % this.FPSManager.FPSLock == 0)
+            this.animator.SetFloat("frequencyPercentage", this.AudioManager.CurrentToMaxFrequencyPercentage);
     }
 }
