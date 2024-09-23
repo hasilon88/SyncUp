@@ -35,7 +35,7 @@ public class AudioManager : MonoBehaviour
 
     //The "Tempo" of [lastSamples]
     //Indicates how many times in average the frequencies are equivalent (more exactly in the same range)
-    public int LastSamplesTempo = 1;
+    public int LastSamplesTempo;
 
     //What is considered "Equivalent" (ex: 0.33 -> 0.34 isn't a noticable change), the n percent of the initial value (40 - 10 and 40 + 10 = (30 - 50))
     [Range(0.1f, 1f)]
@@ -61,6 +61,12 @@ public class AudioManager : MonoBehaviour
     public DataFlow DataFlow = DataFlow.All;
 
     public DeviceState DeviceState = DeviceState.Active;
+
+    private void Awake()
+    {
+        //needs to be set in Awake() to avoid /division by 0 exception
+        this.LastSamplesTempo = 1;   
+    }
 
     public void Start()
     {

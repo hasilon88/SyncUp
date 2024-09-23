@@ -7,9 +7,9 @@ public class AnimationSync : SyncObject
 
     void Update()
     {
-        this.OnFrameTempo(() =>
+        this.OnLastSamplesTempo(() =>
         {
-            this.AnimationSpeed = 1.0f + this.AudioManager.CurrentToMaxFrequencyPercentage / 100f;
+            this.AnimationSpeed = 1.0f + this.AudioManager.CurrentToMaxFrequencyPercentage;
         });
             
     }
