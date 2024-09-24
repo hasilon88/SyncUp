@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+//https://discussions.unity.com/t/find-all-animator-transitions/666496/5 GetTransition
 public class YBotDynamicAnimController : MonoBehaviour
 {
 
@@ -15,6 +17,8 @@ public class YBotDynamicAnimController : MonoBehaviour
     void Update()
     {
         if (this.FPSManager.FrameCount % this.FPSManager.FPSLock == 0)
+        {
             this.animator.SetFloat("frequencyPercentage", this.AudioManager.CurrentToMaxFrequencyPercentage);
+        }
     }
 }

@@ -51,7 +51,7 @@ public class AudioManager : MonoBehaviour
     //signifies the frequency relative to Max() of lastSamples (to fix low volume issues that would only return 0 - 0.20 frequencies)
     public float CurrentToMaxFrequencyPercentage;
 
-    [Range(0.0001f, 0.001f)]
+    [Range(0.00001f, 0.001f)]
     public float MinimumCapturableFrequency = 0.001f;
 
     //the index in the list of currently active audio devices
@@ -113,27 +113,34 @@ public class AudioManager : MonoBehaviour
         else this.lastSamples = this.Displace(this.lastSamples, this.CurrentMaxFrequency);
     }
 
+    private void SetCurrentToMaxFrequencyPercentage()
+    {
+        //to avoid NaN (division by 0)
+        if (this.LastSamplesMaxFrequency > 0) this.CurrentToMaxFrequencyPercentage = ((this.CurrentMaxFrequency * 100) / this.LastSamplesMaxFrequency);
+        else this.CurrentToMaxFrequencyPercentage = 0f;
+    }
+
     public void ListDevicesDebug()
     {
         foreach (MMDevice device in devices) Debug.Log(device);
     }
 
-    public int GetLastSamplesTempo(float[] samples)
+    public void SetLastSamplesTempo()
     {
         List<int> tempoValues = new List<int>();
         float percentagePart;
         int tempoValue = 0;
-        for (int elem = 0; elem < samples.Length - 1; elem++)
+        for (int elem = 0; elem < this.lastSamples.Length - 1; elem++)
         {
-            percentagePart = samples[elem] * this.LastSamplesTempoDifferentialPercentage;
-            if (samples[elem + 1] >= samples[elem] - percentagePart && samples[elem + 1] <= samples[elem] + percentagePart) tempoValue++;
+            percentagePart = this.lastSamples[elem] * this.LastSamplesTempoDifferentialPercentage;
+            if (this.lastSamples[elem + 1] >= this.lastSamples[elem] - percentagePart && this.lastSamples[elem + 1] <= this.lastSamples[elem] + percentagePart) tempoValue++;
             else if (tempoValue > 0)
             {
                 tempoValues.Add(tempoValue);
                 tempoValue = 0;
             }
         }
-        return tempoValues.Count > 0 ? (int)tempoValues.Average() : 1;
+        this.LastSamplesTempo = tempoValues.Count > 0 ? (int)tempoValues.Average() : 1;
     }
 
     public void Update()
@@ -141,7 +148,7 @@ public class AudioManager : MonoBehaviour
         this.AddLastSample();
         this.LastSamplesMaxFrequency = this.lastSamples.Max();
         this.LastSamplesAverage = this.lastSamples.Average();
-        this.CurrentToMaxFrequencyPercentage = ((this.CurrentMaxFrequency * 100)/this.LastSamplesMaxFrequency);
-        this.LastSamplesTempo = GetLastSamplesTempo(this.lastSamples);
+        this.SetCurrentToMaxFrequencyPercentage();
+        this.SetLastSamplesTempo();
     }
 }
