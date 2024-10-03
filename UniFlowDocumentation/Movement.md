@@ -9,3 +9,4 @@
 - Double Jump
 - Slide
 - Shift-Walk?
+- Sprint
