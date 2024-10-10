@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class ColorSync : SyncObject
 {
@@ -10,7 +11,7 @@ public class ColorSync : SyncObject
     {
         if (this.ColorSpectrum == null || ColorSpectrum.Length == 0) this.ColorSpectrum = ColorSpectrums.DEFAULT_SPECTRUM;
         Color nColor = this.ColorSpectrum[0];
-        float currentToMaxAverageFrequencyPercentage = this.AudioManager.CurrentToMaxFrequencyPercentage;
+        float currentToMaxAverageFrequencyPercentage = this.AudioManager.NormalizedCurrentLoudestSample_LastLoudestSamplesMax * 100f;
         float partPercentage = 100f / this.ColorSpectrum.Length;
         float percentageDifference;
         float nextPercentageDifference;
@@ -24,9 +25,8 @@ public class ColorSync : SyncObject
         return nColor;
     }
 
-    void Update()
+    public override void Sync()
     {
-        if (this.FPSManager.FrameCount % this.AudioManager.LastSamplesTempo == 0)
-            this.CurrentColor = this.GetAdaptivePercentageBasedSampleColor();
+        this.CurrentColor = GetAdaptivePercentageBasedSampleColor();
     }
 }

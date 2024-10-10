@@ -22,27 +22,27 @@ public class PlatformElevator : MonoBehaviour
     //    this.transform.position = new Vector3(this.InitialPosition.x, 0, 0);
     //}
 
-    private void SetIsIncrementing()
-    {
-        if (this.transform.position.y >= this.InitialPosition.y + this.ElevationLimitOffSet)
-            this.IsIncrementing = false;
-        else if (this.transform.position.y <= this.InitialPosition.y  - this.ElevationLimitOffSet)
-            this.IsIncrementing = true;
-    }
+    //private void SetIsIncrementing()
+    //{
+    //    if (this.transform.position.y >= this.InitialPosition.y + this.ElevationLimitOffSet)
+    //        this.IsIncrementing = false;
+    //    else if (this.transform.position.y <= this.InitialPosition.y  - this.ElevationLimitOffSet)
+    //        this.IsIncrementing = true;
+    //}
 
-    private void ChangeY()
-    {
-        float value = this.IncrementValue * Time.deltaTime;
-        float multiplier = (1 + (this.AudioManager.CurrentToMaxFrequencyPercentage/100f)) * this.FrequencyMultiplier 
-            * this.AudioManager.CurrentToMaxFrequencyPercentage <= 0f ? 0f : 1f;
+    //private void ChangeY()
+    //{
+    //    float value = this.IncrementValue * Time.deltaTime;
+    //    float multiplier = (1 + (this.AudioManager.CurrentToMaxFrequencyPercentage/100f)) * this.FrequencyMultiplier 
+    //        * this.AudioManager.CurrentToMaxFrequencyPercentage <= 0f ? 0f : 1f;
 
-        if (this.IsIncrementing) this.transform.position += new Vector3(0, value * multiplier, 0);
-        else this.transform.position -= new Vector3(0, value * multiplier, 0);
-    }
+    //    if (this.IsIncrementing) this.transform.position += new Vector3(0, value * multiplier, 0);
+    //    else this.transform.position -= new Vector3(0, value * multiplier, 0);
+    //}
 
-    void Update()
-    {
-        this.SetIsIncrementing();
-        this.ChangeY();
-    }
+    //void Update()
+    //{
+    //    this.SetIsIncrementing();
+    //    this.ChangeY();
+    //}
 }

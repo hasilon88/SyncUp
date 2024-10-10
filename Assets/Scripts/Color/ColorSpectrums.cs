@@ -17,5 +17,5 @@ public class ColorSpectrums
         new Color(0.840f, 0.273f, 0.273f),
         new Color(1f, 0f, 0f)
     };
-   
+
 }

@@ -1,9 +1,21 @@
+using System;
 using UnityEngine;
 
-public class SyncObject : MonoBehaviour
+public abstract class SyncObject : MonoBehaviour
 {
-    [Range(0, 32)]
-    public int FrameTempo = 4;
+
     public AudioManager AudioManager;
-    public FPSManager FPSManager;
+
+    private void Start()
+    {
+        this.AudioManager.OnNormalizedValuesChange += SyncOnLastLoudestSemplesFrameTempo;
+    }
+
+    public void SyncOnLastLoudestSemplesFrameTempo(object sender, EventArgs e)
+    {
+        if (this.AudioManager.FPSManager.UpdateFrameCount % this.AudioManager.LastLoudestSamplesFrameTempo == 0)
+            Sync();
+    }
+
+    public abstract void Sync();
 }

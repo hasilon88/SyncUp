@@ -1,15 +1,16 @@
 using UnityEngine;
 
-public class AnimationSync : SyncObject
+public class AnimationSync: SyncObject
 {
 
     public float AnimationSpeed;
+    public float InitialSpeed = 1.0f;
 
-    void Update()
+    public override void Sync()
     {
-        if (this.FPSManager.FrameCount % this.AudioManager.LastSamplesTempo == 0)
+        if (this.AudioManager.FPSManager.UpdateFrameCount % this.AudioManager.LastLoudestSamplesFrameTempo == 0)
         {
-            this.AnimationSpeed = 1.0f + this.AudioManager.CurrentToMaxFrequencyPercentage/100f;
+            this.AnimationSpeed = this.InitialSpeed + this.AudioManager.NormalizedCurrentLoudestSample_LastLoudestSamplesMax;
         }
     }
 }
