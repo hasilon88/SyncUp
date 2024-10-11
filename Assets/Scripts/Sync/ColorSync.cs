@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 
 public class ColorSync : SyncObject
 {
@@ -9,7 +8,7 @@ public class ColorSync : SyncObject
 
     private Color GetAdaptivePercentageBasedSampleColor()
     {
-        if (this.ColorSpectrum == null || ColorSpectrum.Length == 0) this.ColorSpectrum = ColorSpectrums.DEFAULT_SPECTRUM;
+        if (ColorSpectrum == null || ColorSpectrum.Length < 3) this.ColorSpectrum = ColorSpectrums.DEFAULT_SPECTRUM; //needs to be changed for somethnig else
         Color nColor = this.ColorSpectrum[0];
         float currentToMaxAverageFrequencyPercentage = this.AudioManager.NormalizedCurrentLoudestSample_LastLoudestSamplesMax * 100f;
         float partPercentage = 100f / this.ColorSpectrum.Length;

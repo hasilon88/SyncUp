@@ -5,6 +5,7 @@ public abstract class SyncObject : MonoBehaviour
 {
 
     protected AudioManager AudioManager;
+    //boolean for which tempo to use
 
     private void Start()
     {
