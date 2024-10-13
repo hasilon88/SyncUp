@@ -4,11 +4,13 @@ public class RotationSpeedSyncer : MonoBehaviour
 {
 
     public RotationSpeedSync RotationSpeedSync;
-    [Range(500f, 8000f)]
-    public float InitialSpeed = 1000f;
+    [Range(1f, 5f)]
+    public float InitialSpeed = 1f;
 
     void Update()
     {
-        this.transform.Rotate(Vector3.up, 1000f * this.RotationSpeedSync.RotationSpeed * Time.deltaTime, Space.World);
+        //InitialSpeed * this.RotationSpeedSync.RotationSpeed * Time.deltaTime, Space.World
+        //InitialSpeed * this.RotationSpeedSync.RotationSpeed * (1f + Time.deltaTime)
+        this.transform.Rotate(Vector3.up, 850f * this.RotationSpeedSync.RotationSpeed * Time.deltaTime, Space.World);
     }
 }

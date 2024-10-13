@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 /// <summary>
 /// 
 /// @Unity Color spectrum reference points (UPPER RIGHT CORNER)
@@ -13,7 +12,7 @@ using UnityEngine;
 /// g (0, 1, 1)
 /// h (0, 1, 0.25)
 /// 
-/// @Relation between segments
+/// @transitons between chain links (ColorNode)
 /// a -> b [r+0.5, g-0.25]
 /// b -> c [g-0.75]
 /// c -> d [b+0.75]
@@ -22,11 +21,29 @@ using UnityEngine;
 /// f -> g [g+0.75]
 /// g -> h [b-0.75]
 /// h -> a [r+0.5,b-0.25]
+/// 
+/// @Spectrum Navigation Alg
+/// 1) Finding the closest ColorNode to startColor
+///     - Using the transitions between the [Color] of the ColorNodes, we can determine
+///     the proximity of [startColor] by interating over the chain and substracting 
+///     [startColor.r/.g/.b] to the [Color] of the ColorNode and seeing if the values
+///     returned have the same sign has [transition.Red/.Green/.Blue], the last ColorNode
+///     with the same signs will be the closest one
+///         - example: 
+///         startColor -> (0f, 0.40f, 1f)
+///         firstColorNode.Color -> (0.5f, 1f, 0f)
+///         (0f, 0.40f, 1f) - (0.5f, 1f, 0f) => (-0.5f, -0.60f, 1f)
+///         transition of ColorNode to ColorNode.Next -> ((+)0.5, (-)0.25, (+)0)
+///         ((-)0.5f, (-)0.60f, (+)1f) != ((+)0.5, (-)0.25, (+)0) <-- not the closest Color, because the sigs aren't the same 
+///         
+/// 
 /// </summary>
 public class ColorChainedInterpolator
 {
 
     private ColorNode firstColorNode;
+    //TEMP
+    public delegate void OnIteration(ColorNode colorNode);
 
     public ColorChainedInterpolator(params Color[] colors) 
     { 
@@ -41,24 +58,60 @@ public class ColorChainedInterpolator
         for (int elem = 1; elem < colors.Length; elem++) 
         { 
             ColorNode nColorNode = new ColorNode(colors[elem]);
-            currentColorNode.Next = nColorNode;
+            currentColorNode.SetNext(nColorNode);
             nColorNode.Previous = currentColorNode;
             currentColorNode = nColorNode;
         }
-        currentColorNode.Next = this.firstColorNode;
+        currentColorNode.SetNext(this.firstColorNode);
         this.firstColorNode.Previous = currentColorNode;
     }
 
-    public int GetChainLength()
+    public void Iterate(OnIteration callback)
     {
         ColorNode tempColorNode = this.firstColorNode;
-        int chainLength = 0;
-        while (tempColorNode != this.firstColorNode || chainLength == 0)
+        bool overFirstColorNode = true;
+        while (tempColorNode != this.firstColorNode || overFirstColorNode)
         {
+            callback(tempColorNode);
             tempColorNode = tempColorNode.Next;
-            chainLength++;
+            overFirstColorNode = false;
         }
-        return chainLength;
+    }
+
+    public int GetLength()
+    {
+        int len = 0;
+        this.Iterate(colorNode => len++);
+        return len;
+    }
+
+    private bool ColorComponentIsClose(float differential, float transition)
+    {
+        return ((transition >= 0) && (differential >= 0)) || ((transition < 0) && (differential < 0));
+    }
+
+    public ColorNode GetClosestColorNode(Color color)
+    {
+        ColorNode closestColorNode = null;
+        this.Iterate(colorNode =>
+        {
+            if (ColorComponentIsClose(color.r - colorNode.Color.r, colorNode.transition.Red) 
+            && ColorComponentIsClose(color.g - colorNode.Color.g, colorNode.transition.Green) 
+            && ColorComponentIsClose(color.b - colorNode.Color.b, colorNode.transition.Blue))
+                closestColorNode = colorNode;
+        });
+        return closestColorNode;
+    }
+
+    public void SetSpectrumPercentages(ColorNode startingColorNode)
+    {
+        float percentagePart = 100f / this.GetLength();
+        float currentPercentage = 0f;
+        this.Iterate(colorNode => 
+        { 
+            currentPercentage += percentagePart;
+            colorNode.spectrumPercentage = currentPercentage;
+        });
     }
 
     public Color[] GetColorSpectrum(int spectrumLength, Color startColor, Color endColor)

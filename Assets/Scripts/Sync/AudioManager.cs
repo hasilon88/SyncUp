@@ -5,24 +5,26 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-//loopbackCapture: Wrapper for the Windows audio session API (CSCore)
-//devices: array of avaible audio devices
-//AudioEndpoint: the index in the list of currently active audio devices (should be 1)
-//DataFlow
-//deviceState
-//loopbackSamples: the array containing the data fetched by CSCore (implementation of Windows audio session API)
-//LastLoudestSamplesLength: the higher this value(array), the more precised will the environment be(works better with songs that change beat frequently)
-//lastLoudestSamples: last n [CurrentMaxFrequency] => An array containing the last samples in order to get an average/Max
-//LastLoudestSamplesAverage: Average of n [LastSamplesBuffer] of samples
-//LastLoudestSamplesMax: Most hearable sample in [LastSamplesBuffer]
-//LastLoudestSamplesFrameTempo: The "Tempo" of [lastSamples] -> Indicates how many times in average the frequencies are equivalent (more exactly in the same range)
-//LastLoudestSamplesTempoDifferential: What is considered "Equivalent" (ex: 0.33 -> 0.34 isn't a noticable change), the n percent of the initial value (40 - 10 and 40 + 10 = (30 - 50))
-//CurrentLoudestSample: the current loudest sample
-//SessionLoudestSample: loudest sample since the session (game) started
-//CurrentLoudestSampleMultiplier: To Compensate for low volume?
-//NormalizedCurrentLoudestSample_LastLoudestSamplesMax: normalized value [(CurrentMaxFrequency*100)/LastSamplesMaxFrequency] to be used for interactions  (to fix low audio)
-//NormalizedCurrentLoudestSample_SessionLoudestSample
-//MinimumCapturableSample: to handle E notation floats -> 9.040459E-06 returned when no sound is being played
+/// <summary>
+/// loopbackCapture: Wrapper for the Windows audio session API (CSCore)
+/// devices: array of avaible audio devices
+/// AudioEndpoint: the index in the list of currently active audio devices (should be 1)
+/// DataFlow
+/// deviceState
+/// loopbackSamples: the array containing the data fetched by CSCore (implementation of Windows audio session API)
+/// LastLoudestSamplesLength: the higher this value(array), the more precised will the environment be(works better with songs that change beat frequently)
+/// lastLoudestSamples: last n [CurrentMaxFrequency] => An array containing the last samples in order to get an average/Max
+/// LastLoudestSamplesAverage: Average of n [LastSamplesBuffer] of samples
+/// LastLoudestSamplesMax: Most hearable sample in [LastSamplesBuffer]
+/// LastLoudestSamplesFrameTempo: The "Tempo" of [lastSamples] -> Indicates how many times in average the frequencies are equivalent (more exactly in the same range)
+/// LastLoudestSamplesTempoDifferential: What is considered "Equivalent" (ex: 0.33 -> 0.34 isn't a noticable change), the n percent of the initial value (40 - 10 and 40 + 10 = (30 - 50))
+/// CurrentLoudestSample: the current loudest sample
+/// SessionLoudestSample: loudest sample since the session (game) started
+/// CurrentLoudestSampleMultiplier: To Compensate for low volume?
+/// NormalizedCurrentLoudestSample_LastLoudestSamplesMax: normalized value [(CurrentMaxFrequency*100)/LastSamplesMaxFrequency] to be used for interactions  (to fix low audio)
+/// NormalizedCurrentLoudestSample_SessionLoudestSample
+/// MinimumCapturableSample: to handle E notation floats -> 9.040459E-06 returned when no sound is being played
+/// </summary>
 
 public class AudioManager : MonoBehaviour
 {
@@ -72,7 +74,8 @@ public class AudioManager : MonoBehaviour
             new Color(0f, 1f, 1f),    
             new Color(0f, 1f, 0.25f)
         );
-        Debug.Log(cci.GetChainLength());
+        Debug.Log(cci.GetClosestColorNode(new Color(1f, 0.35f, 0f)).Color);
+        Debug.Log(cci.GetLength());
     }
 
     public void Start()
