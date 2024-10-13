@@ -109,15 +109,23 @@ public class ColorChainedInterpolator
         float currentPercentage = 0f;
         this.Iterate(colorNode => 
         { 
-            currentPercentage += percentagePart;
             colorNode.spectrumPercentage = currentPercentage;
+            currentPercentage += percentagePart;
         });
     }
 
     public Color[] GetColorSpectrum(int spectrumLength, Color startColor, Color endColor)
     {
-        float percentagePart = 100f / spectrumLength;
-        float currentPercentage = 0f;
+        float subSpectrumPercentage = 100f / spectrumLength;
+        float currentSubSpectrumPercentage = 0f;
+        ColorNode startingColorNode = this.GetClosestColorNode(startColor); 
+        this.SetSpectrumPercentages(startingColorNode);
+
+        this.Iterate(colorNode => 
+        {
+            
+        });
+            
 
         return null;
     }

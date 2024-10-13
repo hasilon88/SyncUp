@@ -111,7 +111,6 @@ public class FirstPersonController : MonoBehaviour
     public float doubleJumpPower = 5f;
 
     // Internal Variables
-    private bool hasJumped = false;
     private bool hasDoubleJumped = false;
 
     #endregion
@@ -336,15 +335,8 @@ public class FirstPersonController : MonoBehaviour
         #endregion
 
         #region Jump
-
-        // Gets input and calls jump method
-        if(enableJump && Input.GetKeyDown(jumpKey) && isGrounded)
-        {
-            Jump();
-        }
-
+        Jump();
         #endregion
-
 
         #region Crouch
 
@@ -464,10 +456,8 @@ public class FirstPersonController : MonoBehaviour
         if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
         {
             Debug.DrawRay(origin, direction * distance, Color.red);
-
             // Reset jumping checks
             isGrounded = true;
-            hasJumped = false;
             hasDoubleJumped = false;
         }
         else
@@ -476,35 +466,35 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void FirstJump()
     {
-        // Adds force to the player rigidbody to jump
         if (isGrounded)
         {
-
-            Debug.Log("before jumping | hasDoubleJumped: " + this.hasDoubleJumped + " | isgrounded: " + this.isGrounded + " | hasJumped: " + this.hasJumped);
             rb.AddForce(0f, jumpPower, 0f, ForceMode.Impulse);
             isGrounded = false;
-            hasJumped = true;
         }
 
         // When crouched and using toggle system, will uncrouch for a jump
         if(isCrouched && !holdToCrouch)
-        {
             Crouch();
-        }
     }
 
     private void DoubleJump()
     {
-        // Adds force to the player rigidbody to jump
-        if (!isGrounded && hasJumped && !hasDoubleJumped)
+        if (!isGrounded && !hasDoubleJumped)
         {
-            Debug.Log("Double Jumped");
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(0f, doubleJumpPower, 0f, ForceMode.Impulse);
             hasDoubleJumped = true;
         }
+    }
+
+    public void Jump()
+    {
+        if (enableJump && Input.GetKeyDown(jumpKey) && isGrounded)
+            FirstJump();
+        else if (enableDoubleJump && Input.GetKeyDown(jumpKey) && !isGrounded)
+            DoubleJump();
     }
 
 
@@ -530,18 +520,6 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        #region Double Jump
-
-        if (enableDoubleJump && Input.GetKeyDown(jumpKey) && !isGrounded)
-        {
-            Debug.Log("after jumping | hasDoubleJumped: " + this.hasDoubleJumped + " | isgrounded: " + this.isGrounded + " | hasJumped: " + this.hasJumped);
-            DoubleJump();
-        }
-
-        #endregion
-    }
 
     private void HeadBob()
     {

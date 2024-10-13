@@ -74,8 +74,7 @@ public class AudioManager : MonoBehaviour
             new Color(0f, 1f, 1f),    
             new Color(0f, 1f, 0.25f)
         );
-        Debug.Log(cci.GetClosestColorNode(new Color(1f, 0.35f, 0f)).Color);
-        Debug.Log(cci.GetLength());
+        cci.GetColorSpectrum(50, new Color(1f, 0.35f, 0f), new Color(1f, 0.35f, 0f));
     }
 
     public void Start()

@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e78bdd822b9bf24883d206875360054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentColor: {r: 0, g: 0, b: 0, a: 0}
+  CurrentColor: {r: 1, g: 0.4273501, b: 0, a: 0}
   ColorSpectrum: []
 --- !u!4 &461948843
 Transform:
@@ -429,7 +429,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7044759530410416715, guid: 9065c194fbfe5b545b1e47a9ce49dd0c, type: 3}
       propertyPath: InitialSpeed
-      value: 5
+      value: 1059
       objectReference: {fileID: 0}
     - target: {fileID: 7044759530410416715, guid: 9065c194fbfe5b545b1e47a9ce49dd0c, type: 3}
       propertyPath: RotationSpeedSync
@@ -781,7 +781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7044759530410416715, guid: 9065c194fbfe5b545b1e47a9ce49dd0c, type: 3}
       propertyPath: InitialSpeed
-      value: 1
+      value: 979
       objectReference: {fileID: 0}
     - target: {fileID: 7044759530410416715, guid: 9065c194fbfe5b545b1e47a9ce49dd0c, type: 3}
       propertyPath: RotationSpeedSync
