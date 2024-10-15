@@ -64,17 +64,8 @@ public class AudioManager : MonoBehaviour
         this.LastLoudestSamplesFrameTempo = 1;
         this.CurrentLoudestSample = 0f;
 
-        ColorChainedInterpolator cci = new ColorChainedInterpolator(
-            new Color(0.5f, 1f, 0f),    
-            new Color(1f, 0.75f, 0f),    
-            new Color(1f, 0f, 0f),    
-            new Color(1f, 0f, 0.75f),    
-            new Color(0.5f, 0f, 1f),    
-            new Color(0f, 0.25f, 1f),    
-            new Color(0f, 1f, 1f),    
-            new Color(0f, 1f, 0.25f)
-        );
-        cci.GetColorSpectrum(50, new Color(1f, 0.35f, 0f), new Color(1f, 0.35f, 0f));
+        ColorChainedInterpolator cci = new ColorChainedInterpolator();
+        cci.GetColorSpectrum(50, new Color(1f, 0.41f, 0f), new Color(0f, 0.43f, 1f));
     }
 
     public void Start()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 /// <summary>
 /// 
@@ -42,13 +43,27 @@ public class ColorChainedInterpolator
 {
 
     private ColorNode firstColorNode;
-    //TEMP
     public delegate void OnIteration(ColorNode colorNode);
 
+    public ColorChainedInterpolator()
+    {
+        this.SetColorNodeChain(
+            new Color(0.5f, 1f, 0f),
+            new Color(1f, 0.75f, 0f),
+            new Color(1f, 0f, 0f),
+            new Color(1f, 0f, 0.75f),
+            new Color(0.5f, 0f, 1f),
+            new Color(0f, 0.25f, 1f),
+            new Color(0f, 1f, 1f),
+            new Color(0f, 1f, 0.25f)
+            );
+    }
+
     public ColorChainedInterpolator(params Color[] colors) 
-    { 
+    {
         if (colors.Length >= 8)
-            this.SetColorNodeChain(colors); 
+            this.SetColorNodeChain(colors);
+        else throw new Exception();
     }
 
     private void SetColorNodeChain(params Color[] colors)
@@ -66,7 +81,7 @@ public class ColorChainedInterpolator
         this.firstColorNode.Previous = currentColorNode;
     }
 
-    public void Iterate(OnIteration callback)
+    private void Iterate(OnIteration callback)
     {
         ColorNode tempColorNode = this.firstColorNode;
         bool overFirstColorNode = true;
@@ -90,7 +105,10 @@ public class ColorChainedInterpolator
         return ((transition >= 0) && (differential >= 0)) || ((transition < 0) && (differential < 0));
     }
 
-    public ColorNode GetClosestColorNode(Color color)
+    /// <summary>
+    /// NEEDS TO BE FIXED [(1, 0.41, 0) start]
+    /// </summary>
+    private ColorNode GetClosestColorNode(Color color)
     {
         ColorNode closestColorNode = null;
         this.Iterate(colorNode =>
@@ -103,29 +121,61 @@ public class ColorChainedInterpolator
         return closestColorNode;
     }
 
-    public void SetSpectrumPercentages(ColorNode startingColorNode)
+    /// <summary>
+    /// Sets the percentages for each ColorNode from any ColorNode
+    /// </summary>
+    private void SetSpectrumPercentages(ColorNode startingColorNode)
     {
         float percentagePart = 100f / this.GetLength();
         float currentPercentage = 0f;
         this.Iterate(colorNode => 
         { 
-            colorNode.spectrumPercentage = currentPercentage;
+            startingColorNode.spectrumPercentage = currentPercentage;
             currentPercentage += percentagePart;
+            startingColorNode = startingColorNode.Next;
         });
     }
 
+    private float GetColorComponentPercentage(float transition, float colorComponent, float nextColorComponent, float spectrumPercentage)
+    {
+        float percentage;
+        if (transition >= 0 && (colorComponent != nextColorComponent))
+            percentage = (colorComponent * spectrumPercentage) / transition;
+        else if (transition < 0 && (colorComponent != nextColorComponent))
+            percentage = (colorComponent * spectrumPercentage) / (colorComponent - nextColorComponent);
+        else percentage = 0f;
+        return percentage;
+    }
+
+    /// <summary>
+    /// - After each colorNode percentages haves been set, get the exact percentage represtentation
+    ///   of the color
+    /// - Each component of the color (red, green, blue) travels differently on the spectrum (have a different transition, clockwise)
+    /// - Only one component changes at a time as we travel
+    /// - The exact percentage is determined by adding the percentage of all components (since only one changes at a time between the
+    ///   different colorNodes)
+    ///
+    /// </summary>
+    private float GetExactSpectrumPercentage(Color color, ColorNode closestColorNode)
+    {
+        float percentage = this.GetColorComponentPercentage(closestColorNode.transition.Red, color.r, closestColorNode.Next.Color.r, closestColorNode.Next.spectrumPercentage)
+            + this.GetColorComponentPercentage(closestColorNode.transition.Green, color.g, closestColorNode.Next.Color.g, closestColorNode.Next.spectrumPercentage)
+            + this.GetColorComponentPercentage(closestColorNode.transition.Blue, color.b, closestColorNode.Next.Color.b, closestColorNode.Next.spectrumPercentage);
+        if (percentage == 0f) return closestColorNode.spectrumPercentage;
+        else return percentage;
+    }
     public Color[] GetColorSpectrum(int spectrumLength, Color startColor, Color endColor)
     {
-        float subSpectrumPercentage = 100f / spectrumLength;
-        float currentSubSpectrumPercentage = 0f;
-        ColorNode startingColorNode = this.GetClosestColorNode(startColor); 
-        this.SetSpectrumPercentages(startingColorNode);
-
-        this.Iterate(colorNode => 
-        {
-            
-        });
-            
+        Color[] colors = new Color[spectrumLength];
+        ColorNode closestStartColorNode = this.GetClosestColorNode(startColor);
+        ColorNode closestEndColorNode = this.GetClosestColorNode(endColor);
+        this.SetSpectrumPercentages(closestStartColorNode);
+        float exactStartSpectrumPercentage = this.GetExactSpectrumPercentage(startColor, closestStartColorNode);
+        float exactEndSpectrumPercentage = this.GetExactSpectrumPercentage(endColor, closestEndColorNode);
+        Debug.Log(closestStartColorNode.Color);
+        Debug.Log(exactEndSpectrumPercentage);
+        float subSpectrumPercentageIncrement = (exactEndSpectrumPercentage - exactStartSpectrumPercentage) / spectrumLength;
+        float subSpectrumPercentage = 0f;
 
         return null;
     }
