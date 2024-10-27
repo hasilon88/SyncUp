@@ -40,7 +40,7 @@ public class MenuBehavior : MonoBehaviour
         storeButton = GameObject.Find("StoreButton").GetComponent<Button>();
         exitButton = GameObject.Find("ExitButton").GetComponent<Button>();
         levelSelectorCanvas = GameObject.Find("TestLevelSelector").GetComponent<Canvas>();
-        storeCanvas = GameObject.Find("TestStore").GetComponent<Canvas>();
+        storeCanvas = GameObject.Find("StoreCanvas").GetComponent<Canvas>();
         menuCanvas = GetComponent<Canvas>();
         this.SetGoBackButtons();
     }
