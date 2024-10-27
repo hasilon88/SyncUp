@@ -3,6 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// SINGLETON FOR GLOBAL VARIABLES
+/// GlobalStates s = GlobalStates.Instance;
 /// </summary>
 public class GlobalStates : MonoBehaviour
 {
