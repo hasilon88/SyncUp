@@ -114,20 +114,34 @@ public class ColorChainedInterpolator
         });
     }
 
-    public Color[] GetColorSpectrum(int spectrumLength, Color startColor, Color endColor)
-    {
-        float subSpectrumPercentage = 100f / spectrumLength;
-        float currentSubSpectrumPercentage = 0f;
-        ColorNode startingColorNode = this.GetClosestColorNode(startColor); 
-        this.SetSpectrumPercentages(startingColorNode);
+    //public Color[] GetColorSpectrum(int spectrumLength, Color startColor, Color endColor)
+    //{
+    //    float subSpectrumPercentage = 100f / spectrumLength;
+    //    float currentSubSpectrumPercentage = 0f;
+    //    ColorNode startingColorNode = this.GetClosestColorNode(startColor); 
+    //    this.SetSpectrumPercentages(startingColorNode);
 
-        this.Iterate(colorNode => 
-        {
+    //    this.Iterate(colorNode => 
+    //    {
             
-        });
+    //    });
             
 
-        return null;
-    }
+    //    return null;
+    //}
     
+    //public void test()
+    //{
+    //    ColorChainedInterpolator cci = new ColorChainedInterpolator(
+    //        new Color(0.5f, 1f, 0f),
+    //        new Color(1f, 0.75f, 0f),
+    //        new Color(1f, 0f, 0f),
+    //        new Color(1f, 0f, 0.75f),
+    //        new Color(0.5f, 0f, 1f),
+    //        new Color(0f, 0.25f, 1f),
+    //        new Color(0f, 1f, 1f),
+    //        new Color(0f, 1f, 0.25f)
+    //    );
+    //    cci.GetColorSpectrum(50, new Color(1f, 0.35f, 0f), new Color(1f, 0.35f, 0f));
+    //}
 }
