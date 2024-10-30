@@ -11,13 +11,15 @@ public class JumpController : MonoBehaviour
     public KeyCode JumpKey = KeyCode.Space;
     public bool hasDoubleJumped = false;
     private FirstPersonController firstPersonController;
+    private CrouchController crouchController;
 
     private void Start()
     {
         firstPersonController = GetComponent<FirstPersonController>();
+        crouchController = GetComponent<CrouchController>();
     }
 
-    private void SetIsGrounded()
+    public void UpdateIsGrounded()
     {
         Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
         float distance = .75f;
@@ -34,25 +36,25 @@ public class JumpController : MonoBehaviour
     {
         if (IsGrounded)
         {
-            firstPersonController.rb.AddForce(0f, JumpPower, 0f, ForceMode.Impulse);
+            firstPersonController._rigidBody.AddForce(0f, JumpPower, 0f, ForceMode.Impulse);
             IsGrounded = false;
         }
 
-        if (firstPersonController.CrouchController.IsCrouched && !firstPersonController.CrouchController.HoldToCrouch)
-            firstPersonController.CrouchController.Crouch();
+        if (crouchController.IsCrouched && !crouchController.HoldToCrouch)
+            crouchController.Crouch();
     }
 
     private void DoubleJump()
     {
         if (!IsGrounded && !hasDoubleJumped)
         {
-            firstPersonController.rb.velocity = new Vector3(firstPersonController.rb.velocity.x, 0f, firstPersonController.rb.velocity.z);
-            firstPersonController.rb.AddForce(0f, DoubleJumpPower, 0f, ForceMode.Impulse);
+            firstPersonController._rigidBody.velocity = new Vector3(firstPersonController._rigidBody.velocity.x, 0f, firstPersonController._rigidBody.velocity.z);
+            firstPersonController._rigidBody.AddForce(0f, DoubleJumpPower, 0f, ForceMode.Impulse);
             hasDoubleJumped = true;
         }
     }
 
-    public void Jump()
+    public void UpdateJumpState()
     {
         if (EnableDoubleJump && Input.GetKeyDown(JumpKey) && IsGrounded && EnableJump)
             FirstJump();
@@ -60,10 +62,4 @@ public class JumpController : MonoBehaviour
             DoubleJump();
     }
 
-    public void Update()
-    {
-        SetIsGrounded();
-        if (EnableJump)
-            Jump();
-    }
 }

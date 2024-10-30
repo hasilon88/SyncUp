@@ -45,7 +45,8 @@ public class HeadBobController : MonoBehaviour
                 );
         }
     }
-    private void Update()
+
+    public void UpdateHeadBobState()
     {
         if (EnableHeadBob)
             HeadBob();

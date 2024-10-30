@@ -142,15 +142,14 @@ public class SprintController : MonoBehaviour
         return EnableSprint && Input.GetKey(SprintKey) && sprintRemaining > 0f && !isSprintCooldown;
     }
 
-    private Vector3 UpdateVelocityChange()
+    private void UpdateVelocityChange()
     {
         targetVelocity = transform.TransformDirection(targetVelocity) * SprintSpeed;
-        velocity = firstPersonController.rb.velocity;
+        velocity = firstPersonController._rigidBody.velocity;
         velocityChange = (targetVelocity - velocity);
         velocityChange.x = Mathf.Clamp(velocityChange.x, -MaxVelocityChange, MaxVelocityChange);
         velocityChange.z = Mathf.Clamp(velocityChange.z, -MaxVelocityChange, MaxVelocityChange);
         velocityChange.y = 0;
-        return velocityChange;
     }
 
     private void Sprint()
@@ -170,7 +169,7 @@ public class SprintController : MonoBehaviour
                 if (HideBarWhenFull && !UnlimitedSprint)
                     sprintBarCG.alpha += 5 * Time.deltaTime;
             }
-            firstPersonController.rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            firstPersonController._rigidBody.AddForce(velocityChange, ForceMode.VelocityChange);
         }
         else
         {
@@ -182,17 +181,16 @@ public class SprintController : MonoBehaviour
             targetVelocity = transform.TransformDirection(targetVelocity) * WalkSpeed;
 
             // Apply a force that attempts to reach our target velocity
-            Vector3 velocity = firstPersonController.rb.velocity;
+            Vector3 velocity = firstPersonController._rigidBody.velocity;
             Vector3 velocityChange = (targetVelocity - velocity);
             velocityChange.x = Mathf.Clamp(velocityChange.x, -MaxVelocityChange, MaxVelocityChange);
             velocityChange.z = Mathf.Clamp(velocityChange.z, -MaxVelocityChange, MaxVelocityChange);
             velocityChange.y = 0;
-
-            firstPersonController.rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            firstPersonController._rigidBody.AddForce(velocityChange, ForceMode.VelocityChange);
         }
     }
 
-    private void Update()
+    public void UpdateSprintStates()
     {
         if (EnableSprint)
         {
@@ -202,11 +200,10 @@ public class SprintController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    public void UpdateSprintMovementState()
     {
-        if (EnableSprint && firstPersonController.PlayerCanMove)
-        {
+        if (EnableSprint)
             Sprint();
-        }
     }
+
 }

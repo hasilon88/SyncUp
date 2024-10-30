@@ -54,7 +54,7 @@ public class PlayerCameraController : MonoBehaviour
         else crosshairObject.gameObject.SetActive(false);
     }
 
-    private void UpdateZoomState()
+    public void UpdateZoomState()
     {
         if (EnableZoom)
         {
@@ -77,7 +77,7 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
-    private void UpdatePlayerCamera()
+    public void UpdatePlayerCameraState()
     {
         if (CameraCanMove)
         {
@@ -94,12 +94,5 @@ public class PlayerCameraController : MonoBehaviour
             playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
         }
     }
-
-    public void LateUpdate()
-    {
-        UpdatePlayerCamera();
-        UpdateZoomState();
-    }
-
 
 }

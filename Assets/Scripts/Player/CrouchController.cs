@@ -44,7 +44,6 @@ public class CrouchController : MonoBehaviour
         {
             if (Input.GetKeyDown(CrouchKey) && !HoldToCrouch)
                 Crouch();
-
             if (Input.GetKeyDown(CrouchKey) && HoldToCrouch)
             {
                 IsCrouched = false;
@@ -57,9 +56,5 @@ public class CrouchController : MonoBehaviour
             }
         }
     }
-
-    public void Update()
-    {
-        UpdateCrouchState();
-    }
+    
 }
