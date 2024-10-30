@@ -10,11 +10,16 @@ public class CrouchController : MonoBehaviour
     public float SpeedReduction = .5f;
     public bool IsCrouched = false;
     private Vector3 OriginalScale;
-    public FirstPersonController FirstPersonController;
+    private SprintController sprintController;
 
     private void Awake()
     {
         OriginalScale = transform.localScale;
+    }
+
+    private void Start()
+    {
+        sprintController = GetComponent<SprintController>();
     }
 
     public void Crouch()
@@ -22,13 +27,13 @@ public class CrouchController : MonoBehaviour
         if (IsCrouched) // Stands player up to full height // Brings walkSpeed back up to original speed
         {
             transform.localScale = new Vector3(OriginalScale.x, OriginalScale.y, OriginalScale.z);
-            FirstPersonController.walkSpeed /= SpeedReduction;
+            sprintController.WalkSpeed /= SpeedReduction;
             IsCrouched = false;
         }
         else // Crouches player down to set height // Reduces walkSpeed
         {
             transform.localScale = new Vector3(OriginalScale.x, CrouchHeight, OriginalScale.z);
-            FirstPersonController.walkSpeed *= SpeedReduction;
+            sprintController.WalkSpeed *= SpeedReduction;
             IsCrouched = true;
         }
     }

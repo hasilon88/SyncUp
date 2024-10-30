@@ -3,46 +3,67 @@ using UnityEngine;
 public class JumpController : MonoBehaviour
 {
 
+    public bool EnableJump = true;
     public bool EnableDoubleJump = true;
+    public bool IsGrounded = false;
     public float DoubleJumpPower = 5f;
     public float JumpPower = 5f;
     public KeyCode JumpKey = KeyCode.Space;
     public bool hasDoubleJumped = false;
-    public FirstPersonController FirstPersonController;
+    private FirstPersonController firstPersonController;
+
+    private void Start()
+    {
+        firstPersonController = GetComponent<FirstPersonController>();
+    }
+
+    private void SetIsGrounded()
+    {
+        Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
+        float distance = .75f;
+        if (Physics.Raycast(origin, transform.TransformDirection(Vector3.down), out RaycastHit hit, distance))
+        {
+            //Debug.DrawRay(origin, direction * distance, Color.red);
+            IsGrounded = true;
+            hasDoubleJumped = false;
+        }
+        else IsGrounded = false;
+    }
 
     private void FirstJump()
     {
-        if (FirstPersonController.isGrounded)
+        if (IsGrounded)
         {
-            FirstPersonController.rb.AddForce(0f, JumpPower, 0f, ForceMode.Impulse);
-            FirstPersonController.isGrounded = false;
+            firstPersonController.rb.AddForce(0f, JumpPower, 0f, ForceMode.Impulse);
+            IsGrounded = false;
         }
 
-        // When crouched and using toggle system, will uncrouch for a jump
-        if (FirstPersonController.CrouchController.IsCrouched && !FirstPersonController.CrouchController.HoldToCrouch)
-            FirstPersonController.CrouchController.Crouch();
+        if (firstPersonController.CrouchController.IsCrouched && !firstPersonController.CrouchController.HoldToCrouch)
+            firstPersonController.CrouchController.Crouch();
     }
 
     private void DoubleJump()
     {
-        if (!FirstPersonController.isGrounded && !hasDoubleJumped)
+        if (!IsGrounded && !hasDoubleJumped)
         {
-            FirstPersonController.rb.velocity = new Vector3(FirstPersonController.rb.velocity.x, 0f, FirstPersonController.rb.velocity.z);
-            FirstPersonController.rb.AddForce(0f, DoubleJumpPower, 0f, ForceMode.Impulse);
+            firstPersonController.rb.velocity = new Vector3(firstPersonController.rb.velocity.x, 0f, firstPersonController.rb.velocity.z);
+            firstPersonController.rb.AddForce(0f, DoubleJumpPower, 0f, ForceMode.Impulse);
             hasDoubleJumped = true;
         }
     }
 
     public void Jump()
     {
-        if (EnableDoubleJump && Input.GetKeyDown(JumpKey) && FirstPersonController.isGrounded)
+        if (EnableDoubleJump && Input.GetKeyDown(JumpKey) && IsGrounded && EnableJump)
             FirstJump();
-        else if (EnableDoubleJump && Input.GetKeyDown(JumpKey) && !FirstPersonController.isGrounded)
+        else if (EnableDoubleJump && Input.GetKeyDown(JumpKey) && !IsGrounded && EnableJump)
             DoubleJump();
     }
 
     public void Update()
     {
-        Jump();
+        SetIsGrounded();
+        if (EnableJump)
+            Jump();
     }
 }

@@ -12,13 +12,11 @@ public class PlayerCameraController : MonoBehaviour
     public float MouseSensitivity = 2f;
     public float MaxLookAngle = 50f;
 
-    // Crosshair
     public bool LockCursor = true;
     public bool Crosshair = true;
     public Sprite CrosshairImage;
     public Color CrosshairColor = Color.white;
 
-    // Internal Variables
     private float yaw = 0.0f;
     private float pitch = 0.0f;
     private Image crosshairObject;
@@ -31,18 +29,23 @@ public class PlayerCameraController : MonoBehaviour
 
     public bool isZoomed = false;
 
-    public FirstPersonController FirstPersonController;
+    private SprintController sprintController;
 
     public void Awake()
     {
+        sprintController = GetComponent<SprintController>();
         crosshairObject = GetComponentInChildren<Image>();
         playerCamera.fieldOfView = Fov;
     }
 
     public void Start()
     {
-        if (LockCursor) Cursor.lockState = CursorLockMode.Locked;
+        SetUpCursor();
+    }
 
+    private void SetUpCursor()
+    {
+        if (LockCursor) Cursor.lockState = CursorLockMode.Locked;
         if (Crosshair)
         {
             crosshairObject.sprite = CrosshairImage;
@@ -51,7 +54,30 @@ public class PlayerCameraController : MonoBehaviour
         else crosshairObject.gameObject.SetActive(false);
     }
 
-    public void LateUpdate()
+    private void UpdateZoomState()
+    {
+        if (EnableZoom)
+        {
+            if (Input.GetKeyDown(ZoomKey) && !HoldToZoom && !sprintController.IsSprinting)
+            {
+                if (!isZoomed) isZoomed = true;
+                else isZoomed = false;
+            }
+
+            if (HoldToZoom && !sprintController.IsSprinting)
+            {
+                if (Input.GetKeyDown(ZoomKey)) isZoomed = true;
+                else if (Input.GetKeyUp(ZoomKey)) isZoomed = false;
+            }
+
+            if (isZoomed)
+                playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, ZoomFOV, ZoomStepTime * Time.deltaTime);
+            else if (!isZoomed && !sprintController.IsSprinting)
+                playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, Fov, ZoomStepTime * Time.deltaTime);
+        }
+    }
+
+    private void UpdatePlayerCamera()
     {
         if (CameraCanMove)
         {
@@ -67,36 +93,12 @@ public class PlayerCameraController : MonoBehaviour
             transform.localEulerAngles = new Vector3(0, yaw, 0);
             playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
         }
+    }
 
-        if (EnableZoom)
-        {
-            // Changes isZoomed when key is pressed
-            // Behavior for toogle zoom
-            if (Input.GetKeyDown(ZoomKey) && !HoldToZoom && !FirstPersonController.isSprinting)
-            {
-                if (!isZoomed)
-                    isZoomed = true;
-                else
-                    isZoomed = false;
-            }
-
-            // Changes isZoomed when key is pressed
-            // Behavior for hold to zoom
-            if (HoldToZoom && !FirstPersonController.isSprinting)
-            {
-                if (Input.GetKeyDown(ZoomKey))
-                    isZoomed = true;
-                else if (Input.GetKeyUp(ZoomKey))
-                    isZoomed = false;
-            }
-
-            // Lerps camera.fieldOfView to allow for a smooth transistion
-            if (isZoomed)
-                playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, ZoomFOV, ZoomStepTime * Time.deltaTime);
-            else if (!isZoomed && !FirstPersonController.isSprinting)
-                playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, Fov, ZoomStepTime * Time.deltaTime);
-        }
-
+    public void LateUpdate()
+    {
+        UpdatePlayerCamera();
+        UpdateZoomState();
     }
 
 
