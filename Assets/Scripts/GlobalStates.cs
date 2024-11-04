@@ -20,6 +20,7 @@ public class GlobalStates : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(this);
+        //one loading a new scene, object wont be destroyed
         DontDestroyOnLoad(this);
     }
 

@@ -6,15 +6,21 @@ using System.Linq;
 
 
 /// <summary>
-/// EVENTATTRIBUTE OBJECT?
+/// # OPTIMIZATIONS
+/// - **TIMING SNAPSHOTTHRESHOLD WITH FLOATS**
+/// - EVENTATTRIBUTE OBJECT?
+/// - should keep a reference of RigidBody[] has attribute
+/// - CAMERA REWINDER?
+/// - should use .AddForce() while inverting Vector3s?
+/// - GOONCOOLDOWN...
+/// - STOP REWIND IN CERTAIN CONDITIONS
 /// </summary>
 public class RewindAbility : Ability
 {
-    [SerializeField]
     private IRewind[] rewindableObjects;
     public int RewindDurationInSeconds = 3;
     public int SnapshotThresold = 1; // new name...
-    private int lastRewindElementsAddRealtime = 0; // new name...
+    private int lastSnapshotTime = 0; // new name...
     [Range(0f, 2f)]
     public float SecondsBetweenRewindIteration = 1f;
     public GlobalStates GlobalStates = GlobalStates.Instance;
@@ -27,14 +33,14 @@ public class RewindAbility : Ability
 
     public void Start()
     {
-        OnRewindStart += (object sender, EventArgs e) => Debug.Log("Rewind started");
+        OnRewindStart += BeforeRewind;
         OnRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
-        OnRewindStop += (object sender, EventArgs e) => Debug.Log("Rewind stopped");
+        OnRewindStop += AfterRewind;
 
         OnRewindElementsAddStart += (object sender, EventArgs e) =>
         {
             Debug.Log("ElementsAdd Start");
-            lastRewindElementsAddRealtime = GlobalStates.Realtime;
+            lastSnapshotTime = GlobalStates.Realtime;
         };
 
         OnRewindElementsAddStop += (object sender, EventArgs e) => 
@@ -44,10 +50,27 @@ public class RewindAbility : Ability
 
     }
 
+    private void BeforeRewind(object sender, EventArgs e)
+    {
+        Debug.Log("Rewind start");
+        PrepareRigidBodies();
+        firstPersonController.PlayerCanMove = false; //enemy can move?
+        isLive = true;
+    }
+
+    private void AfterRewind(object sender, EventArgs e)
+    {
+        Debug.Log("Rewind stopped");
+        firstPersonController.PlayerCanMove = true;
+        isLive = false;
+        UnPrepareRigidBodies();
+        //GoOnCooldown()
+    }
+
     private bool CanAddRewindElements()
     {
         if (SnapshotThresold > 0)
-            return (GlobalStates.Realtime % SnapshotThresold == 0) && (GlobalStates.Realtime != lastRewindElementsAddRealtime);
+            return (GlobalStates.Realtime % SnapshotThresold == 0) && (GlobalStates.Realtime != lastSnapshotTime);
         else return true;
     }
 
@@ -78,7 +101,27 @@ public class RewindAbility : Ability
             Debug.Log("ADD ELEMENTS");
             OnRewindElementsAddStop?.Invoke(this, EventArgs.Empty);
         }
-            
+    }
+
+    private Rigidbody[] GetRigidBodies()
+    {
+        return GameObject.FindObjectsOfType<Rigidbody>().ToArray();
+    }
+
+    private void PrepareRigidBodies()
+    {
+        foreach (Rigidbody body in FindObjectsOfType<Rigidbody>().ToArray())
+        {
+            body.useGravity = false;
+            body.velocity = Vector3.zero;
+            //body.angularVelocity = Vector3.zero; //CAMERA REWINDER?
+        }
+    }
+
+    private void UnPrepareRigidBodies()
+    {
+        foreach (Rigidbody body in FindObjectsOfType<Rigidbody>().ToArray())
+            body.useGravity = true;
     }
 
     /// <summary>
@@ -88,11 +131,6 @@ public class RewindAbility : Ability
     {
         OnRewindStart?.Invoke(this, EventArgs.Empty);
         int currentRealtimeSinceStartup = GlobalStates.Realtime;
-        firstPersonController.PlayerCanMove = false;
-        isLive = true;
-        firstPersonController._rigidBody.useGravity = false;
-        firstPersonController._rigidBody.velocity = Vector3.zero;
-        firstPersonController._rigidBody.angularVelocity = Vector3.zero;
         while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
         {
             OnRewindIteration?.Invoke(this, EventArgs.Empty);
@@ -100,10 +138,6 @@ public class RewindAbility : Ability
             yield return new WaitForSeconds(SecondsBetweenRewindIteration);
         }
         OnRewindStop?.Invoke(this, EventArgs.Empty);
-        //GoOnCooldown()
-        firstPersonController.PlayerCanMove = true;
-        isLive = false;
-        firstPersonController._rigidBody.useGravity = true;
     }
 
     /// <summary>

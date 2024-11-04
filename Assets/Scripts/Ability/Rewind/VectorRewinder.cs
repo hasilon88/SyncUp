@@ -20,13 +20,11 @@ public class VectorRewinder : MonoBehaviour, IRewind
 
     public void Rewind()
     {
-        Debug.Log("REWIND VECTOR");
         transform.position = lastPositions.GetLast(rewindOffset);
     }
 
     public void UpdateRewindElements()
     {
-        Debug.Log("UPDATE ELEMENTS VECTOR");
         lastPositions.Add(transform.position);
     }
 }
