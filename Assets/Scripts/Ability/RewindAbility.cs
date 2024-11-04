@@ -9,14 +9,13 @@ public class RewindAbility : Ability
     [SerializeField]
     private IRewind[] rewindableObjects;
     public int RewindDurationInSeconds = 3;
-    private int realtime = 0;
     public int RewindElementsAddTimeThresold = 15; //new name?
     private int lastRewindElementsAddRealtime = 0;
+    public GlobalStates GlobalStates = GlobalStates.Instance;
 
     private event EventHandler onRewindStart;
     private event EventHandler onRewindIteration;
     private event EventHandler onRewindStop;
-
     private event EventHandler onRewindElementsAddStart;
     private event EventHandler onRewindElementsAddStop;
 
@@ -29,26 +28,19 @@ public class RewindAbility : Ability
         onRewindElementsAddStart += (object sender, EventArgs e) =>
         {
             Debug.Log("ElementsAdd Start");
-            lastRewindElementsAddRealtime = realtime;
-
+            lastRewindElementsAddRealtime = GlobalStates.Realtime;
         };
 
         onRewindElementsAddStop += (object sender, EventArgs e) => Debug.Log("ElementsAdd Stop");
     }
-
-    private void UpdateRealtime()
-    {
-        realtime = (int)Time.realtimeSinceStartup;
-    }
-
     private bool CanAddRewindElements()
     {
-        return (realtime % RewindElementsAddTimeThresold == 0) && (realtime != lastRewindElementsAddRealtime); 
+        return (GlobalStates.Realtime % RewindElementsAddTimeThresold == 0) && (GlobalStates.Realtime != lastRewindElementsAddRealtime); 
     }
 
-    private bool hasNotPassedSeconds(int currentRealtimeSinceStartup)
+    private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
     {
-        return realtime - currentRealtimeSinceStartup < RewindDurationInSeconds;
+        return GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds;
     }
 
     /// <summary>
@@ -56,7 +48,6 @@ public class RewindAbility : Ability
     /// </summary>
     private void UpdateRewindableObjects()
     {
-        //var ss = FindObjectsOfType<MonoBehaviour>().OfType<IStats>();
         if (!isLive)
             rewindableObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<IRewind>().ToArray();
     }
@@ -82,19 +73,20 @@ public class RewindAbility : Ability
     /// </summary>
     private IEnumerator Rewind()
     {
-            onRewindStart?.Invoke(this, EventArgs.Empty);
-            int currentRealtimeSinceStartup = realtime;
-            firstPersonController.PlayerCanMove = false;
-            isLive = true;
-            while (hasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
-            {
-                onRewindIteration?.Invoke(this, EventArgs.Empty);
-                foreach (IRewind obj in rewindableObjects) obj?.Rewind();
-                yield return null;
-            }
-            onRewindStop?.Invoke(this, EventArgs.Empty);
-            firstPersonController.PlayerCanMove = true;
-            isLive = false;
+        onRewindStart?.Invoke(this, EventArgs.Empty);
+        int currentRealtimeSinceStartup = GlobalStates.Realtime;
+        firstPersonController.PlayerCanMove = false;
+        isLive = true;
+        while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
+        {
+            onRewindIteration?.Invoke(this, EventArgs.Empty);
+            foreach (IRewind obj in rewindableObjects) obj?.Rewind();
+            yield return null;
+        }
+        onRewindStop?.Invoke(this, EventArgs.Empty);
+        //GoOnCooldown()
+        firstPersonController.PlayerCanMove = true;
+        isLive = false;
     }
 
     /// <summary>
@@ -103,10 +95,9 @@ public class RewindAbility : Ability
     /// </summary>
     private void Update()
     {
-        UpdateRealtime();
         UpdateRewindableObjects();
         UpdateRewindElements();
-        if (!isLive && Input.GetKeyDown(triggerKey))
+        if (!isLive && Input.GetKeyDown(triggerKey) && !OnCooldown)
             StartCoroutine(Rewind());
     }
 }

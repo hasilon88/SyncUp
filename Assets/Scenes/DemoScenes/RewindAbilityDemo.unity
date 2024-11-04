@@ -277,6 +277,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cooldown: 0
+  CooldownCountdown: 0
+  CooldownEnable: 1
   Name: Rewind
   Icon: {fileID: 0}
   isLive: 0
@@ -284,7 +286,8 @@ MonoBehaviour:
   triggerKey: 273
   firstPersonController: {fileID: 265405478}
   RewindDurationInSeconds: 3
-  ElementsTimeThresold: 15
+  RewindElementsAddTimeThresold: 3
+  GlobalStates: {fileID: 1269032594}
 --- !u!4 &222041661
 Transform:
   m_ObjectHideFlags: 0
@@ -689,6 +692,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1269032592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1269032593}
+  - component: {fileID: 1269032594}
+  m_Layer: 0
+  m_Name: GlobalStates
+  m_TagString: GlobalStates
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1269032593
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269032592}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 599.05206, y: 273.24646, z: 3.0415869}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1269032594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269032592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 084cff47185aa7a418d8f5de95a1fefb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ability1: {fileID: 0}
+  Ability2: {fileID: 0}
+  Credits: 0
+  CurrentLevel: 1
+  Realtime: 0
 --- !u!1 &1278632017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1089,6 +1141,10 @@ PrefabInstance:
     - target: {fileID: 6669486477074290078, guid: cdd53f876648db449a436e0fadc9728b, type: 3}
       propertyPath: m_Name
       value: FirstPersonController
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669486477074290078, guid: cdd53f876648db449a436e0fadc9728b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7246601654380192024, guid: cdd53f876648db449a436e0fadc9728b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1540,3 +1596,4 @@ SceneRoots:
   - {fileID: 1087386366}
   - {fileID: 1653287477}
   - {fileID: 222041661}
+  - {fileID: 1269032593}
