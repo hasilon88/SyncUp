@@ -13,7 +13,7 @@ public abstract class Ability : MonoBehaviour
     public bool isLive; //if ablity is currently being used (has been fired) //could be disregarded
     public int CreditsNeeded; //price in the store
     public KeyCode triggerKey;
-
+    public FirstPersonController firstPersonController;
     public event EventHandler OnAbilityEnabled;
 
     public void EnableAbility()

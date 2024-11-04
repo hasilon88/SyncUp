@@ -33,7 +33,6 @@ public class FirstPersonController : MonoBehaviour
             crouchController.UpdateCrouchState();
             headBobController.UpdateHeadBobState();
         }
-        
     }
 
     private void FixedUpdate()

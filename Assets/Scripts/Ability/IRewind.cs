@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IRewind
 {
+
+    public abstract void UpdateRewindElements();
     public abstract void Rewind();
 }
