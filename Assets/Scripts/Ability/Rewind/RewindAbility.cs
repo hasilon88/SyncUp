@@ -91,6 +91,8 @@ public class RewindAbility : Ability
         firstPersonController.PlayerCanMove = false;
         isLive = true;
         firstPersonController._rigidBody.useGravity = false;
+        firstPersonController._rigidBody.velocity = Vector3.zero;
+        firstPersonController._rigidBody.angularVelocity = Vector3.zero;
         while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
         {
             OnRewindIteration?.Invoke(this, EventArgs.Empty);
