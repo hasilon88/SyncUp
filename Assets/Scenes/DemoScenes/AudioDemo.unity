@@ -650,7 +650,7 @@ MonoBehaviour:
   LastLoudestSamplesAverage: 0
   LastLoudestSamplesMax: 0
   LastLoudestSamplesFrameTempo: 0
-  NormalizedLastLoudestSamplesTempoDifferential: 0.2
+  NormalizedLastLoudestSamplesTempoDifferential: 0.179
   CurrentLoudestSample: 0
   SessionLoudestSample: 0
   CurrentLoudestSampleMultiplier: 1

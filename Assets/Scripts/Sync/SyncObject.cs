@@ -12,10 +12,10 @@ public abstract class SyncObject : MonoBehaviour
         if (this.AudioManager == null) 
             this.AudioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         if (this.AudioManager != null) 
-            this.AudioManager.OnNormalizedValuesChange += SyncOnLastLoudestSemplesFrameTempo;
+            this.AudioManager.OnNormalizedValuesChange += SyncOnLastLoudestSamplesFrameTempo;
     }
 
-    public void SyncOnLastLoudestSemplesFrameTempo(object sender, EventArgs e)
+    public void SyncOnLastLoudestSamplesFrameTempo(object sender, EventArgs e)
     {
         if (this.AudioManager.FPSManager.UpdateFrameCount % this.AudioManager.LastLoudestSamplesFrameTempo == 0)
             Sync();

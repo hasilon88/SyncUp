@@ -55,6 +55,7 @@ public class AudioManager : MonoBehaviour
     public float MinimumCapturableSample = 0.001f;
     public event EventHandler OnNormalizedValuesChange;
     public FPSManager FPSManager;
+    private readonly ArrayUtils<float> arrayUtils = new ArrayUtils<float>();
 
     /// <summary>
     /// these values need to be set in Awake() to avoid /division by 0 exception
@@ -103,7 +104,7 @@ public class AudioManager : MonoBehaviour
     private void AddLoudestSample()
     {
         if (this.lastLoudestSamplesIndex < this.lastLoudestSamples.Length) this.lastLoudestSamples[this.lastLoudestSamplesIndex++] = this.CurrentLoudestSample;
-        else this.lastLoudestSamples = ArrayUtils.AddLast(this.lastLoudestSamples, this.CurrentLoudestSample);
+        else this.lastLoudestSamples = arrayUtils.AddLast(this.lastLoudestSamples, this.CurrentLoudestSample);
     }
 
     private void SetNormalizedValues()

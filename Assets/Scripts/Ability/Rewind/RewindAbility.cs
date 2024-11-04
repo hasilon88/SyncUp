@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
 
+
+/// <summary>
+/// EVENTATTRIBUTE OBJECT?
+/// </summary>
 public class RewindAbility : Ability
 {
     [SerializeField]
@@ -13,25 +17,25 @@ public class RewindAbility : Ability
     private int lastRewindElementsAddRealtime = 0;
     public GlobalStates GlobalStates = GlobalStates.Instance;
 
-    private event EventHandler onRewindStart;
-    private event EventHandler onRewindIteration;
-    private event EventHandler onRewindStop;
-    private event EventHandler onRewindElementsAddStart;
-    private event EventHandler onRewindElementsAddStop;
+    public event EventHandler OnRewindStart;
+    public event EventHandler OnRewindIteration;
+    public event EventHandler OnRewindStop;
+    public event EventHandler OnRewindElementsAddStart;
+    public event EventHandler OnRewindElementsAddStop;
 
     public void Start()
     {
-        onRewindStart += (object sender, EventArgs e) => Debug.Log("Rewind started");
-        onRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
-        onRewindStop += (object sender, EventArgs e) => Debug.Log("Rewind stopped");
+        OnRewindStart += (object sender, EventArgs e) => Debug.Log("Rewind started");
+        OnRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
+        OnRewindStop += (object sender, EventArgs e) => Debug.Log("Rewind stopped");
 
-        onRewindElementsAddStart += (object sender, EventArgs e) =>
+        OnRewindElementsAddStart += (object sender, EventArgs e) =>
         {
             Debug.Log("ElementsAdd Start");
             lastRewindElementsAddRealtime = GlobalStates.Realtime;
         };
 
-        onRewindElementsAddStop += (object sender, EventArgs e) => Debug.Log("ElementsAdd Stop");
+        OnRewindElementsAddStop += (object sender, EventArgs e) => Debug.Log("ElementsAdd Stop");
     }
     private bool CanAddRewindElements()
     {
@@ -60,10 +64,10 @@ public class RewindAbility : Ability
     {
         if (CanAddRewindElements() && !isLive)
         {
-            onRewindElementsAddStart?.Invoke(this, EventArgs.Empty);
+            OnRewindElementsAddStart?.Invoke(this, EventArgs.Empty);
             foreach (IRewind obj in rewindableObjects) obj?.UpdateRewindElements();
             Debug.Log("ADD ELEMENTS");
-            onRewindElementsAddStop?.Invoke(this, EventArgs.Empty);
+            OnRewindElementsAddStop?.Invoke(this, EventArgs.Empty);
         }
             
     }
@@ -73,17 +77,17 @@ public class RewindAbility : Ability
     /// </summary>
     private IEnumerator Rewind()
     {
-        onRewindStart?.Invoke(this, EventArgs.Empty);
+        OnRewindStart?.Invoke(this, EventArgs.Empty);
         int currentRealtimeSinceStartup = GlobalStates.Realtime;
         firstPersonController.PlayerCanMove = false;
         isLive = true;
         while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
         {
-            onRewindIteration?.Invoke(this, EventArgs.Empty);
+            OnRewindIteration?.Invoke(this, EventArgs.Empty);
             foreach (IRewind obj in rewindableObjects) obj?.Rewind();
             yield return null;
         }
-        onRewindStop?.Invoke(this, EventArgs.Empty);
+        OnRewindStop?.Invoke(this, EventArgs.Empty);
         //GoOnCooldown()
         firstPersonController.PlayerCanMove = true;
         isLive = false;

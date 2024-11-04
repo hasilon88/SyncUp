@@ -1,11 +1,10 @@
-using UnityEngine;
 
-public static class ArrayUtils
+public class ArrayUtils<T>
 {
 
-    public static float[] AddLast(float[] initialArray, float element)
+    public T[] AddLast(T[] initialArray, T element)
     {
-        float[] temp = new float[initialArray.Length];
+        T[] temp = new T[initialArray.Length];
         for (int elem = 0; elem < initialArray.Length - 1; elem++)
             temp[elem] = initialArray[elem + 1];
         temp[initialArray.Length - 1] = element;
