@@ -13,8 +13,10 @@ public class RewindAbility : Ability
     [SerializeField]
     private IRewind[] rewindableObjects;
     public int RewindDurationInSeconds = 3;
-    public int RewindElementsAddTimeThresold = 15; //new name?
-    private int lastRewindElementsAddRealtime = 0;
+    public int SnapshotThresold = 1; // new name...
+    private int lastRewindElementsAddRealtime = 0; // new name...
+    [Range(0f, 2f)]
+    public float SecondsBetweenRewindIteration = 1f;
     public GlobalStates GlobalStates = GlobalStates.Instance;
 
     public event EventHandler OnRewindStart;
@@ -35,11 +37,18 @@ public class RewindAbility : Ability
             lastRewindElementsAddRealtime = GlobalStates.Realtime;
         };
 
-        OnRewindElementsAddStop += (object sender, EventArgs e) => Debug.Log("ElementsAdd Stop");
+        OnRewindElementsAddStop += (object sender, EventArgs e) => 
+        {
+            Debug.Log("ElementsAdd Stop");
+        };
+
     }
+
     private bool CanAddRewindElements()
     {
-        return (GlobalStates.Realtime % RewindElementsAddTimeThresold == 0) && (GlobalStates.Realtime != lastRewindElementsAddRealtime); 
+        if (SnapshotThresold > 0)
+            return (GlobalStates.Realtime % SnapshotThresold == 0) && (GlobalStates.Realtime != lastRewindElementsAddRealtime);
+        else return true;
     }
 
     private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
@@ -81,16 +90,18 @@ public class RewindAbility : Ability
         int currentRealtimeSinceStartup = GlobalStates.Realtime;
         firstPersonController.PlayerCanMove = false;
         isLive = true;
+        firstPersonController._rigidBody.useGravity = false;
         while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
         {
             OnRewindIteration?.Invoke(this, EventArgs.Empty);
             foreach (IRewind obj in rewindableObjects) obj?.Rewind();
-            yield return null;
+            yield return new WaitForSeconds(SecondsBetweenRewindIteration);
         }
         OnRewindStop?.Invoke(this, EventArgs.Empty);
         //GoOnCooldown()
         firstPersonController.PlayerCanMove = true;
         isLive = false;
+        firstPersonController._rigidBody.useGravity = true;
     }
 
     /// <summary>

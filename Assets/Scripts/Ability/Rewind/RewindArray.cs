@@ -31,7 +31,7 @@ public class RewindArray<T>
 
     public T GetLast(int offset = 0)
     {
-        if (objects.Length - 1 - offset >= 0) return objects[objects.Length - 1 - offset];
+        if (index - 1 - offset >= 0) return objects[index - 1 - offset];
         return objects[0];
     }
 
