@@ -14,13 +14,14 @@ using System.Linq;
 /// - should use .AddForce() while inverting Vector3s?
 /// - GOONCOOLDOWN...
 /// - STOP REWIND IN CERTAIN CONDITIONS
+/// - STOP AUDIOMANAGER CAPTURE (LASTLOUDESTSAMPLES SNAPSHOT)
 /// </summary>
 public class RewindAbility : Ability
 {
     private IRewind[] rewindableObjects;
     public int RewindDurationInSeconds = 3;
-    public int SnapshotThresold = 1; // new name...
-    private int lastSnapshotTime = 0; // new name...
+    public int SnapshotThresold = 1; 
+    private int lastSnapshotTime = 0; 
     [Range(0f, 2f)]
     public float SecondsBetweenRewindIteration = 1f;
     public GlobalStates GlobalStates = GlobalStates.Instance;

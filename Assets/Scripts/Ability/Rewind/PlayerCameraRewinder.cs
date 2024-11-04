@@ -1,13 +1,11 @@
+
 using System;
 using UnityEngine;
 
-/// <summary>
-/// LIMITED REWIND SCRIPT (ONLY REWINDS WORLD POSITION)
-/// </summary>
-public class VectorRewinder : MonoBehaviour, IRewind
+public class PlayerCameraRewinder : MonoBehaviour, IRewind
 {
 
-    private RewindArray<Vector3> lastPositions;
+    private RewindArray<Vector3> lastEulerAngles; //(y, z, x)
     private int rewindOffset = 0;
     public RewindAbility RewindAbility;
 
@@ -16,16 +14,17 @@ public class VectorRewinder : MonoBehaviour, IRewind
         //NEED TO AVOID REPETITION
         RewindAbility.OnRewindIteration += (object sender, EventArgs e) => rewindOffset++;
         RewindAbility.OnRewindStop += (object sender, EventArgs e) => rewindOffset = 0;
-        lastPositions = new RewindArray<Vector3>(20);
+        lastEulerAngles = new RewindArray<Vector3>(20);
     }
 
     public void Rewind()
     {
-        transform.position = lastPositions.GetLast(rewindOffset);
+        transform.localEulerAngles = lastEulerAngles.GetLast(rewindOffset);
     }
 
     public void UpdateRewindElements()
     {
-        lastPositions.Add(transform.position);
+        lastEulerAngles.Add(transform.localEulerAngles);
     }
+
 }

@@ -90,8 +90,8 @@ public class PlayerCameraController : MonoBehaviour
 
             pitch = Mathf.Clamp(pitch, -MaxLookAngle, MaxLookAngle); // Clamp pitch between lookAngle
 
-            transform.localEulerAngles = new Vector3(0, yaw, 0);
-            playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
+            transform.localEulerAngles = new Vector3(pitch, yaw, 0);
+            //playerCamera.transform.localEulerAngles = new Vector3(pitch, yaw, 0); //to move head????
         }
     }
 
