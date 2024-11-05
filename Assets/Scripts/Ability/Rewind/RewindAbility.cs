@@ -90,7 +90,8 @@ public class RewindAbility : Ability
     /// </summary>
     private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
     {
-        return GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds;
+        if (currentRealtimeSinceStartup < 0) return false;
+        return (GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds);
     }
 
     /// <summary>
