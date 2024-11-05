@@ -16,12 +16,15 @@ public class SimpleVectorRewinder : MonoBehaviour, IRewind
         //NEED TO AVOID REPETITION
         RewindAbility.OnRewindIteration += (object sender, EventArgs e) => rewindOffset++;
         RewindAbility.OnRewindStop += (object sender, EventArgs e) => rewindOffset = 0;
-        lastPositions = new RewindArray<Vector3>(GlobalStates.Instance.RewindArrayLength);
+        lastPositions = new RewindArray<Vector3>();
     }
 
-    public void Rewind()
+    public RewindResponse Rewind()
     {
-        transform.position = lastPositions.GetLast(rewindOffset);
+        RewindResponse res = lastPositions.GetLast(rewindOffset);
+        res.RewindingObject = this.gameObject;
+        transform.position = (Vector3)res.Element;
+        return res; //or null
     }
 
     public void UpdateRewindElements()

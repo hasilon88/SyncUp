@@ -86,7 +86,7 @@ public class RewindAbility : Ability
 
     private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
     {
-        return GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds;
+        return GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds; //15 - 10 < 8
     }
 
     /// <summary>
@@ -142,10 +142,19 @@ public class RewindAbility : Ability
     {
         OnRewindStart?.Invoke(this, EventArgs.Empty);
         int currentRealtimeSinceStartup = GlobalStates.Realtime;
+        RewindResponse res;
         while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
         {
             OnRewindIteration?.Invoke(this, EventArgs.Empty);
-            foreach (IRewind obj in rewindableObjects) obj?.Rewind();
+            for (int elem = 0; elem < rewindableObjects.Length; elem++)
+            {
+                res = rewindableObjects[elem].Rewind();
+                if (res.HasToStop && res.RewindingObject.CompareTag("Player"))
+                {
+                    currentRealtimeSinceStartup = -1;
+                    break;
+                }
+            }
             yield return new WaitForSeconds(SecondsBetweenRewindIteration);
         }
         OnRewindStop?.Invoke(this, EventArgs.Empty);

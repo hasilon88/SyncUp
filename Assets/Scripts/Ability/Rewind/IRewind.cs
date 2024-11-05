@@ -1,6 +1,3 @@
-
-//IRewind<T>
-//abstract T[] lastElements; 
 using System;
 using UnityEngine;
 
@@ -11,7 +8,7 @@ public interface IRewind
 {
 
     public abstract void UpdateRewindElements();
-    public abstract void Rewind();
+    public abstract RewindResponse Rewind();
 }
 
 /// <summary>
@@ -19,8 +16,14 @@ public interface IRewind
 /// </summary>
 public class RewindResponse
 {
-    public object Element;
-    public Boolean HasToStop;
-    public GameObject RewindingObject;
+    public object Element { get; set; }
+    public Boolean HasToStop { get; set; }
+    public GameObject RewindingObject { get; set; }
 
+    public RewindResponse(object element, Boolean hasToStop, GameObject gameObject) 
+    {
+        this.Element = element;
+        this.HasToStop = hasToStop;
+        this.RewindingObject = gameObject;
+    }
 }

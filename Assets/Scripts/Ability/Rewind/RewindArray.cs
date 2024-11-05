@@ -9,9 +9,15 @@ public class RewindArray<T>
     private T[] objects;
     private int index = 0;
 
-    public RewindArray(int size) 
+    public RewindArray() 
     {
-        objects = new T[size];
+        objects = new T[GlobalStates.Instance.RewindArrayLength];
+    }
+
+    public RewindArray<T> Reset()
+    {
+        index = 0;
+        return new RewindArray<T>();
     }
 
     private void AddLast(T element)
@@ -29,10 +35,14 @@ public class RewindArray<T>
         else AddLast(element);
     }
 
-    public T GetLast(int offset = 0)
+    /// <summary>
+    /// - gameObject of RewindResponse is set in RewinderScript
+    /// - HasToStop will only be set to true if it is returned in PlayerRewinder
+    /// </summary>
+    public RewindResponse GetLast(int offset = 0)
     {
-        if (index - 1 - offset >= 0) return objects[index - 1 - offset];
-        return objects[0]; //index = 20 (19 - 20) 
+        if (index - 1 - offset >= 0) return new RewindResponse(objects[index - 1 - offset], false, null);
+        return new RewindResponse(objects[0], true, null);
     }
 
     public T[] GetObjects()
