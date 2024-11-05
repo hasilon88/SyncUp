@@ -352,9 +352,9 @@ MonoBehaviour:
   CreditsNeeded: 0
   triggerKey: 273
   firstPersonController: {fileID: 265405478}
-  RewindDurationInSeconds: 8
+  RewindDurationInSeconds: 3
   SnapshotThresold: 1
-  SecondsBetweenRewindIteration: 0.159
+  SecondsBetweenRewindIteration: 0.035
   GlobalStates: {fileID: 1269032594}
 --- !u!4 &222041661
 Transform:
@@ -1035,7 +1035,7 @@ MonoBehaviour:
   Credits: 0
   CurrentLevel: 1
   Realtime: 0
-  RewindArrayLength: 50
+  RewindArrayLength: 200
 --- !u!1 &1278632017
 GameObject:
   m_ObjectHideFlags: 0

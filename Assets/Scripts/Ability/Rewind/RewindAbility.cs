@@ -142,6 +142,8 @@ public class RewindAbility : Ability
 
     /// <summary>
     /// START REWINDING
+    /// - AFTER IMAGE
+    /// - SLOW - FAST - SLOW (SecondsBetweenRewindIteration)
     /// </summary>
     private IEnumerator Rewind()
     {
