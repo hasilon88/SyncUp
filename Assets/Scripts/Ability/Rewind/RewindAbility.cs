@@ -44,25 +44,25 @@ public class RewindAbility : Ability
     public void Start()
     {
         OnRewindStart += BeforeRewind;
-        OnRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
+        //OnRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
         OnRewindStop += AfterRewind;
 
         OnRewindElementsAddStart += (object sender, EventArgs e) =>
         {
-            Debug.Log("ElementsAdd Start");
+            //Debug.Log("ElementsAdd Start");
             lastSnapshotTime = GlobalStates.Realtime;
         };
 
         OnRewindElementsAddStop += (object sender, EventArgs e) => 
         {
-            Debug.Log("ElementsAdd Stop");
+            //Debug.Log("ElementsAdd Stop");
         };
 
     }
 
     private void BeforeRewind(object sender, EventArgs e)
     {
-        Debug.Log("Rewind start");
+        //Debug.Log("Rewind start");
         PrepareRigidBodies();
         firstPersonController.PlayerCanMove = false; //enemy can move?
         isLive = true;
@@ -70,7 +70,7 @@ public class RewindAbility : Ability
 
     private void AfterRewind(object sender, EventArgs e)
     {
-        Debug.Log("Rewind stopped");
+        //Debug.Log("Rewind stopped");
         firstPersonController.PlayerCanMove = true;
         isLive = false;
         UnPrepareRigidBodies();
@@ -84,9 +84,13 @@ public class RewindAbility : Ability
         else return true;
     }
 
+    /// <summary>
+    /// ==========> BUG: IF GLOBAL REALTIME IS BELLOW DURATION AT START <==========
+    /// shouldn't be a problem in the actual game
+    /// </summary>
     private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
     {
-        return GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds; //15 - 10 < 8
+        return GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds;
     }
 
     /// <summary>
@@ -109,7 +113,7 @@ public class RewindAbility : Ability
         {
             OnRewindElementsAddStart?.Invoke(this, EventArgs.Empty);
             foreach (IRewind obj in rewindableObjects) obj?.UpdateRewindElements();
-            Debug.Log("ADD ELEMENTS");
+            //Debug.Log("ADD ELEMENTS");
             OnRewindElementsAddStop?.Invoke(this, EventArgs.Empty);
         }
     }

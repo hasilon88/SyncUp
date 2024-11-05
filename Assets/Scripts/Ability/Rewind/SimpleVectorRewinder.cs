@@ -15,7 +15,11 @@ public class SimpleVectorRewinder : MonoBehaviour, IRewind
     {
         //NEED TO AVOID REPETITION
         RewindAbility.OnRewindIteration += (object sender, EventArgs e) => rewindOffset++;
-        RewindAbility.OnRewindStop += (object sender, EventArgs e) => rewindOffset = 0;
+        RewindAbility.OnRewindStop += (object sender, EventArgs e) =>
+        {
+            rewindOffset = 0;
+            lastPositions = lastPositions.Reset();
+        };
         lastPositions = new RewindArray<Vector3>();
     }
 
