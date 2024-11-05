@@ -15,6 +15,15 @@ using System.Linq;
 /// - GOONCOOLDOWN...
 /// - STOP REWIND IN CERTAIN CONDITIONS
 /// - STOP AUDIOMANAGER CAPTURE (LASTLOUDESTSAMPLES SNAPSHOT)
+/// 
+/// 
+/// 
+/// - Will search for objects implementing IRewind
+/// to then use UpdateRewindElements() every x seconds,
+/// thereby adding previous elements (Vector3, Color, ...).
+/// - WIll use Rewind of every object implementing IRewind
+/// to use there custom implementation
+/// 
 /// </summary>
 public class RewindAbility : Ability
 {
@@ -82,6 +91,7 @@ public class RewindAbility : Ability
 
     /// <summary>
     /// FIND REWINDABLE OBJECTS AND ADD THEM TO THE LIST
+    /// - SHOULD BE ONLY WHEN A NEW IREWIND OBJECT IS CREATED
     /// </summary>
     private void UpdateRewindableObjects()
     {

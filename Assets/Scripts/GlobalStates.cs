@@ -13,6 +13,7 @@ public class GlobalStates : MonoBehaviour
     public int Credits = 0;
     public int CurrentLevel = 1;
     public int Realtime = 0;
+    public int RewindArrayLength = 50;
 
     private void Awake()
     {
@@ -20,7 +21,7 @@ public class GlobalStates : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(this);
-        //one loading a new scene, object wont be destroyed
+        //on loading a new scene, object wont be destroyed
         DontDestroyOnLoad(this);
     }
 

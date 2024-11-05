@@ -14,7 +14,7 @@ public class PlayerCameraRewinder : MonoBehaviour, IRewind
         //NEED TO AVOID REPETITION
         RewindAbility.OnRewindIteration += (object sender, EventArgs e) => rewindOffset++;
         RewindAbility.OnRewindStop += (object sender, EventArgs e) => rewindOffset = 0;
-        lastEulerAngles = new RewindArray<Vector3>(20);
+        lastEulerAngles = new RewindArray<Vector3>(GlobalStates.Instance.RewindArrayLength);
     }
 
     public void Rewind()

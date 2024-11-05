@@ -32,7 +32,7 @@ public class RewindArray<T>
     public T GetLast(int offset = 0)
     {
         if (index - 1 - offset >= 0) return objects[index - 1 - offset];
-        return objects[0];
+        return objects[0]; //index = 20 (19 - 20) 
     }
 
     public T[] GetObjects()

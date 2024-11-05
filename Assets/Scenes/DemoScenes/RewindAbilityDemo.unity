@@ -354,7 +354,7 @@ MonoBehaviour:
   firstPersonController: {fileID: 265405478}
   RewindDurationInSeconds: 8
   SnapshotThresold: 1
-  SecondsBetweenRewindIteration: 0.43
+  SecondsBetweenRewindIteration: 0.159
   GlobalStates: {fileID: 1269032594}
 --- !u!4 &222041661
 Transform:
