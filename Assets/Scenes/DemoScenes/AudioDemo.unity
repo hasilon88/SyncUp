@@ -658,6 +658,7 @@ MonoBehaviour:
   NormalizedCurrentLoudestSample_LastLoudestSamplesMax: 0
   MinimumCapturableSample: 0.001
   FPSManager: {fileID: 1120380394}
+  CaptureRate: 250
 --- !u!4 &1909218670
 Transform:
   m_ObjectHideFlags: 0

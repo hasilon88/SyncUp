@@ -1,4 +1,5 @@
 using UnityEngine;
+using CSCore;
 using CSCore.SoundIn;
 using CSCore.CoreAudioAPI;
 using System;
@@ -29,7 +30,7 @@ using System.Collections.Generic;
 public class AudioManager : MonoBehaviour
 {
 
-    private readonly WasapiLoopbackCapture loopbackCapture = new WasapiLoopbackCapture();
+    private WasapiLoopbackCapture loopbackCapture;
     [SerializeField]
     private MMDeviceCollection devices;
     public byte AudioEndpoint = 1;
@@ -57,11 +58,18 @@ public class AudioManager : MonoBehaviour
     public FPSManager FPSManager;
     private readonly ArrayUtils<float> arrayUtils = new ArrayUtils<float>();
 
+    public int CaptureRate = 100;
+    //public bool OnBeat = false;
+    //public bool FromSpotify = true;
+    //ProcessSpotifyDataStream
+    //ProcessDefaultDataStream
+
     /// <summary>
     /// these values need to be set in Awake() to avoid /division by 0 exception
     /// </summary>
     private void Awake()
     {
+        loopbackCapture = new WasapiLoopbackCapture(CaptureRate, new WaveFormat(44100, 16, 2));
         this.LastLoudestSamplesFrameTempo = 1;
         this.CurrentLoudestSample = 0f;
     }
@@ -74,6 +82,11 @@ public class AudioManager : MonoBehaviour
         this.InitializeLoopbackCapture();
     }
 
+    public void Stop()
+    {
+        this.loopbackCapture.Stop();
+    }
+
     /// <summary>
     /// BlockCopy takes blocks of bytes (4 bytes for floats) in the byte data array
     /// returned by [_event.Data], assembles them in binary and converts the results into floats
@@ -82,23 +95,39 @@ public class AudioManager : MonoBehaviour
     public void InitializeLoopbackCapture()
     {
         loopbackCapture.Initialize();
-        float loudestSampleBuffer;
         loopbackCapture.DataAvailable += (sender, _event) =>
         {
-            this.loopbackSamples = new float[_event.Data.Length / 4];
-            Buffer.BlockCopy(_event.Data, 0, this.loopbackSamples, 0, _event.Data.Length);
-            loudestSampleBuffer = this.loopbackSamples.Max();
-            if (loudestSampleBuffer > this.MinimumCapturableSample) 
-                this.CurrentLoudestSample = this.loopbackSamples.Max() * this.CurrentLoudestSampleMultiplier;
-            else this.CurrentLoudestSample = 0f;
-            this.AddLoudestSample();
-            this.LastLoudestSamplesMax = this.lastLoudestSamples.Max();
-            this.LastLoudestSamplesAverage = this.lastLoudestSamples.Average();
-            this.SetSessionLoudestSample();
-            this.SetNormalizedValues();
-            this.SetLastLoudestSamplesFrameTempo();
+            Debug.Log("Capture : " + _event.Data.Length/2);
+            ProcessDefaultAudioStream(_event.Data);
+            this.UpdateProperties();
         };
         loopbackCapture.Start();
+    }
+
+    private void ProcessDefaultAudioStream(byte[] data)
+    {
+        this.loopbackSamples = new float[data.Length / 4];
+        Buffer.BlockCopy(data, 0, this.loopbackSamples, 0, data.Length);
+    }
+
+    private void UpdateProperties()
+    {
+        this.SetCurrentLoudestSample();
+        this.AddLoudestSample();
+        this.LastLoudestSamplesMax = this.lastLoudestSamples.Max();
+        this.LastLoudestSamplesAverage = this.lastLoudestSamples.Average();
+        this.SetSessionLoudestSample();
+        this.SetNormalizedValues();
+        this.SetLastLoudestSamplesFrameTempo();
+    }
+
+    private void SetCurrentLoudestSample()
+    {
+        float loudestSampleBuffer;
+        loudestSampleBuffer = this.loopbackSamples.Max();
+        if (loudestSampleBuffer > this.MinimumCapturableSample)
+            this.CurrentLoudestSample = this.loopbackSamples.Max() * this.CurrentLoudestSampleMultiplier;
+        else this.CurrentLoudestSample = 0f;
     }
 
     private void AddLoudestSample()
@@ -144,5 +173,10 @@ public class AudioManager : MonoBehaviour
             }
         }
         this.LastLoudestSamplesFrameTempo = tempoValues.Count > 0 ? (int)tempoValues.Average() : 1;
+    }
+
+    private void OnDestroy()
+    {
+        loopbackCapture.Dispose();
     }
 }
