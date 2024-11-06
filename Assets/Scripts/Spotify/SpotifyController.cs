@@ -22,8 +22,7 @@ public class SpotifyController : MonoBehaviour
 
     public async Task<bool> GetPlayPauseState()
     {
-        CurrentlyPlayingContext context = await _spotify.Player.GetCurrentPlayback();
-        return context.IsPlaying;
+        return (await _spotify.Player.GetCurrentPlayback()).IsPlaying;
     }
 
     public async Task Pause()
@@ -38,12 +37,8 @@ public class SpotifyController : MonoBehaviour
 
     public async Task TogglePlayPause()
     {
-        var currentPlaybackInfo = await _spotify.Player.GetCurrentPlayback();
-
-        if (currentPlaybackInfo.IsPlaying)
-            await Pause();
-        else
-            await Play();
+        if (await GetPlayPauseState()) await Pause();
+        else await Play();
     }
 
     private async Task Seek(int seconds)
@@ -98,7 +93,7 @@ public class SpotifyController : MonoBehaviour
                     AlbumName = track.Album.Name,
                     ArtistID = track.Artists[0].Id,
                     ArtistName = track.Artists[0].Name,
-                    Duration = track.DurationMs / 1000,
+                    Duration = track.DurationMs,
                     IsPlayable = track.IsPlayable,
                     IsLocal = track.IsLocal
                 });
@@ -117,7 +112,7 @@ public class SpotifyController : MonoBehaviour
             {
                 ID = track.Id,
                 Title = track.Name,
-                Duration = track.DurationMs / 1000,
+                Duration = track.DurationMs,
                 ArtistID = track.Artists[0].Id,
                 ArtistName = track.Artists[0].Name,
                 AlbumID = track.Album.Id,
@@ -129,6 +124,13 @@ public class SpotifyController : MonoBehaviour
 
         Debug.Log("No track is currently playing.");
         return null;
+    }
+
+    public async Task<int> GetCurrentSongProgressMillis()
+    {
+        CurrentlyPlayingContext context = await _spotify.Player.GetCurrentPlayback();
+        if (context == null) return 0;
+        return context.ProgressMs;
     }
 
     public async Task<bool> PlaySearchedSong(string songName)
