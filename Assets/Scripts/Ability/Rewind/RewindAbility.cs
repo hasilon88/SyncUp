@@ -16,7 +16,10 @@ using System.Linq;
 /// - STOP REWIND IN CERTAIN CONDITIONS
 /// - STOP AUDIOMANAGER CAPTURE (LASTLOUDESTSAMPLES SNAPSHOT)
 /// 
-/// 
+/// - DURING REWIND, EXPAN FIELD OF VIEW
+/// - HIGH CONTRAST ON REWIND
+/// - BLACK TUNNEL VISION
+/// - WIND TUNNEL
 /// 
 /// - Will search for objects implementing IRewind
 /// to then use UpdateRewindElements() every x seconds,

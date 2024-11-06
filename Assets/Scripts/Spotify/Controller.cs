@@ -38,6 +38,12 @@ public class Controller
         _spotify = new SpotifyClient(new Auth(userId).AccessToken);
     }
 
+    public async Task<bool> GetPlayPauseState()
+    {
+        CurrentlyPlayingContext context = await _spotify.Player.GetCurrentPlayback();
+        return context.IsPlaying;
+    }
+
     public async Task Pause()
     {
         await _spotify.Player.PausePlayback();
