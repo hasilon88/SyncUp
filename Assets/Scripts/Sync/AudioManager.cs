@@ -44,6 +44,7 @@ public class AudioManager : MonoBehaviour
     private float[] lastLoudestSamples;
     public float LastLoudestSamplesAverage = 0f;
     public float LastLoudestSamplesMax = 0f;
+    public float LastLoudestSamplesMin = 0f;
     public int LastLoudestSamplesFrameTempo;
     [Range(0.1f, 1f)]
     public float NormalizedLastLoudestSamplesTempoDifferential = 0.20f;
@@ -59,10 +60,9 @@ public class AudioManager : MonoBehaviour
     private readonly ArrayUtils<float> arrayUtils = new ArrayUtils<float>();
 
     public int CaptureRate = 100;
-    //public bool OnBeat = false;
+    //public bool CuurentlyOnBeat = false;
+    //public event EventHandler OnBeat;
     //public bool FromSpotify = true;
-    //ProcessSpotifyDataStream
-    //ProcessDefaultDataStream
 
     /// <summary>
     /// these values need to be set in Awake() to avoid /division by 0 exception
@@ -110,18 +110,24 @@ public class AudioManager : MonoBehaviour
         Buffer.BlockCopy(data, 0, this.loopbackSamples, 0, data.Length);
     }
 
-    private void UpdateProperties()
+    private void ProcessSpotifyAudioStream(byte[] data) 
     {
-        this.SetCurrentLoudestSample();
-        this.AddLoudestSample();
-        this.LastLoudestSamplesMax = this.lastLoudestSamples.Max();
-        this.LastLoudestSamplesAverage = this.lastLoudestSamples.Average();
-        this.SetSessionLoudestSample();
-        this.SetNormalizedValues();
-        this.SetLastLoudestSamplesFrameTempo();
+        throw new NotImplementedException();
     }
 
-    private void SetCurrentLoudestSample()
+    private void UpdateProperties()
+    {
+        this.UpdateCurrentLoudestSample();
+        this.AddLoudestSample();
+        this.LastLoudestSamplesMax = this.lastLoudestSamples.Max();
+        this.LastLoudestSamplesMin = this.lastLoudestSamples.Min();
+        this.LastLoudestSamplesAverage = this.lastLoudestSamples.Average();
+        this.UpdateSessionLoudestSample();
+        this.UpdateNormalizedValues();
+        this.UpdateLastLoudestSamplesFrameTempo();
+    }
+
+    private void UpdateCurrentLoudestSample()
     {
         float loudestSampleBuffer;
         loudestSampleBuffer = this.loopbackSamples.Max();
@@ -136,7 +142,7 @@ public class AudioManager : MonoBehaviour
         else this.lastLoudestSamples = arrayUtils.AddLast(this.lastLoudestSamples, this.CurrentLoudestSample);
     }
 
-    private void SetNormalizedValues()
+    private void UpdateNormalizedValues()
     {
         if (this.LastLoudestSamplesMax > 0f) 
             this.NormalizedCurrentLoudestSample_LastLoudestSamplesMax = this.CurrentLoudestSample/this.LastLoudestSamplesMax;
@@ -151,12 +157,12 @@ public class AudioManager : MonoBehaviour
         if (this.OnNormalizedValuesChange != null) this.OnNormalizedValuesChange(this, EventArgs.Empty);
     }
 
-    private void SetSessionLoudestSample()
+    private void UpdateSessionLoudestSample()
     {
         if (this.CurrentLoudestSample > this.SessionLoudestSample) this.SessionLoudestSample = this.CurrentLoudestSample;
     }
 
-    public void SetLastLoudestSamplesFrameTempo()
+    private void UpdateLastLoudestSamplesFrameTempo()
     {
         List<int> tempoValues = new List<int>();
         float percentagePart;
