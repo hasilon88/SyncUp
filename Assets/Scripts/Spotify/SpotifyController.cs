@@ -3,39 +3,21 @@ using System.Threading.Tasks;
 using SpotifyAPI.Web;
 using UnityEngine;
 
-public class Song
+public class SpotifyController : MonoBehaviour 
 {
-    public string ID { get; set; }
-    public string Title { get; set; }
-    public int Duration { get; set; }
-    public string ArtistID { get; set; }
-    public string ArtistName { get; set; }
-    public string AlbumID { get; set; }
-    public string AlbumName { get; set; }
-    public bool IsPlayable { get; set; }
-    public bool IsLocal { get; set; }
+    public static SpotifyController Instance { get; private set; }
+    private SpotifyClient _spotify;
+    public int UserId;
 
-    public override string ToString()
+    private void Awake()
     {
-        return $"ID: {ID}\n" +
-               $"Title: {Title}\n" +
-               $"Duration: {Duration} seconds\n" +
-               $"Artist ID: {ArtistID}\n" +
-               $"Artist Name: {ArtistName}\n" +
-               $"Album ID: {AlbumID}\n" +
-               $"Album Name: {AlbumName}\n" +
-               $"Is Playable: {IsPlayable}\n" +
-               $"Is Local: {IsLocal}";
-    }
-}
-
-public class Controller
-{
-    private readonly SpotifyClient _spotify;
-
-    public Controller(int userId)
-    {
-        _spotify = new SpotifyClient(new Auth(userId).AccessToken);
+        if (Instance == null)
+        {
+            _spotify = new SpotifyClient(new Auth(UserId).AccessToken);
+            Instance = this;
+        }
+        else if (Instance != this) Destroy(this);
+        DontDestroyOnLoad(this);
     }
 
     public async Task<bool> GetPlayPauseState()

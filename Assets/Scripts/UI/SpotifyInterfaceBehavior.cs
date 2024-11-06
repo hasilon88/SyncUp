@@ -9,11 +9,11 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
     private Button fastForwardButton;
     private Button rewindButton;
     private Button playPauseButton;
-    private Controller spotifyController;
+    private SpotifyController spotifyController;
 
     private void Start()
     {
-        spotifyController = new Controller(26);
+        spotifyController = SpotifyController.Instance;
         SetButtons();   
         SetButtonsListenner();
     }
