@@ -58,10 +58,7 @@ public class AudioManager : MonoBehaviour
     public event EventHandler OnNormalizedValuesChange;
     public FPSManager FPSManager;
     private readonly ArrayUtils<float> arrayUtils = new ArrayUtils<float>();
-
     public int CaptureRate = 100;
-    //public bool CuurentlyOnBeat = false;
-    //public event EventHandler OnBeat;
     //public bool FromSpotify = true;
 
     /// <summary>
@@ -97,7 +94,7 @@ public class AudioManager : MonoBehaviour
         loopbackCapture.Initialize();
         loopbackCapture.DataAvailable += (sender, _event) =>
         {
-            Debug.Log("Capture : " + _event.Data.Length/2);
+            //Debug.Log("Capture : " + _event.Data.Length/2);
             ProcessDefaultAudioStream(_event.Data);
             this.UpdateProperties();
         };

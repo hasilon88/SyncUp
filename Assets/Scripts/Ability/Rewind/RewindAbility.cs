@@ -53,7 +53,7 @@ public class RewindAbility : Ability
         OnRewindElementsAddStart += (object sender, EventArgs e) =>
         {
             //Debug.Log("ElementsAdd Start");
-            lastSnapshotTime = GlobalStates.Realtime;
+            lastSnapshotTime = GlobalStates.ScaledTime;
         };
 
         OnRewindElementsAddStop += (object sender, EventArgs e) => 
@@ -83,7 +83,7 @@ public class RewindAbility : Ability
     private bool CanAddRewindElements()
     {
         if (SnapshotThresold > 0)
-            return (GlobalStates.Realtime % SnapshotThresold == 0) && (GlobalStates.Realtime != lastSnapshotTime);
+            return (GlobalStates.ScaledTime % SnapshotThresold == 0) && (GlobalStates.ScaledTime != lastSnapshotTime);
         else return true;
     }
 
@@ -94,7 +94,7 @@ public class RewindAbility : Ability
     private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
     {
         if (currentRealtimeSinceStartup < 0) return false;
-        return (GlobalStates.Realtime - currentRealtimeSinceStartup < RewindDurationInSeconds);
+        return (GlobalStates.ScaledTime - currentRealtimeSinceStartup < RewindDurationInSeconds);
     }
 
     /// <summary>
@@ -151,7 +151,7 @@ public class RewindAbility : Ability
     private IEnumerator Rewind()
     {
         OnRewindStart?.Invoke(this, EventArgs.Empty);
-        int currentRealtimeSinceStartup = GlobalStates.Realtime;
+        int currentRealtimeSinceStartup = GlobalStates.ScaledTime;
         RewindResponse res;
         while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
         {

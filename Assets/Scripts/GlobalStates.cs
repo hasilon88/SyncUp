@@ -12,7 +12,8 @@ public class GlobalStates : MonoBehaviour
     public Ability Ability2 = null;
     public int Credits = 0;
     public int CurrentLevel = 1;
-    public int Realtime = 0;
+    public int ScaledTime = 0;
+    public float RealTime = 0f;
     public int RewindArrayLength = 50;
 
     private void Awake()
@@ -25,14 +26,15 @@ public class GlobalStates : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    private void UpdateRealtime()
+    private void UpdateTime()
     {
-        Realtime = (int)Time.time;
+        ScaledTime = (int)Time.time;
+        RealTime = Time.realtimeSinceStartup;
     }
 
     private void Update()
     {
-        UpdateRealtime();
+        UpdateTime();
     }
 
 }
