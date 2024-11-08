@@ -414,8 +414,8 @@ MonoBehaviour:
   CreditsNeeded: 0
   triggerKey: 273
   firstPersonController: {fileID: 265405478}
-  RewindDurationInSeconds: 1
-  SnapshotThresold: 1
+  RewindDurationInSeconds: 3
+  SnapshotThresold: 0
   TargetRewindIterationDelay: 0.5
   TargetRewindIterationFOV: 120
 --- !u!4 &222041661
@@ -1707,7 +1707,7 @@ MonoBehaviour:
   CurrentLevel: 1
   ScaledTime: 0
   RealTime: 0
-  RewindArrayLength: 200
+  RewindArrayLength: 500
 --- !u!1 &1278632017
 GameObject:
   m_ObjectHideFlags: 0

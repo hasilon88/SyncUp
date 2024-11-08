@@ -30,6 +30,7 @@ public class RewindAbility : Ability
     private Rigidbody[] rewindableRigidbodies;
     [Range(2, 10)]
     public int RewindDurationInSeconds = 3;
+    private int rewindDurationInFrames;
     public int SnapshotThresold = 1; 
     private int lastTimeSnapshot = 0; 
     [Range(0f, 2f)]
@@ -38,6 +39,7 @@ public class RewindAbility : Ability
     private Vector2[] iterationDelays;
     private Vector2[] iterationFOVs;
     private GlobalStates globalStates;
+    private Camera mainCamera;
 
     public event EventHandler OnRewindStart;
     public event EventHandler OnRewindIteration;
@@ -47,19 +49,25 @@ public class RewindAbility : Ability
 
     public void Start()
     {
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         globalStates = GlobalStates.Instance;
         OnRewindStart += BeforeRewind;
-        //OnRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
         OnRewindStop += AfterRewind;
         OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
-        foreach (Vector2 v in ParabolicArray.GetArray(TargetRewindIterationDelay, 600)) Debug.Log(v);
+        //OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
+    }
+
+    private void SetRewindDurationInFrames()
+    {
+        rewindDurationInFrames = RewindDurationInSeconds * 60; //fps
     }
 
     private void BeforeRewind(object sender, EventArgs e)
     {
+        SetRewindDurationInFrames();
         rewindableRigidbodies = FindObjectsOfType<Rigidbody>().ToArray();
-        //iterationDelays = ParabolicArray.GetArray(TargetRewindIterationDelay, ((60 * RewindDurationInSeconds) / 2)); //* UpdateCountPerSecond
-        //iterationFOVs = ParabolicArray.GetArray(TargetRewindIterationFOV, ((60 * RewindDurationInSeconds) / 2)); //* UpdateCountPerSecond
+        iterationDelays = ParabolicArray.GetArray(TargetRewindIterationDelay, rewindDurationInFrames);
+        iterationFOVs = ParabolicArray.GetArray(TargetRewindIterationFOV, rewindDurationInFrames);
         PrepareRigidBodies();
         firstPersonController.PlayerCanMove = false; //enemy can move?
         isLive = true;
@@ -70,6 +78,7 @@ public class RewindAbility : Ability
         firstPersonController.PlayerCanMove = true;
         isLive = false;
         UnPrepareRigidBodies();
+        Debug.Log("END OF REWIND");
         //GoOnCooldown()
     }
 
@@ -78,16 +87,6 @@ public class RewindAbility : Ability
         if (SnapshotThresold > 0)
             return (globalStates.ScaledTime % SnapshotThresold == 0) && (globalStates.ScaledTime != lastTimeSnapshot);
         else return true;
-    }
-
-    /// <summary>
-    /// ==========> BUG: IF GLOBAL REALTIME IS BELLOW DURATION AT START <==========
-    /// shouldn't be a problem in the actual game
-    /// </summary>
-    private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
-    {
-        if (currentRealtimeSinceStartup < 0) return false;
-        return (globalStates.ScaledTime - currentRealtimeSinceStartup < RewindDurationInSeconds);
     }
 
     /// <summary>
@@ -137,21 +136,31 @@ public class RewindAbility : Ability
     private IEnumerator Rewind()
     {
         OnRewindStart?.Invoke(this, EventArgs.Empty);
-        int currentRealtimeSinceStartup = globalStates.ScaledTime;
+        int iterationIndex = 0;
         RewindResponse res;
-        while (HasNotPassedSeconds(currentRealtimeSinceStartup))
+        while (iterationIndex < rewindDurationInFrames)
         {
             OnRewindIteration?.Invoke(this, EventArgs.Empty);
+            //mainCamera.fieldOfView = iterationFOVs[iterationIndex].y;
             for (int elem = 0; elem < rewindableObjects.Length; elem++)
             {
                 res = rewindableObjects[elem].Rewind();
                 if (res.HasToStop && res.RewindingObject.CompareTag("Player"))
                 {
-                    currentRealtimeSinceStartup = -1;
+                    iterationIndex = rewindDurationInFrames;
+                    break;
+                } 
+                if (Input.GetKeyDown(triggerKey) && iterationIndex > 1)
+                {
+                    iterationIndex = rewindDurationInFrames;
                     break;
                 }
             }
-            yield return new WaitForSeconds(TargetRewindIterationDelay);
+            if (iterationIndex < rewindDurationInFrames)
+            {
+                yield return new WaitForSeconds(iterationDelays[iterationIndex++].y * Time.deltaTime);
+            }
+                
         }
         OnRewindStop?.Invoke(this, EventArgs.Empty);
     }
