@@ -14,6 +14,16 @@ public class FPSManager : MonoBehaviour
     public float FrameRate = 0f;
     public int FPSLock = 60;
     public int UpdateFrameCount = 0;
+    public bool Locked = true;
+
+    private void Start()
+    {
+        if (Locked)
+        {
+            QualitySettings.vSyncCount = this.VSyncLevel;
+            Application.targetFrameRate = this.FPSLock;
+        }
+    }
 
     void Update()
     {

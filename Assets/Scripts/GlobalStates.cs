@@ -21,8 +21,7 @@ public class GlobalStates : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else if (Instance != this)
-            Destroy(this);
-        //on loading a new scene, object wont be destroyed
+            Destroy(this); //on loading a new scene, object wont be destroyed
         DontDestroyOnLoad(this);
     }
 

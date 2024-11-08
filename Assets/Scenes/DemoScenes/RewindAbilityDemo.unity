@@ -416,8 +416,8 @@ MonoBehaviour:
   firstPersonController: {fileID: 265405478}
   RewindDurationInSeconds: 1
   SnapshotThresold: 1
-  SecondsBetweenRewindIteration: 0.04
-  GlobalStates: {fileID: 1269032594}
+  TargetRewindIterationDelay: 0.5
+  TargetRewindIterationFOV: 120
 --- !u!4 &222041661
 Transform:
   m_ObjectHideFlags: 0
@@ -1705,7 +1705,8 @@ MonoBehaviour:
   Ability2: {fileID: 0}
   Credits: 0
   CurrentLevel: 1
-  Realtime: 0
+  ScaledTime: 0
+  RealTime: 0
   RewindArrayLength: 200
 --- !u!1 &1278632017
 GameObject:

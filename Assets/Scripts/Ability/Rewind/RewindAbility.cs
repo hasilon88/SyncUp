@@ -1,7 +1,6 @@
 using System.Collections;
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 using System.Linq;
 
 
@@ -9,17 +8,14 @@ using System.Linq;
 /// # OPTIMIZATIONS
 /// - **TIMING SNAPSHOTTHRESHOLD WITH FLOATS**
 /// - EVENTATTRIBUTE OBJECT?
-/// - should keep a reference of RigidBody[] has attribute
-/// - CAMERA REWINDER?
 /// - should use .AddForce() while inverting Vector3s?
 /// - GOONCOOLDOWN...
-/// - STOP REWIND IN CERTAIN CONDITIONS
 /// - STOP AUDIOMANAGER CAPTURE (LASTLOUDESTSAMPLES SNAPSHOT)
-/// 
 /// - DURING REWIND, EXPAN FIELD OF VIEW
 /// - HIGH CONTRAST ON REWIND
 /// - BLACK TUNNEL VISION
 /// - WIND TUNNEL
+/// - CREATE TIMESNAPSHOT CLASS
 /// 
 /// - Will search for objects implementing IRewind
 /// to then use UpdateRewindElements() every x seconds,
@@ -31,12 +27,16 @@ using System.Linq;
 public class RewindAbility : Ability
 {
     private IRewind[] rewindableObjects;
+    private Rigidbody[] rewindableRigidbodies;
     public int RewindDurationInSeconds = 3;
     public int SnapshotThresold = 1; 
-    private int lastSnapshotTime = 0; 
+    private int lastTimeSnapshot = 0; 
     [Range(0f, 2f)]
-    public float SecondsBetweenRewindIteration = 1f;
-    public GlobalStates GlobalStates = GlobalStates.Instance;
+    public float TargetRewindIterationDelay = 0.5f;
+    public float TargetRewindIterationFOV = 120f;
+    private Vector2[] iterationDelays;
+    private Vector2[] iterationFOVs;
+    private GlobalStates globalStates;
 
     public event EventHandler OnRewindStart;
     public event EventHandler OnRewindIteration;
@@ -46,26 +46,18 @@ public class RewindAbility : Ability
 
     public void Start()
     {
+        globalStates = GlobalStates.Instance;
         OnRewindStart += BeforeRewind;
         //OnRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
         OnRewindStop += AfterRewind;
-
-        OnRewindElementsAddStart += (object sender, EventArgs e) =>
-        {
-            //Debug.Log("ElementsAdd Start");
-            lastSnapshotTime = GlobalStates.ScaledTime;
-        };
-
-        OnRewindElementsAddStop += (object sender, EventArgs e) => 
-        {
-            //Debug.Log("ElementsAdd Stop");
-        };
-
+        OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
     }
 
     private void BeforeRewind(object sender, EventArgs e)
     {
-        //Debug.Log("Rewind start");
+        rewindableRigidbodies = FindObjectsOfType<Rigidbody>().ToArray();
+        //iterationDelays = ParabolicArray.GetArray(TargetRewindIterationDelay, ((60 * RewindDurationInSeconds) / 2)); //* UpdateCountPerSecond
+        //iterationFOVs = ParabolicArray.GetArray(TargetRewindIterationFOV, ((60 * RewindDurationInSeconds) / 2)); //* UpdateCountPerSecond
         PrepareRigidBodies();
         firstPersonController.PlayerCanMove = false; //enemy can move?
         isLive = true;
@@ -73,7 +65,6 @@ public class RewindAbility : Ability
 
     private void AfterRewind(object sender, EventArgs e)
     {
-        //Debug.Log("Rewind stopped");
         firstPersonController.PlayerCanMove = true;
         isLive = false;
         UnPrepareRigidBodies();
@@ -83,7 +74,7 @@ public class RewindAbility : Ability
     private bool CanAddRewindElements()
     {
         if (SnapshotThresold > 0)
-            return (GlobalStates.ScaledTime % SnapshotThresold == 0) && (GlobalStates.ScaledTime != lastSnapshotTime);
+            return (globalStates.ScaledTime % SnapshotThresold == 0) && (globalStates.ScaledTime != lastTimeSnapshot);
         else return true;
     }
 
@@ -94,7 +85,7 @@ public class RewindAbility : Ability
     private bool HasNotPassedSeconds(int currentRealtimeSinceStartup)
     {
         if (currentRealtimeSinceStartup < 0) return false;
-        return (GlobalStates.ScaledTime - currentRealtimeSinceStartup < RewindDurationInSeconds);
+        return (globalStates.ScaledTime - currentRealtimeSinceStartup < RewindDurationInSeconds);
     }
 
     /// <summary>
@@ -117,29 +108,22 @@ public class RewindAbility : Ability
         {
             OnRewindElementsAddStart?.Invoke(this, EventArgs.Empty);
             foreach (IRewind obj in rewindableObjects) obj?.UpdateRewindElements();
-            //Debug.Log("ADD ELEMENTS");
             OnRewindElementsAddStop?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    private Rigidbody[] GetRigidBodies()
-    {
-        return GameObject.FindObjectsOfType<Rigidbody>().ToArray();
-    }
-
     private void PrepareRigidBodies()
     {
-        foreach (Rigidbody body in FindObjectsOfType<Rigidbody>().ToArray())
+        foreach (Rigidbody body in rewindableRigidbodies)
         {
             body.useGravity = false;
             body.velocity = Vector3.zero;
-            //body.angularVelocity = Vector3.zero; //CAMERA REWINDER?
         }
     }
 
     private void UnPrepareRigidBodies()
     {
-        foreach (Rigidbody body in FindObjectsOfType<Rigidbody>().ToArray())
+        foreach (Rigidbody body in rewindableRigidbodies)
             body.useGravity = true;
     }
 
@@ -151,9 +135,9 @@ public class RewindAbility : Ability
     private IEnumerator Rewind()
     {
         OnRewindStart?.Invoke(this, EventArgs.Empty);
-        int currentRealtimeSinceStartup = GlobalStates.ScaledTime;
+        int currentRealtimeSinceStartup = globalStates.ScaledTime;
         RewindResponse res;
-        while (HasNotPassedSeconds(currentRealtimeSinceStartup)) //while (secodns in in-game time)
+        while (HasNotPassedSeconds(currentRealtimeSinceStartup))
         {
             OnRewindIteration?.Invoke(this, EventArgs.Empty);
             for (int elem = 0; elem < rewindableObjects.Length; elem++)
@@ -165,7 +149,7 @@ public class RewindAbility : Ability
                     break;
                 }
             }
-            yield return new WaitForSeconds(SecondsBetweenRewindIteration);
+            yield return new WaitForSeconds(TargetRewindIterationDelay);
         }
         OnRewindStop?.Invoke(this, EventArgs.Empty);
     }
