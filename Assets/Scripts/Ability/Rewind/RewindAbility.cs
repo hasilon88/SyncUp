@@ -28,6 +28,7 @@ public class RewindAbility : Ability
 {
     private IRewind[] rewindableObjects;
     private Rigidbody[] rewindableRigidbodies;
+    [Range(2, 10)]
     public int RewindDurationInSeconds = 3;
     public int SnapshotThresold = 1; 
     private int lastTimeSnapshot = 0; 
@@ -51,6 +52,7 @@ public class RewindAbility : Ability
         //OnRewindIteration += (object sender, EventArgs e) => Debug.Log("Rewinding.........");
         OnRewindStop += AfterRewind;
         OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
+        foreach (Vector2 v in ParabolicArray.GetArray(TargetRewindIterationDelay, 600)) Debug.Log(v);
     }
 
     private void BeforeRewind(object sender, EventArgs e)
