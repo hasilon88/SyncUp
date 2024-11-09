@@ -27,8 +27,9 @@ public class RewindAbility : Ability
 {
     private IRewind[] rewindableObjects;
     private Rigidbody[] rewindableRigidbodies;
-    [Range(2, 10)]
-    public int RewindDurationInSeconds = 3;
+    [Range(0.1f, 30f)]
+    public float RewindDurationInSeconds = 3;
+    [SerializeField]
     private int rewindDurationInFrames;
     private TimingController addElementsTimingController;
     [Range(0f, 2f)]
@@ -65,7 +66,7 @@ public class RewindAbility : Ability
 
     private void SetRewindDurationInFrames()
     {
-        rewindDurationInFrames = RewindDurationInSeconds * 60; //fps
+        rewindDurationInFrames = (int)(RewindDurationInSeconds * 60f); //fpslock
     }
 
     private void BeforeRewind(object sender, EventArgs e)

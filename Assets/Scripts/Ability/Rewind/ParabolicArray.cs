@@ -25,7 +25,7 @@ public class ParabolicArray
 
     private void SetSize(int size)
     {
-        if (size % 2 != 0) this.size = size + 1;
+        if (size % 2 != 0) this.size = size - 1; //NOT +1
         else this.size = size;
     }
 

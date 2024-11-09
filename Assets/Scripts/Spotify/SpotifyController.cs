@@ -9,6 +9,8 @@ public class SpotifyController : MonoBehaviour
     private SpotifyClient _spotify;
     public string userId="";
 
+    //events
+
     private async void Awake()
     {
         if (Instance == null)
