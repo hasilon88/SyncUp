@@ -1,5 +1,4 @@
 
-
 /// <summary>
 /// new name?
 /// </summary>
@@ -12,6 +11,11 @@ public class RewindArray<T>
     public RewindArray() 
     {
         objects = new T[GlobalStates.Instance.RewindArrayLength];
+    }
+
+    public int GetIndex() 
+    {
+        return index; 
     }
 
     public RewindArray<T> Reset()

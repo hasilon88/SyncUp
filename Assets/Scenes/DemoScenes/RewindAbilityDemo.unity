@@ -386,6 +386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 222041661}
   - component: {fileID: 222041660}
+  - component: {fileID: 222041662}
   m_Layer: 0
   m_Name: Rewinder
   m_TagString: Untagged
@@ -414,8 +415,7 @@ MonoBehaviour:
   CreditsNeeded: 0
   triggerKey: 273
   firstPersonController: {fileID: 265405478}
-  RewindDurationInSeconds: 3
-  SnapshotThresold: 0
+  RewindDurationInSeconds: 2
   TargetRewindIterationDelay: 0.5
   TargetRewindIterationFOV: 120
 --- !u!4 &222041661
@@ -433,6 +433,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &222041662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222041659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd7138c6ca327fd47981b09df628b43a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0.15
+  Type: 0
+  IsOnTime: 0
 --- !u!1 &259070040
 GameObject:
   m_ObjectHideFlags: 0
@@ -1707,7 +1722,7 @@ MonoBehaviour:
   CurrentLevel: 1
   ScaledTime: 0
   RealTime: 0
-  RewindArrayLength: 500
+  RewindArrayLength: 120
 --- !u!1 &1278632017
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,6 @@ using System.Linq;
 
 /// <summary>
 /// # OPTIMIZATIONS
-/// - **TIMING SNAPSHOTTHRESHOLD WITH FLOATS**
 /// - EVENTATTRIBUTE OBJECT?
 /// - should use .AddForce() while inverting Vector3s?
 /// - GOONCOOLDOWN...
@@ -31,8 +30,7 @@ public class RewindAbility : Ability
     [Range(2, 10)]
     public int RewindDurationInSeconds = 3;
     private int rewindDurationInFrames;
-    public int SnapshotThresold = 1; 
-    private int lastTimeSnapshot = 0; 
+    private TimingController addElementsTimingController;
     [Range(0f, 2f)]
     public float TargetRewindIterationDelay = 0.5f;
     public float TargetRewindIterationFOV = 120f;
@@ -53,8 +51,10 @@ public class RewindAbility : Ability
         globalStates = GlobalStates.Instance;
         OnRewindStart += BeforeRewind;
         OnRewindStop += AfterRewind;
-        OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
+        //OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
         //OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
+        addElementsTimingController = GetComponent<TimingController>();
+        addElementsTimingController.OnTime += UpdateRewindElements;
     }
 
     private void SetRewindDurationInFrames()
@@ -67,7 +67,6 @@ public class RewindAbility : Ability
         SetRewindDurationInFrames();
         rewindableRigidbodies = FindObjectsOfType<Rigidbody>().ToArray();
         iterationDelays = ParabolicArray.GetArray(TargetRewindIterationDelay, rewindDurationInFrames);
-        iterationFOVs = ParabolicArray.GetArray(TargetRewindIterationFOV, rewindDurationInFrames);
         PrepareRigidBodies();
         firstPersonController.PlayerCanMove = false; //enemy can move?
         isLive = true;
@@ -78,15 +77,7 @@ public class RewindAbility : Ability
         firstPersonController.PlayerCanMove = true;
         isLive = false;
         UnPrepareRigidBodies();
-        Debug.Log("END OF REWIND");
         //GoOnCooldown()
-    }
-
-    private bool CanAddRewindElements()
-    {
-        if (SnapshotThresold > 0)
-            return (globalStates.ScaledTime % SnapshotThresold == 0) && (globalStates.ScaledTime != lastTimeSnapshot);
-        else return true;
     }
 
     /// <summary>
@@ -103,9 +94,9 @@ public class RewindAbility : Ability
     /// <summary>
     /// USE THE CALLBACK DECLARED IN THE OBJECTS IMPLEMENTING IREWIND
     /// </summary>
-    public void UpdateRewindElements()
+    public void UpdateRewindElements(object sender, EventArgs e)
     {
-        if (CanAddRewindElements() && !isLive)
+        if (!isLive)
         {
             OnRewindElementsAddStart?.Invoke(this, EventArgs.Empty);
             foreach (IRewind obj in rewindableObjects) obj?.UpdateRewindElements();
@@ -150,17 +141,14 @@ public class RewindAbility : Ability
                     iterationIndex = rewindDurationInFrames;
                     break;
                 } 
-                if (Input.GetKeyDown(triggerKey) && iterationIndex > 1)
-                {
-                    iterationIndex = rewindDurationInFrames;
-                    break;
-                }
             }
             if (iterationIndex < rewindDurationInFrames)
             {
-                yield return new WaitForSeconds(iterationDelays[iterationIndex++].y * Time.deltaTime);
+                //Debug.Log("Index: " + iterationIndex + " | " + "delay: " + iterationDelays[iterationIndex++].y * Time.deltaTime);
+                yield return new WaitForSeconds(iterationDelays[iterationIndex++].y * Time.deltaTime); //* (1 * Time.deltaTime)
             }
                 
+
         }
         OnRewindStop?.Invoke(this, EventArgs.Empty);
     }
@@ -172,7 +160,6 @@ public class RewindAbility : Ability
     private void Update()
     {
         UpdateRewindableObjects();
-        UpdateRewindElements();
         if (!isLive && Input.GetKeyDown(triggerKey) && !OnCooldown)
             StartCoroutine(Rewind());
     }

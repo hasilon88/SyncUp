@@ -18,6 +18,9 @@ public class TimingController : MonoBehaviour
     public event EventHandler OnTime;
     public bool IsOnTime = false;
 
+    /// <summary>
+    /// TYPE = REALTIME...FOR PRECISE TIMING
+    /// </summary>
     private void Start()
     {
         globalStates = GlobalStates.Instance;

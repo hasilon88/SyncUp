@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+//ARRAY TYPE (LOW_FAST_LOW, FAST_LOW_FAST)
 public class ParabolicArray
 {
 
