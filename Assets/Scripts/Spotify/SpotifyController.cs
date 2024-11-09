@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SpotifyAPI.Web;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpotifyController : MonoBehaviour 
@@ -14,14 +13,12 @@ public class SpotifyController : MonoBehaviour
     {
         if (Instance == null)
         {
-            _spotify = new SpotifyClient(new Auth(userId).AccessToken);
+            var auth = await Auth.CreateAsync(userId);
+            _spotify = new SpotifyClient(auth.AccessToken);
             Instance = this;
         }
         else if (Instance != this) Destroy(this);
         DontDestroyOnLoad(this);
-
-        Song song = await GetCurrentlyPlayingSong();
-        Debug.Log(song.ToString());
     }
 
     public async Task<bool> GetPlayPauseState()

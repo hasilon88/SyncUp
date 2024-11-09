@@ -26,16 +26,31 @@ public class Auth
     private readonly ConfigManager _config;
     private static EmbedIOAuthServer _server;
 
-    public Auth(int userId)
+    /// <summary>
+    /// Private constructor for the Auth class, used to initialize configuration settings.
+    /// This constructor is only accessible within the class itself and is intended
+    /// to be called by the asynchronous method CreateAsync.
+    /// </summary>
+    /// <param name="userId">The ID of the user for whom the configuration is being set up.</param>
+    private Auth(int userId)
     {
         _config = new ConfigManager(Path.Combine(Application.dataPath, "Scripts/Spotify/Data/spotify.config"));
-        Init(userId.ToString());
     }
 
-    private async void Init(string userId)
+    /// <summary>
+    /// Asynchronous method to create and initialize an instance of the Auth class.
+    /// This method initializes the instance with a specified user ID and retrieves or refreshes
+    /// the user's token before returning a fully initialized Auth object.
+    /// </summary>
+    /// <param name="userId">The ID of the user for whom the Auth instance is created.</param>
+    /// <returns>An initialized Auth instance associated with the specified user.</returns>
+    public static async Task<Auth> CreateAsync(int userId)
     {
-        await GetOrRefreshToken(userId);
+        var instance = new Auth(userId);
+        await instance.GetOrRefreshToken(userId.ToString());
+        return instance;
     }
+
 
     /// <summary>
     /// Starts the authorization process to obtain a new authorization code for a specific user.
@@ -199,14 +214,24 @@ public class Auth
     }
 
     /// <summary>
-    /// Saves the user's token data (access token, refresh token, and expiration time) to persistent storage.
+    /// Saves the token data for a user. If the JSON file does not exist, it is created.
+    /// If the user already has token data, it updates the existing entry; otherwise, it adds a new entry.
     /// </summary>
-    /// <param name="userId">The ID of the user.</param>
-    /// <param name="accessToken">The access token to save.</param>
-    /// <param name="refreshToken">The refresh token to save.</param>
-    /// <param name="expiration">The expiration time of the access token.</param>
+    /// <param name="userId">The ID of the user whose token data is being saved.</param>
+    /// <param name="accessToken">The access token to be saved.</param>
+    /// <param name="refreshToken">The refresh token to be saved.</param>
+    /// <param name="expiration">The expiration date and time of the access token.</param>
     private void SaveTokenData(string userId, string accessToken, string refreshToken, DateTime expiration)
     {
+        string userFilePath = _config.GetString("USERS_PATH");
+
+        if (!File.Exists(userFilePath))
+        {
+            var emptyTokenList = new List<TokenData>();
+            string jsonOutput = JsonConvert.SerializeObject(emptyTokenList, Formatting.Indented);
+            File.WriteAllText(userFilePath, jsonOutput);
+        }
+
         var tokenDataList = LoadTokenData();
         var existingUser = tokenDataList.Find(u => u.UserId == userId);
 
@@ -227,10 +252,10 @@ public class Auth
             });
         }
 
-        string jsonOutput = JsonConvert.SerializeObject(tokenDataList, Formatting.Indented);
-        File.WriteAllText(_config.GetString("USERS_PATH"), jsonOutput);
+        string updatedJsonOutput = JsonConvert.SerializeObject(tokenDataList, Formatting.Indented);
+        File.WriteAllText(userFilePath, updatedJsonOutput);
     }
-
+    
     /// <summary>
     /// Loads the stored token data for all users from persistent storage.
     /// </summary>
