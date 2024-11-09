@@ -74,6 +74,7 @@ public class RewindAbility : Ability
         SetRewindDurationInFrames();
         rewindableRigidbodies = FindObjectsOfType<Rigidbody>().ToArray();
         iterationDelays = ParabolicArray.GetArray(TargetRewindIterationDelay, rewindDurationInFrames);
+        iterationFOVs = ParabolicArray.GetArray(TargetRewindIterationFOV, rewindDurationInFrames, mainCamera.fieldOfView);
         PrepareRigidBodies();
         firstPersonController.PlayerCanMove = false; //enemy can move?
         isLive = true;
@@ -139,7 +140,7 @@ public class RewindAbility : Ability
         while (iterationIndex < rewindDurationInFrames)
         {
             OnRewindIteration?.Invoke(this, EventArgs.Empty);
-            //mainCamera.fieldOfView = iterationFOVs[iterationIndex].y;
+            mainCamera.fieldOfView = iterationFOVs[iterationIndex].y;
             for (int elem = 0; elem < rewindableObjects.Length; elem++)
             {
                 res = rewindableObjects[elem].Rewind();

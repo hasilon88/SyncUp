@@ -8,19 +8,25 @@ public class ParabolicArray
     private Vector2[] array;
     private Vector2 summit;
     private int size;
-    private readonly Vector2 point = new Vector2(1f, 0f);
+    private readonly Vector2 point;
     private float slope;
     private float xIncrement;
 
-    private ParabolicArray(float target, int size)
+    private ParabolicArray(float summitY, int size, float pointY) //pointY to set Range (0 - 120, 60 - 120)
     {
         SetSize(size);
-        this.summit = new Vector2(0f, target);
+        this.summit = new Vector2(0f, summitY);
+        this.point = new Vector2(1f, pointY);
         this.array = new Vector2[size];
         this.slope = (point.y - summit.y) / MathF.Pow(point.x - summit.x, 2);
         this.xIncrement = point.x / (size/2);
         SetVectorsX();
         SetArrayY();
+    }
+
+    public static Vector2[] GetArray(float target, int size, float pointY = 0f)
+    {
+        return new ParabolicArray(target, size, pointY).array;
     }
 
     private void SetSize(int size)
@@ -56,11 +62,4 @@ public class ParabolicArray
         for (int elem = 0; elem < array.Length; elem++)
             array[elem].y = (slope * MathF.Pow(array[elem].x - summit.x, 2)) + summit.y;
     }
-
-    public static Vector2[] GetArray(float target, int size)
-    {
-        return new ParabolicArray(target, size).array;
-    }
-
-
 }
