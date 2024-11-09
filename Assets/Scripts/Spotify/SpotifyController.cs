@@ -7,7 +7,7 @@ public class SpotifyController : MonoBehaviour
 {
     public static SpotifyController Instance { get; private set; }
     private SpotifyClient _spotify;
-    public int userId;
+    public string userId="";
 
     private async void Awake()
     {
@@ -38,8 +38,10 @@ public class SpotifyController : MonoBehaviour
 
     public async Task TogglePlayPause()
     {
-        if (await GetPlayPauseState()) await Pause();
-        else await Play();
+        if (await GetPlayPauseState()) 
+            await Pause();
+        else 
+            await Play();
     }
 
     private async Task Seek(int seconds)

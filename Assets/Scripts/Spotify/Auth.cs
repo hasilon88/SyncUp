@@ -9,7 +9,8 @@ using UnityEngine;
 
 public class TokenData
 {
-    public string UserId { get; set; }
+    public string Id { get; set; } // Unique ID for the user
+    public string Username { get; set; } // Non-unique Username for display
     public string AccessToken { get; set; }
     public string RefreshToken { get; set; }
     public DateTime Expiration { get; set; }
@@ -31,8 +32,8 @@ public class Auth
     /// This constructor is only accessible within the class itself and is intended
     /// to be called by the asynchronous method CreateAsync.
     /// </summary>
-    /// <param name="userId">The ID of the user for whom the configuration is being set up.</param>
-    private Auth(int userId)
+    /// <param name="id">The unique ID of the user for whom the configuration is being set up.</param>
+    private Auth()
     {
         _config = new ConfigManager(Path.Combine(Application.dataPath, "Scripts/Spotify/Data/spotify.config"));
     }
@@ -42,22 +43,20 @@ public class Auth
     /// This method initializes the instance with a specified user ID and retrieves or refreshes
     /// the user's token before returning a fully initialized Auth object.
     /// </summary>
-    /// <param name="userId">The ID of the user for whom the Auth instance is created.</param>
+    /// <param name="id">The unique ID of the user for whom the Auth instance is created.</param>
     /// <returns>An initialized Auth instance associated with the specified user.</returns>
-    public static async Task<Auth> CreateAsync(int userId)
+    public static async Task<Auth> CreateAsync(string id)
     {
-        var instance = new Auth(userId);
-        await instance.GetOrRefreshToken(userId.ToString());
+        var instance = new Auth();
+        await instance.GetOrRefreshToken(id);
         return instance;
     }
-
 
     /// <summary>
     /// Starts the authorization process to obtain a new authorization code for a specific user.
     /// This method opens a browser for the user to log in and authorize the app.
     /// </summary>
-    /// <param name="userId">The ID of the user requesting authorization.</param>
-    private async Task GetNewAuthorizationCode(string userId)
+    private async Task GetNewAuthorizationCode()
     {
         _server = new EmbedIOAuthServer(new Uri(
             _config.GetString("SERVER_REDIRECT_URI")),
@@ -66,33 +65,33 @@ public class Auth
 
         await _server.Start();
 
-        _server.AuthorizationCodeReceived += async (sender, response) => await OnAuthorizationCodeReceived(sender, response, userId);
+        _server.AuthorizationCodeReceived += async (sender, response) => await OnAuthorizationCodeReceived(sender, response);
         _server.ErrorReceived += async (sender, error, state) => await OnErrorReceived(sender, error, state);
 
         var request = new LoginRequest(_server.BaseUri, _config.GetString("CLIENT_ID"), LoginRequest.ResponseType.Code)
         {
             Scope = new List<string>
-                {
-                    Scopes.UgcImageUpload,
-                    Scopes.UserReadPlaybackState,
-                    Scopes.UserModifyPlaybackState,
-                    Scopes.UserReadCurrentlyPlaying,
-                    Scopes.Streaming,
-                    Scopes.AppRemoteControl,
-                    Scopes.UserReadEmail,
-                    Scopes.UserReadPrivate,
-                    Scopes.PlaylistReadCollaborative,
-                    Scopes.PlaylistModifyPublic,
-                    Scopes.PlaylistReadPrivate,
-                    Scopes.PlaylistModifyPrivate,
-                    Scopes.UserLibraryModify,
-                    Scopes.UserLibraryRead,
-                    Scopes.UserTopRead,
-                    Scopes.UserReadPlaybackPosition,
-                    Scopes.UserReadRecentlyPlayed,
-                    Scopes.UserFollowRead,
-                    Scopes.UserFollowModify
-                }
+            {
+                Scopes.UgcImageUpload,
+                Scopes.UserReadPlaybackState,
+                Scopes.UserModifyPlaybackState,
+                Scopes.UserReadCurrentlyPlaying,
+                Scopes.Streaming,
+                Scopes.AppRemoteControl,
+                Scopes.UserReadEmail,
+                Scopes.UserReadPrivate,
+                Scopes.PlaylistReadCollaborative,
+                Scopes.PlaylistModifyPublic,
+                Scopes.PlaylistReadPrivate,
+                Scopes.PlaylistModifyPrivate,
+                Scopes.UserLibraryModify,
+                Scopes.UserLibraryRead,
+                Scopes.UserTopRead,
+                Scopes.UserReadPlaybackPosition,
+                Scopes.UserReadRecentlyPlayed,
+                Scopes.UserFollowRead,
+                Scopes.UserFollowModify
+            }
         };
 
         var uri = request.ToUri();
@@ -102,7 +101,7 @@ public class Auth
         }
         catch (Exception ex)
         {
-            Debug.Log($"Unable to open URL, manually open: {uri}, Exception: {ex}");
+            Debug.Log($"Unable to open URL, manually open: {uri},\n Exception: {ex}");
         }
     }
 
@@ -124,8 +123,7 @@ public class Auth
     /// </summary>
     /// <param name="sender">The object that triggered the event.</param>
     /// <param name="response">The response containing the authorization code.</param>
-    /// <param name="userId">The ID of the user for whom the code is received.</param>
-    private async Task OnAuthorizationCodeReceived(object sender, AuthorizationCodeResponse response, string userId)
+    private async Task OnAuthorizationCodeReceived(object sender, AuthorizationCodeResponse response)
     {
         var tokenResponse = await new OAuthClient(SpotifyClientConfig.CreateDefault()).RequestToken(
             new AuthorizationCodeTokenRequest(
@@ -135,25 +133,39 @@ public class Auth
                 new Uri(_config.GetString("SERVER_REDIRECT_URI"))
             )
         );
-
+        
+        await _server.Stop();
+        
         _accessToken = tokenResponse.AccessToken;
         _refreshToken = tokenResponse.RefreshToken;
         _expiration = DateTime.Now.AddSeconds(tokenResponse.ExpiresIn);
 
-        SaveTokenData(userId, _accessToken, _refreshToken, _expiration);
+        var profile = await GetUserProfile(_accessToken);
+        
+        SaveTokenData(profile.Id, profile.DisplayName, _accessToken, _refreshToken, _expiration);
+    }
 
-        await _server.Stop();
+    private async Task<PrivateUser> GetUserProfile(string accessToken)
+    {
+        var spotifyClient = new SpotifyClient(accessToken);
+        return await spotifyClient.UserProfile.Current();
     }
 
     /// <summary>
     /// Retrieves an existing token from storage or refreshes it if expired.
     /// If no valid token is found, the authorization process starts to get a new one.
     /// </summary>
-    /// <param name="userId">The ID of the user whose token is being fetched or refreshed.</param>
-    private async Task GetOrRefreshToken(string userId)
+    /// <param name="id">The unique ID of the user whose token is being fetched or refreshed.</param>
+    private async Task GetOrRefreshToken(string id)
     {
+        if (id == "")
+        {
+            await GetNewAuthorizationCode();
+            return;
+        }
+        
         var tokenDataList = LoadTokenData();
-        var userToken = tokenDataList.Find(u => u.UserId == userId);
+        var userToken = tokenDataList.Find(u => u.Id == id);
 
         if (userToken != null && !IsTokenExpired(userToken))
         {
@@ -167,7 +179,7 @@ public class Auth
         }
         else
         {
-            await GetNewAuthorizationCode(userId);
+            await GetNewAuthorizationCode();
         }
     }
 
@@ -175,13 +187,6 @@ public class Auth
     /// Refreshes the Spotify access token using the provided refresh token.
     /// </summary>
     /// <param name="tokenData">An object containing the user's token data, including the refresh token and user ID.</param>
-    /// <remarks>
-    /// This method attempts to renew the access token by sending a refresh request to the Spotify OAuth service.
-    /// If successful, it updates the access token and expiration time, then saves the updated token data.
-    /// If the refresh fails, it logs an error message and triggers a new authorization code request to obtain a fresh access and refresh token.
-    /// </remarks>
-    /// <exception cref="APIException">Logs an error and initiates re-authorization if token refresh fails due to an API exception.</exception>
-    /// <returns>Task representing the asynchronous operation.</returns>
     private async Task RefreshToken(TokenData tokenData)
     {
         try
@@ -192,14 +197,14 @@ public class Auth
             _accessToken = tokenResponse.AccessToken;
             _expiration = DateTime.Now.AddSeconds(tokenResponse.ExpiresIn);
 
-            SaveTokenData(tokenData.UserId, _accessToken, _refreshToken, _expiration);
+            SaveTokenData(tokenData.Id, tokenData.Username, _accessToken, _refreshToken, _expiration);
 
             Debug.Log("Token refreshed successfully.");
         }
         catch (APIException e)
         {
             Debug.LogError($"Failed to refresh token: {e.Message}");
-            await GetNewAuthorizationCode(tokenData.UserId);
+            await GetNewAuthorizationCode();
         }
     }
 
@@ -217,64 +222,47 @@ public class Auth
     /// Saves the token data for a user. If the JSON file does not exist, it is created.
     /// If the user already has token data, it updates the existing entry; otherwise, it adds a new entry.
     /// </summary>
-    /// <param name="userId">The ID of the user whose token data is being saved.</param>
+    /// <param name="id">The unique ID of the user whose token data is being saved.</param>
+    /// <param name="username">The display username of the user.</param>
     /// <param name="accessToken">The access token to be saved.</param>
     /// <param name="refreshToken">The refresh token to be saved.</param>
     /// <param name="expiration">The expiration date and time of the access token.</param>
-    private void SaveTokenData(string userId, string accessToken, string refreshToken, DateTime expiration)
+    private void SaveTokenData(string id, string username, string accessToken, string refreshToken, DateTime expiration)
     {
-        string userFilePath = _config.GetString("USERS_PATH");
-
-        if (!File.Exists(userFilePath))
-        {
-            var emptyTokenList = new List<TokenData>();
-            string jsonOutput = JsonConvert.SerializeObject(emptyTokenList, Formatting.Indented);
-            File.WriteAllText(userFilePath, jsonOutput);
-        }
-
         var tokenDataList = LoadTokenData();
-        var existingUser = tokenDataList.Find(u => u.UserId == userId);
+        var existingUserToken = tokenDataList.Find(u => u.Id == id);
 
-        if (existingUser != null)
+        if (existingUserToken != null)
         {
-            existingUser.AccessToken = accessToken;
-            existingUser.RefreshToken = refreshToken;
-            existingUser.Expiration = expiration;
+            existingUserToken.AccessToken = accessToken;
+            existingUserToken.RefreshToken = refreshToken;
+            existingUserToken.Expiration = expiration;
         }
         else
         {
             tokenDataList.Add(new TokenData
             {
-                UserId = userId,
+                Id = id,
+                Username = username,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
                 Expiration = expiration
             });
         }
 
-        string updatedJsonOutput = JsonConvert.SerializeObject(tokenDataList, Formatting.Indented);
-        File.WriteAllText(userFilePath, updatedJsonOutput);
+        File.WriteAllText(_config.GetString("USERS_PATH"), JsonConvert.SerializeObject(tokenDataList, Formatting.Indented));
     }
-    
+
     /// <summary>
-    /// Loads the stored token data for all users from persistent storage.
+    /// Loads the token data from a JSON file.
     /// </summary>
-    /// <returns>A list of token data for all users.</returns>
+    /// <returns>A list of token data.</returns>
     private List<TokenData> LoadTokenData()
     {
         if (!File.Exists(_config.GetString("USERS_PATH")))
             return new List<TokenData>();
 
         var json = File.ReadAllText(_config.GetString("USERS_PATH"));
-
-        try
-        {
-            return JsonConvert.DeserializeObject<List<TokenData>>(json);
-        }
-        catch (JsonSerializationException)
-        {
-            Debug.LogError("JSON format is incorrect. Please check the users.json file (" + _config.GetString("USERS_PATH") + ").");
-            return new List<TokenData>();
-        }
+        return JsonConvert.DeserializeObject<List<TokenData>>(json);
     }
 }
