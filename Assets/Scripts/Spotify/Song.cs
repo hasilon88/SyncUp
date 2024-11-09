@@ -13,17 +13,23 @@ public class Song
     public string AlbumName { get; set; }
     public bool IsPlayable { get; set; }
     public bool IsLocal { get; set; }
-
+    public float Tempo { get; set; }
+    public float TempoConfidence { get; set; }
+    
     public override string ToString()
     {
-        return $"ID: {ID}\n" +
-               $"Title: {Title}\n" +
-               $"Duration: {Duration} seconds\n" +
-               $"Artist ID: {ArtistID}\n" +
-               $"Artist Name: {ArtistName}\n" +
-               $"Album ID: {AlbumID}\n" +
-               $"Album Name: {AlbumName}\n" +
-               $"Is Playable: {IsPlayable}\n" +
-               $"Is Local: {IsLocal}";
+        return $"Song Details:\n" +
+               $"-----------------\n" +
+               $"ID              : {ID}\n" +
+               $"Title           : {Title}\n" +
+               $"Duration        : {Duration} seconds\n" +
+               $"Artist ID       : {ArtistID}\n" +
+               $"Artist Name     : {ArtistName}\n" +
+               $"Album ID        : {AlbumID}\n" +
+               $"Album Name      : {AlbumName}\n" +
+               $"Is Playable     : {(IsPlayable)}\n" +
+               $"Is Local        : {(IsLocal)}\n" +
+               $"Tempo           : {Tempo}\n" +
+               $"Tempo Confidence: {TempoConfidence}\n";
     }
 }

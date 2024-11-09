@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SpotifyAPI.Web;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpotifyController : MonoBehaviour 
 {
     public static SpotifyController Instance { get; private set; }
     private SpotifyClient _spotify;
-    public int UserId;
+    public string userId="";
 
-    private void Awake()
+    private async void Awake()
     {
         if (Instance == null)
         {
-            _spotify = new SpotifyClient(new Auth(UserId).AccessToken);
+            var auth = await Auth.CreateAsync(userId);
+            _spotify = new SpotifyClient(auth.AccessToken);
             Instance = this;
         }
         else if (Instance != this) Destroy(this);
@@ -38,8 +38,10 @@ public class SpotifyController : MonoBehaviour
 
     public async Task TogglePlayPause()
     {
-        if (await GetPlayPauseState()) await Pause();
-        else await Play();
+        if (await GetPlayPauseState()) 
+            await Pause();
+        else 
+            await Play();
     }
 
     private async Task Seek(int seconds)
@@ -96,7 +98,9 @@ public class SpotifyController : MonoBehaviour
                     ArtistName = track.Artists[0].Name,
                     Duration = track.DurationMs,
                     IsPlayable = track.IsPlayable,
-                    IsLocal = track.IsLocal
+                    IsLocal = track.IsLocal,
+                    Tempo = await GetTempo(track.Id),
+                    TempoConfidence = await GetTempoConfidence(track.Id)
                 });
             }
         }
@@ -119,7 +123,9 @@ public class SpotifyController : MonoBehaviour
                 AlbumID = track.Album.Id,
                 AlbumName = track.Album.Name,
                 IsPlayable = track.IsPlayable,
-                IsLocal = track.IsLocal
+                IsLocal = track.IsLocal,
+                Tempo = await GetTempo(track.Id),
+                TempoConfidence = await GetTempoConfidence(track.Id)
             };
         }
 
@@ -130,7 +136,6 @@ public class SpotifyController : MonoBehaviour
     public async Task<int> GetCurrentSongProgressMillis()
     {
         CurrentlyPlayingContext context = await _spotify.Player.GetCurrentPlayback();
-        if (context == null) return 0;
         return context.ProgressMs;
     }
 
@@ -141,5 +146,17 @@ public class SpotifyController : MonoBehaviour
         await _spotify.Player.SkipNext();
 
         return GetCurrentlyPlayingSong().Result.ID == searchResponse.Tracks.Items[0].Id;
+    }
+
+    public async Task<float> GetTempo(string songId)
+    {
+        var trackData = await _spotify.Tracks.GetAudioAnalysis(songId);
+        return trackData.Track.Tempo;
+    }
+    
+    public async Task<float> GetTempoConfidence(string songId)
+    {
+        var trackData = await _spotify.Tracks.GetAudioAnalysis(songId);
+        return trackData.Track.TempConfidence;
     }
 }
