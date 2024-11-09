@@ -156,6 +156,17 @@ public class Auth
         }
     }
 
+    /// <summary>
+    /// Refreshes the Spotify access token using the provided refresh token.
+    /// </summary>
+    /// <param name="tokenData">An object containing the user's token data, including the refresh token and user ID.</param>
+    /// <remarks>
+    /// This method attempts to renew the access token by sending a refresh request to the Spotify OAuth service.
+    /// If successful, it updates the access token and expiration time, then saves the updated token data.
+    /// If the refresh fails, it logs an error message and triggers a new authorization code request to obtain a fresh access and refresh token.
+    /// </remarks>
+    /// <exception cref="APIException">Logs an error and initiates re-authorization if token refresh fails due to an API exception.</exception>
+    /// <returns>Task representing the asynchronous operation.</returns>
     private async Task RefreshToken(TokenData tokenData)
     {
         try
@@ -164,7 +175,6 @@ public class Auth
             var tokenResponse = await new OAuthClient(SpotifyClientConfig.CreateDefault()).RequestToken(refreshRequest);
 
             _accessToken = tokenResponse.AccessToken;
-            _refreshToken = tokenResponse.RefreshToken;
             _expiration = DateTime.Now.AddSeconds(tokenResponse.ExpiresIn);
 
             SaveTokenData(tokenData.UserId, _accessToken, _refreshToken, _expiration);

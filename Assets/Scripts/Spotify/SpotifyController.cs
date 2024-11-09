@@ -8,17 +8,20 @@ public class SpotifyController : MonoBehaviour
 {
     public static SpotifyController Instance { get; private set; }
     private SpotifyClient _spotify;
-    public int UserId;
+    public int userId;
 
-    private void Awake()
+    private async void Awake()
     {
         if (Instance == null)
         {
-            _spotify = new SpotifyClient(new Auth(UserId).AccessToken);
+            _spotify = new SpotifyClient(new Auth(userId).AccessToken);
             Instance = this;
         }
         else if (Instance != this) Destroy(this);
         DontDestroyOnLoad(this);
+
+        Song song = await GetCurrentlyPlayingSong();
+        Debug.Log(song.ToString());
     }
 
     public async Task<bool> GetPlayPauseState()
@@ -96,7 +99,9 @@ public class SpotifyController : MonoBehaviour
                     ArtistName = track.Artists[0].Name,
                     Duration = track.DurationMs,
                     IsPlayable = track.IsPlayable,
-                    IsLocal = track.IsLocal
+                    IsLocal = track.IsLocal,
+                    Tempo = await GetTempo(track.Id),
+                    TempoConfidence = await GetTempoConfidence(track.Id)
                 });
             }
         }
@@ -119,7 +124,9 @@ public class SpotifyController : MonoBehaviour
                 AlbumID = track.Album.Id,
                 AlbumName = track.Album.Name,
                 IsPlayable = track.IsPlayable,
-                IsLocal = track.IsLocal
+                IsLocal = track.IsLocal,
+                Tempo = await GetTempo(track.Id),
+                TempoConfidence = await GetTempoConfidence(track.Id)
             };
         }
 
@@ -130,7 +137,6 @@ public class SpotifyController : MonoBehaviour
     public async Task<int> GetCurrentSongProgressMillis()
     {
         CurrentlyPlayingContext context = await _spotify.Player.GetCurrentPlayback();
-        if (context == null) return 0;
         return context.ProgressMs;
     }
 
@@ -141,5 +147,17 @@ public class SpotifyController : MonoBehaviour
         await _spotify.Player.SkipNext();
 
         return GetCurrentlyPlayingSong().Result.ID == searchResponse.Tracks.Items[0].Id;
+    }
+
+    public async Task<float> GetTempo(string songId)
+    {
+        var trackData = await _spotify.Tracks.GetAudioAnalysis(songId);
+        return trackData.Track.Tempo;
+    }
+    
+    public async Task<float> GetTempoConfidence(string songId)
+    {
+        var trackData = await _spotify.Tracks.GetAudioAnalysis(songId);
+        return trackData.Track.TempConfidence;
     }
 }
