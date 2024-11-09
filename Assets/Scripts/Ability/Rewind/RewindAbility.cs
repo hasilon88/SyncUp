@@ -34,6 +34,7 @@ public class RewindAbility : Ability
     private TimingController addElementsTimingController;
     [Range(0f, 2f)]
     public float TargetRewindIterationDelay = 0.5f;
+    [Range(100, 360)]
     public float TargetRewindIterationFOV = 120f;
     private Vector2[] iterationDelays;
     private Vector2[] iterationFOVs;
