@@ -23,7 +23,12 @@ public class SpotifyController : MonoBehaviour
 
     public async Task<bool> GetPlayPauseState()
     {
-        return (await _spotify.Player.GetCurrentPlayback()).IsPlaying;
+        CurrentlyPlayingContext currentlyPlayingContext = await _spotify.Player.GetCurrentPlayback();
+        if (currentlyPlayingContext != null) 
+        {
+            return currentlyPlayingContext.IsPlaying;
+        }
+        return false;
     }
 
     public async Task Pause()

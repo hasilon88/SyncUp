@@ -416,7 +416,7 @@ MonoBehaviour:
   triggerKey: 273
   firstPersonController: {fileID: 265405478}
   RewindDurationInSeconds: 2
-  TargetRewindIterationDelay: 0.5
+  TargetRewindIterationDelay: 0.1
   TargetRewindIterationFOV: 120
 --- !u!4 &222041661
 Transform:
