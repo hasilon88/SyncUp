@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 222041662}
   m_Layer: 0
   m_Name: Rewinder
-  m_TagString: Untagged
+  m_TagString: RewindAbility
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1722,7 +1722,6 @@ MonoBehaviour:
   CurrentLevel: 1
   ScaledTime: 0
   RealTime: 0
-  RewindArrayLength: 120
 --- !u!1 &1278632017
 GameObject:
   m_ObjectHideFlags: 0
@@ -2389,7 +2388,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed32610b34b326c428fa078919016c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RewindAbility: {fileID: 222041660}
 --- !u!1001 &1657642279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3399,11 +3397,11 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 222041661}
   - {fileID: 1929365112}
   - {fileID: 259070044}
   - {fileID: 873481839}
   - {fileID: 1087386366}
   - {fileID: 1653287477}
-  - {fileID: 222041661}
   - {fileID: 1269032593}
   - {fileID: 903798522}

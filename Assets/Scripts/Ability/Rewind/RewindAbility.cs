@@ -55,6 +55,12 @@ public class RewindAbility : Ability
         //OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
         addElementsTimingController = GetComponent<TimingController>();
         addElementsTimingController.OnTime += UpdateRewindElements;
+        SetRewindDurationInFrames();
+    }
+
+    public int GetRewindDurationInFrames()
+    {
+        return this.rewindDurationInFrames;
     }
 
     private void SetRewindDurationInFrames()

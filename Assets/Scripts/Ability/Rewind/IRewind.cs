@@ -2,13 +2,28 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Rewinder will search for everyting implementing this interface
+/// ...
 /// </summary>
-public interface IRewind
+public abstract class IRewind : MonoBehaviour
 {
+
+    protected int rewindOffset = 0;
+    protected RewindAbility rewindAbility;
+
+    private void Start()
+    {
+        rewindAbility = GameObject.FindGameObjectWithTag("RewindAbility").GetComponent<RewindAbility>();
+        rewindAbility.OnRewindIteration += (object sender, EventArgs e) => rewindOffset++;
+        rewindAbility.OnRewindStop += (object sender, EventArgs e) => rewindOffset = 0;
+        rewindAbility.OnRewindStop += (object sender, EventArgs e) => ResetRewindProperties();
+        ResetRewindProperties();
+    }
 
     public abstract void UpdateRewindElements();
     public abstract RewindResponse Rewind();
+    public abstract void ResetRewindProperties();
+
+
 }
 
 /// <summary>

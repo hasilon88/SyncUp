@@ -4,26 +4,17 @@ using UnityEngine;
 /// <summary>
 /// LIMITED REWIND SCRIPT (ONLY REWINDS WORLD POSITION)
 /// </summary>
-public class SimpleVectorRewinder : MonoBehaviour, IRewind
+public class SimpleVectorRewinder : IRewind
 {
 
     private RewindArray<Vector3> lastPositions;
-    private int rewindOffset = 0;
-    public RewindAbility RewindAbility;
 
-    private void Start()
+    public override void ResetRewindProperties()
     {
-        //NEED TO AVOID REPETITION
-        RewindAbility.OnRewindIteration += (object sender, EventArgs e) => rewindOffset++;
-        RewindAbility.OnRewindStop += (object sender, EventArgs e) =>
-        {
-            rewindOffset = 0;
-            lastPositions = lastPositions.Reset();
-        };
-        lastPositions = new RewindArray<Vector3>();
+        lastPositions = new RewindArray<Vector3>(rewindAbility.GetRewindDurationInFrames());
     }
 
-    public RewindResponse Rewind()
+    public override RewindResponse Rewind()
     {
         RewindResponse res = lastPositions.GetLast(rewindOffset);
         res.RewindingObject = this.gameObject;
@@ -31,7 +22,7 @@ public class SimpleVectorRewinder : MonoBehaviour, IRewind
         return res; //or null
     }
 
-    public void UpdateRewindElements()
+    public override void UpdateRewindElements()
     {
         lastPositions.Add(transform.position);
     }

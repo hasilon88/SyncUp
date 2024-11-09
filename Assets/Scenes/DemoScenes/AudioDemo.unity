@@ -240,6 +240,67 @@ MonoBehaviour:
   - {r: 0.20361868, g: 0.037913855, b: 0.2830189, a: 0}
   - {r: 0.16784751, g: 0.02108222, b: 0.23773581, a: 0}
   - {r: 0.11759772, g: 0.0073691513, b: 0.16981131, a: 0}
+--- !u!1001 &232029835
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 41.11373
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 12.619477
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 142.02682
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2308605373078065068, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5808496036336886867, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: userId
+      value: velozee
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687566224722834181, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: m_Name
+      value: SpotifyControllerSingleton
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
 --- !u!4 &313476477 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2006743512119260152, guid: 9065c194fbfe5b545b1e47a9ce49dd0c, type: 3}
@@ -1348,6 +1409,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 435571309}
+  - {fileID: 232029835}
   - {fileID: 705507995}
   - {fileID: 1909218670}
   - {fileID: 1120380393}

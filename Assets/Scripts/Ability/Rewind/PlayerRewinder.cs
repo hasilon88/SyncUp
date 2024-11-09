@@ -1,39 +1,30 @@
 using System;
 using UnityEngine;
 
-public class PlayerRewinder : MonoBehaviour, IRewind
+public class PlayerRewinder : IRewind
 {
 
     private RewindArray<Vector3> lastEulerAngles; //(y, z, x)
     private RewindArray<Vector3> lastPositions;
-    private int rewindOffset = 0;
-    public RewindAbility RewindAbility;
 
-    private void Start()
+    public override void ResetRewindProperties()
     {
-        //NEED TO AVOID REPETITION
-        RewindAbility.OnRewindIteration += (object sender, EventArgs e) => rewindOffset++;
-        RewindAbility.OnRewindStop += (object sender, EventArgs e) =>
-        {
-            rewindOffset = 0;
-            lastEulerAngles = lastEulerAngles.Reset();
-            lastPositions = lastPositions.Reset();
-        };
-        lastEulerAngles = new RewindArray<Vector3>();
-        lastPositions = new RewindArray<Vector3>();
+        rewindOffset = 0;
+        lastEulerAngles = new RewindArray<Vector3>(rewindAbility.GetRewindDurationInFrames());
+        lastPositions = new RewindArray<Vector3>(rewindAbility.GetRewindDurationInFrames());
     }
 
-    public RewindResponse Rewind()
+    public override RewindResponse Rewind()
     {
         RewindResponse cameraRes = lastEulerAngles.GetLast(rewindOffset);
         RewindResponse positionRes = lastPositions.GetLast(rewindOffset);
-        positionRes.RewindingObject = this.gameObject;
+        positionRes.RewindingObject = gameObject;
         transform.localEulerAngles = (Vector3)cameraRes.Element;
         transform.position = (Vector3)positionRes.Element;
         return positionRes;
     }
 
-    public void UpdateRewindElements()
+    public override void UpdateRewindElements()
     {
         lastEulerAngles.Add(transform.localEulerAngles);
         lastPositions.Add(transform.position);

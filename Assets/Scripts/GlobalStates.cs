@@ -14,7 +14,6 @@ public class GlobalStates : MonoBehaviour
     public int CurrentLevel = 1;
     public int ScaledTime = 0;
     public float RealTime = 0f;
-    public int RewindArrayLength = 50;
 
     private void Awake()
     {
