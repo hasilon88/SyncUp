@@ -413,7 +413,7 @@ MonoBehaviour:
   Icon: {fileID: 0}
   isLive: 0
   CreditsNeeded: 0
-  triggerKey: 273
+  triggerKey: 114
   firstPersonController: {fileID: 265405478}
   RewindDurationInSeconds: 3.5
   rewindDurationInFrames: 0

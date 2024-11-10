@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class TempoSetter : MonoBehaviour
@@ -7,6 +8,7 @@ public class TempoSetter : MonoBehaviour
     private bool inFrameWindow = false;
     private int frameCount = 0;
     private TimingController timingController;
+    private SpotifyController spotifyController;
     public float Tempo = 100f;
     public int FrameWindow = 15;
     public bool CurrentlyOnBeat = false;
@@ -16,8 +18,22 @@ public class TempoSetter : MonoBehaviour
 
     private void Start()
     {
+        spotifyController = SpotifyController.Instance;
+        spotifyController.OnNext += HandleSongChange;
+        spotifyController.OnPrevious += HandleSongChange;
         timingController = GetComponent<TimingController>();
         OnTempoChange += (object sender, EventArgs e) => timingController.Target = 60f / Tempo;
+    }
+
+    /// <summary>
+    /// TASK = *
+    /// VOID = EVENTS
+    /// https://stackoverflow.com/questions/12144077/async-await-when-to-return-a-task-vs-void
+    /// </summary>
+    public async void HandleSongChange(object sender, EventArgs e)
+    {
+        Song song = await spotifyController.GetCurrentlyPlayingSong();
+        SetTempo(song.Tempo);
     }
 
     public void SetTempo(float nTempo)

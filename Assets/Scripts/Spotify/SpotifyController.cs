@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SpotifyAPI.Web;
 using UnityEngine;
@@ -9,7 +10,8 @@ public class SpotifyController : MonoBehaviour
     private SpotifyClient _spotify;
     public string userId="";
 
-    //events
+    public event EventHandler OnNext;
+    public event EventHandler OnPrevious;
 
     private async void Awake()
     {
@@ -27,9 +29,7 @@ public class SpotifyController : MonoBehaviour
     {
         CurrentlyPlayingContext currentlyPlayingContext = await _spotify.Player.GetCurrentPlayback();
         if (currentlyPlayingContext != null) 
-        {
             return currentlyPlayingContext.IsPlaying;
-        }
         return false;
     }
 
@@ -72,11 +72,13 @@ public class SpotifyController : MonoBehaviour
     public async Task Next()
     {
         await _spotify.Player.SkipNext();
+        OnNext?.Invoke(this, EventArgs.Empty);
     }
 
     public async Task Previous()
     {
         await _spotify.Player.SkipPrevious();
+        OnPrevious?.Invoke(this, EventArgs.Empty);
     }
 
     public async Task<List<Song>> GetPlaylist()

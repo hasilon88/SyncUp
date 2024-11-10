@@ -14,8 +14,15 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
     private TextMeshProUGUI playPauseText;
     private SpotifyController spotifyController;
 
+    public KeyCode NextKey;
+    public KeyCode PreviousKey;
+    public KeyCode TogglePauseKey;
+
     private async void Start()
     {
+        NextKey = KeyCode.RightArrow;
+        PreviousKey = KeyCode.LeftArrow;
+        TogglePauseKey = KeyCode.DownArrow;
         spotifyController = SpotifyController.Instance;
         SetButtons();   
         SetButtonsListenner();
@@ -53,8 +60,19 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
         else playPauseText.text = "Play";
     }
 
-    void Update()
+    async void Update()
     {
-        
+        if (Input.GetKeyDown(NextKey))
+        {
+            await spotifyController.Next();
+        }
+        else if (Input.GetKeyUp(PreviousKey)) 
+        {
+            await spotifyController.Previous();
+        }
+        else if (Input.GetKeyDown(TogglePauseKey))
+        {
+            await HandlePlayPause();
+        }
     }
 }
