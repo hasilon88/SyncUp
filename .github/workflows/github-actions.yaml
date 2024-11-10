@@ -7,12 +7,12 @@ jobs:
   remove-secrets:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write  # Allows pushing changes
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Ensures full history for committing
 
       - name: Remove existing files with sensitive data
         run: |
@@ -23,16 +23,16 @@ jobs:
       - name: Recreate spotify.config without sensitive data
         run: |
           echo "// Client secrets
-                CLIENT_ID=...
-                CLIENT_SECRET=...
+CLIENT_ID=...
+CLIENT_SECRET=...
 
-                // User configs
-                USERS_PATH=Assets/Scripts/Spotify/Data/users.json
-                TOKEN_REFRESH_THRESHOLD=300
+// User configs
+USERS_PATH=Assets/Scripts/Spotify/Data/users.json
+TOKEN_REFRESH_THRESHOLD=300
 
-                // Server configs
-                SERVER_REDIRECT_URI=http://localhost:5543/callback
-                SERVER_PORT=5543" > ./Assets/Scripts/Spotify/Data/spotify.config
+// Server configs
+SERVER_REDIRECT_URI=http://localhost:5543/callback
+SERVER_PORT=5543" > ./Assets/Scripts/Spotify/Data/spotify.config
 
       - name: Recreate users.json as empty JSON array
         run: echo "[]" > ./Assets/Scripts/Spotify/Data/users.json
