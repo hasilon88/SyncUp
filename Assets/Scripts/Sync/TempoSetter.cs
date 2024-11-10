@@ -19,8 +19,11 @@ public class TempoSetter : MonoBehaviour
     private void Start()
     {
         spotifyController = SpotifyController.Instance;
-        spotifyController.OnNext += HandleSongChange;
-        spotifyController.OnPrevious += HandleSongChange;
+        if (spotifyController != null)
+        {
+            spotifyController.OnNext += HandleSongChange;
+            spotifyController.OnPrevious += HandleSongChange;
+        }
         timingController = GetComponent<TimingController>();
         OnTempoChange += (object sender, EventArgs e) => timingController.Target = 60f / Tempo;
     }
