@@ -14,9 +14,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Remove existing files with sensitive data
+        run: |
+          rm -f \
+            ./Assets/Scripts/Spotify/Data/users.json \
+            ./Assets/Scripts/Spotify/Data/spotify.config
+
       - name: Recreate spotify.config without sensitive data
         run: |
-          echo "// Client secrets\nCLIENT_ID=your-client-id\nCLIENT_SECRET=your-client-secret\n\n// User configs\nUSERS_PATH=Assets/Scripts/Spotify/Data/users.json\nTOKEN_REFRESH_THRESHOLD=300\n\n// Server configs\nSERVER_REDIRECT_URI=http://localhost:5543/callback\nSERVER_PORT=5543" > ./Assets/Scripts/Spotify/Data/spotify.config
+          echo -e "// Client secrets\nCLIENT_ID=your-client-id\nCLIENT_SECRET=your-client-secret\n\n// User configs\nUSERS_PATH=Assets/Scripts/Spotify/Data/users.json\nTOKEN_REFRESH_THRESHOLD=300\n\n// Server configs\nSERVER_REDIRECT_URI=http://localhost:5543/callback\nSERVER_PORT=5543" > ./Assets/Scripts/Spotify/Data/spotify.config
 
       - name: Recreate users.json as empty JSON array
         run: echo "[]" > ./Assets/Scripts/Spotify/Data/users.json
