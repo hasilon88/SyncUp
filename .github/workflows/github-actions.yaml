@@ -1,0 +1,36 @@
+name: Remove sensitive information
+on:
+  push:
+    branches-ignore:
+      - 'main' 
+jobs:
+  remove-secrets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Remove existing files with sensitive data
+        run: |
+          rm -f \
+            ./Assets/Scripts/Spotify/Data/users.json \
+            ./Assets/Scripts/Spotify/Data/spotify.config
+
+      - name: Recreate spotify.config without sensitive data
+        run: |
+          echo -e "// Client secrets\nCLIENT_ID=your-client-id\nCLIENT_SECRET=your-client-secret\n\n// User configs\nUSERS_PATH=Assets/Scripts/Spotify/Data/users.json\nTOKEN_REFRESH_THRESHOLD=300\n\n// Server configs\nSERVER_REDIRECT_URI=http://localhost:5543/callback\nSERVER_PORT=5543" > ./Assets/Scripts/Spotify/Data/spotify.config
+
+      - name: Recreate users.json as empty JSON array
+        run: echo -e "[\n\n]" > ./Assets/Scripts/Spotify/Data/users.json
+
+      - name: Commit files and push them
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add "./Assets/Scripts/Spotify/Data/users.json" "./Assets/Scripts/Spotify/Data/spotify.config"
+          git commit -m "Overwrite existing secrets files" --allow-empty
+          git push
