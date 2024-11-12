@@ -2,10 +2,15 @@ using UnityEngine.UI;
 using UnityEngine;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEngine.EventSystems;
+using Unity.VisualScripting;
+using System.Collections;
 
-public class SpotifyInterfaceBehavior : MonoBehaviour
+public class SpotifyInterfaceBehavior : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 
+    private Canvas root;
+    private CanvasGroup canvasGroup;
     private Button nextButton;
     private Button previousButton;
     private Button fastForwardButton;
@@ -14,6 +19,20 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
     private TextMeshProUGUI playPauseText;
     private SpotifyController spotifyController;
 
+    private Image pauseImage;
+    private Image playImage;
+    private Image skipImage;
+    private Image previousImage;
+    private Image fastForwardImage;
+    private Image rewindImage;
+
+    private Coroutine brightenCoroutine;
+    private Coroutine hideCoroutine;
+
+    //should be in a separate script
+    public float FadeAwayWaitSeconds = 1f;
+    public float AlphaIncrement = 0.1f;
+
     public bool UseKeys = false;
     public KeyCode NextKey;
     public KeyCode PreviousKey;
@@ -21,13 +40,31 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
 
     private async void Start()
     {
+        root = GetComponent<Canvas>();
+        canvasGroup = GetComponent<CanvasGroup>();
         NextKey = KeyCode.RightArrow;
         PreviousKey = KeyCode.LeftArrow;
         TogglePauseKey = KeyCode.DownArrow;
         spotifyController = SpotifyController.Instance;
-        SetButtons();   
+        SetButtons();
+        SetImages();
         SetButtonsListenner();
         await ChangePauseButtonState();
+    }
+
+    private Image GetSpotifyIcon(string name)
+    {
+        return (Image)Resources.Load("images/spotify/" + name);
+    }
+
+    private void SetImages()
+    {
+        playImage = GetSpotifyIcon("play-button.png");
+        pauseImage = GetSpotifyIcon("pause.png");
+        fastForwardImage = GetSpotifyIcon("fastforward.png");
+        rewindImage = GetSpotifyIcon("rewind-button.png");
+        skipImage = GetSpotifyIcon("next.png");
+        previousImage = GetSpotifyIcon("previous.png");
     }
 
     private void SetButtons()
@@ -60,9 +97,35 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
         if (await spotifyController.GetPlayPauseState()) playPauseText.text = "Pause";
         else playPauseText.text = "Play";
     }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("Enter");
+        if (hideCoroutine != null) StopCoroutine(hideCoroutine);
+        brightenCoroutine = StartCoroutine(Brighten(true));
+    }
 
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("Leave");
+        if (brightenCoroutine != null) StopCoroutine(brightenCoroutine);
+        hideCoroutine = StartCoroutine(Brighten(false));
+    }
 
-
+    private IEnumerator Brighten(bool reverse = true)
+    {
+        if (reverse)
+            while (canvasGroup.alpha < 1)
+            {
+                canvasGroup.alpha += AlphaIncrement;
+                yield return new WaitForSeconds(FadeAwayWaitSeconds * Time.deltaTime);
+            }
+        else
+            while (canvasGroup.alpha > 0)
+            {
+                canvasGroup.alpha -= AlphaIncrement;
+                yield return new WaitForSeconds(FadeAwayWaitSeconds * Time.deltaTime);
+            }
+    }
 
     private async void Update()
     {

@@ -418,10 +418,10 @@ MonoBehaviour:
   CreditsNeeded: 0
   TriggerKey: 114
   FirstPersonController: {fileID: 265405478}
-  RewindDurationInSeconds: 3
+  RewindDurationInSeconds: 1.3
   rewindDurationInFrames: 0
   TargetRewindIterationDelay: 0.59
-  TargetRewindIterationFOV: 184
+  TargetRewindIterationFOV: 119
 --- !u!4 &222041661
 Transform:
   m_ObjectHideFlags: 0

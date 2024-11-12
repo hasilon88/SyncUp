@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +27,11 @@ public abstract class Ability : MonoBehaviour
     public event EventHandler OnCooldownEnter;
     public event EventHandler OnCooldownLeave;
 
+    public void SetCooldownInFrames()
+    {
+        cooldownInFrames = (int)(CooldownInSeconds * 60f); //FPSManager.FrameRate
+    }
+
     public void GoOnCooldown()
     {
         OnCooldown = true;
@@ -40,5 +44,6 @@ public abstract class Ability : MonoBehaviour
         OnCooldown = false;
         OnCooldownLeave?.Invoke(this, EventArgs.Empty);
     }
+
 
 }
