@@ -77,14 +77,14 @@ public class RewindAbility : Ability
         iterationDelays = ParabolicArray.GetArray(TargetRewindIterationDelay, rewindDurationInFrames);
         iterationFOVs = ParabolicArray.GetArray(TargetRewindIterationFOV, rewindDurationInFrames, mainCamera.fieldOfView);
         PrepareRigidBodies();
-        firstPersonController.PlayerCanMove = false; //enemy can move?
-        isLive = true;
+        FirstPersonController.PlayerCanMove = false; //enemy can move?
+        IsLive = true;
     }
 
     private void AfterRewind(object sender, EventArgs e)
     {
-        firstPersonController.PlayerCanMove = true;
-        isLive = false;
+        FirstPersonController.PlayerCanMove = true;
+        IsLive = false;
         UnPrepareRigidBodies();
         //GoOnCooldown()
     }
@@ -95,7 +95,7 @@ public class RewindAbility : Ability
     /// </summary>
     private void UpdateRewindableObjects()
     {
-        if (!isLive)
+        if (!IsLive)
             rewindableObjects = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<IRewind>().ToArray();
     }
 
@@ -105,7 +105,7 @@ public class RewindAbility : Ability
     /// </summary>
     public void UpdateRewindElements(object sender, EventArgs e)
     {
-        if (!isLive)
+        if (!IsLive)
         {
             OnRewindElementsAddStart?.Invoke(this, EventArgs.Empty);
             foreach (IRewind obj in rewindableObjects) obj?.UpdateRewindElements();
@@ -169,7 +169,7 @@ public class RewindAbility : Ability
     private void Update()
     {
         UpdateRewindableObjects();
-        if (!isLive && Input.GetKeyDown(triggerKey) && !OnCooldown)
+        if (!IsLive && Input.GetKeyDown(TriggerKey) && !OnCooldown)
             StartCoroutine(Rewind());
     }
 }

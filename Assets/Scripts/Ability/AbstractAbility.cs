@@ -7,34 +7,26 @@ public abstract class Ability : MonoBehaviour
 {
 
     [Range(0f, 15f)]
-    public float Cooldown = 3; //cooldown value (seconds)
-    public float CooldownCountdown = 0;
-    public bool CooldownEnable = true; //
-    protected bool OnCooldown { get; private set; }
-    public string Name; //name of ability in the store
-    public Image Icon; //icon to be shown
-    public bool isLive = false; //if ablity is currently being used (has been fired) //could be disregarded
-    public int CreditsNeeded = 0; //price in the store
-    public KeyCode triggerKey;
-    public FirstPersonController firstPersonController;
+    public float CooldownInSeconds = 3f;
+    private int cooldownInFrames = 0;
+    public float CooldownCountdown = 0f;
+    public bool CooldownEnabled = true;
+    public bool OnCooldown = false;
 
-    public event EventHandler OnAbilityEnabled;
-    public event EventHandler OnAbilityDisabled;
+    public string Name; 
+    public Image Icon; 
+    public bool IsLive = false;
+    public bool IsEquipped = false;
+    public bool IsUnlocked = false;
+    public int CreditsNeeded = 0; 
+    public KeyCode TriggerKey;
+    public FirstPersonController FirstPersonController;
+
+    public event EventHandler OnAbilityUnlock;
+    public event EventHandler OnAbilityEquip;
+    public event EventHandler OnAbilityUnequip;
     public event EventHandler OnCooldownEnter;
     public event EventHandler OnCooldownLeave;
-
-    public void EnableAbility()
-    {
-        gameObject.SetActive(true);
-        OnAbilityEnabled?.Invoke(this, EventArgs.Empty);
-
-    }
-
-    public void DisableAbility()
-    {
-        gameObject.SetActive(false);
-        OnAbilityDisabled?.Invoke(this, EventArgs.Empty);
-    }
 
     public void GoOnCooldown()
     {
