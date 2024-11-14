@@ -59,7 +59,6 @@ public class SpotifyInterfaceBehavior : MonoBehaviour, IPointerEnterHandler, IPo
     private void SetImages()
     {
         playImage = GetSpotifyIcon("play-button");
-        Debug.Log(playImage);
         pauseImage = GetSpotifyIcon("pause.png");
         fastForwardImage = GetSpotifyIcon("fastforward.png");
         rewindImage = GetSpotifyIcon("rewind-button.png");

@@ -6,6 +6,8 @@ public class AbilityController : MonoBehaviour
 {
 
     public Ability FirstAbility;
+    public Ability SecondAbility;
+
 
     void Start()
     {
