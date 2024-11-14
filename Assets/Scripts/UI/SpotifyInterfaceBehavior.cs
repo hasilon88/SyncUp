@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.EventSystems;
-using Unity.VisualScripting;
 using System.Collections;
 
 public class SpotifyInterfaceBehavior : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -19,12 +18,12 @@ public class SpotifyInterfaceBehavior : MonoBehaviour, IPointerEnterHandler, IPo
     private TextMeshProUGUI playPauseText;
     private SpotifyController spotifyController;
 
-    private Image pauseImage;
-    private Image playImage;
-    private Image skipImage;
-    private Image previousImage;
-    private Image fastForwardImage;
-    private Image rewindImage;
+    private Texture pauseImage;
+    private Texture playImage;
+    private Texture skipImage;
+    private Texture previousImage;
+    private Texture fastForwardImage;
+    private Texture rewindImage;
 
     private Coroutine brightenCoroutine;
     private Coroutine hideCoroutine;
@@ -52,14 +51,15 @@ public class SpotifyInterfaceBehavior : MonoBehaviour, IPointerEnterHandler, IPo
         await ChangePauseButtonState();
     }
 
-    private Image GetSpotifyIcon(string name)
+    private Texture GetSpotifyIcon(string name)
     {
-        return (Image)Resources.Load("images/spotify/" + name);
+        return (Texture)Resources.Load("images/spotify/" + name);
     }
 
     private void SetImages()
     {
-        playImage = GetSpotifyIcon("play-button.png");
+        playImage = GetSpotifyIcon("play-button");
+        Debug.Log(playImage);
         pauseImage = GetSpotifyIcon("pause.png");
         fastForwardImage = GetSpotifyIcon("fastforward.png");
         rewindImage = GetSpotifyIcon("rewind-button.png");

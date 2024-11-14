@@ -8,8 +8,6 @@ public class GlobalStates : MonoBehaviour
 {
 
     public static GlobalStates Instance { get; private set; }
-    public Ability Ability1 = null;
-    public Ability Ability2 = null;
     public int Credits = 0;
     public int CurrentLevel = 1;
     public int ScaledTime = 0;
