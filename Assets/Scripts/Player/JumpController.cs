@@ -10,12 +10,12 @@ public class JumpController : MonoBehaviour
     public float JumpPower = 5f;
     public KeyCode JumpKey = KeyCode.Space;
     public bool hasDoubleJumped = false;
-    private FirstPersonController firstPersonController;
+    private PlayerController firstPersonController;
     private CrouchController crouchController;
 
     private void Start()
     {
-        firstPersonController = GetComponent<FirstPersonController>();
+        firstPersonController = GetComponent<PlayerController>();
         crouchController = GetComponent<CrouchController>();
     }
 

@@ -38,7 +38,6 @@ public class RewindAbility : Ability
     public float TargetRewindIterationFOV = 120f;
     private Vector2[] iterationDelays;
     private Vector2[] iterationFOVs;
-    private GlobalStates globalStates;
     private Camera mainCamera;
 
     public event EventHandler OnRewindStart;
@@ -47,17 +46,21 @@ public class RewindAbility : Ability
     public event EventHandler OnRewindElementsAddStart;
     public event EventHandler OnRewindElementsAddStop;
 
+    private void Awake()
+    {
+        Debug.Log("REWIND ABILITY AWAKE");
+        SetRewindDurationInFrames();
+    }
+
     public void Start()
     {
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        globalStates = GlobalStates.Instance;
         OnRewindStart += BeforeRewind;
         OnRewindStop += AfterRewind;
         //OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
         //OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
         addElementsTimingController = GetComponent<TimingController>();
         addElementsTimingController.OnTime += UpdateRewindElements;
-        SetRewindDurationInFrames();
     }
 
     public int GetRewindDurationInFrames()

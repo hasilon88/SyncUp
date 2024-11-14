@@ -379,8 +379,10 @@ GameObject:
   - component: {fileID: 7710576827250144287}
   - component: {fileID: 5994153863358348556}
   - component: {fileID: 5342940180459114526}
+  - component: {fileID: 752800818453940378}
+  - component: {fileID: 6282025930986469371}
   m_Layer: 0
-  m_Name: FirstPersonController
+  m_Name: PlayerController
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -627,6 +629,44 @@ MonoBehaviour:
   SprintFOV: 80
   SprintFOVStepTime: 10
   MaxVelocityChange: 10
+--- !u!114 &752800818453940378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6669486477074290078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb1a6fcb442b843418fd3e255d7aca9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 500
+  CurrentHealth: 0
+  CanRegainHealth: 1
+  IsInvulnerable: 0
+  IsRegenerating: 0
+  HealthAlterationSpeed: 1
+  HealthAlterationRate: 0.8
+  HealthSlider: {fileID: 0}
+  UseHealthSlider: 1
+--- !u!114 &6282025930986469371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6669486477074290078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0974d475be3104f409fe75da7a08a38e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DashForce: 5
+  CanDash: 1
+  OnCooldown: 0
+  TriggerKey: 0
+  DashType: 0
 --- !u!1 &7035764734349387463
 GameObject:
   m_ObjectHideFlags: 0

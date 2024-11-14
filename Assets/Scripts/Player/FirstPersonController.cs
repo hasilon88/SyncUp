@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 
-public class FirstPersonController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public Rigidbody _rigidBody;
     public bool PlayerCanMove = true;
+
     private PlayerCameraController playerCameraController;
     private JumpController jumpController;
     private CrouchController crouchController;
     private SprintController sprintController;
     private HeadBobController headBobController;
+    private DashController dashController;
 
     private void Awake()
     {
@@ -17,6 +19,7 @@ public class FirstPersonController : MonoBehaviour
         sprintController = GetComponent<SprintController>();
         headBobController = GetComponent<HeadBobController>();
         playerCameraController = GetComponent<PlayerCameraController>();
+        dashController = GetComponent<DashController>();
         _rigidBody = GetComponent<Rigidbody>();
     }
 
@@ -31,13 +34,18 @@ public class FirstPersonController : MonoBehaviour
             jumpController.UpdateJumpState();
             crouchController.UpdateCrouchState();
             headBobController.UpdateHeadBobState();
+            dashController.UpdateDashState();
         }
     }
 
     private void FixedUpdate()
     {
         if (PlayerCanMove)
+        {
             sprintController.UpdateSprintMovementState();
+            
+        }
+            
     }
 
 }

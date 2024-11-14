@@ -7,7 +7,7 @@ public class PauseController : MonoBehaviour
     public PauseController Instance;
     public bool GameIsPaused = false;
     public KeyCode PauseKey;
-    private FirstPersonController firstPersonController;
+    private PlayerController firstPersonController;
     public event EventHandler OnPauseEnter;
     public event EventHandler OnPauseLeave;
 
@@ -23,7 +23,7 @@ public class PauseController : MonoBehaviour
     private void Start()
     {
         PauseKey = KeyCode.Escape;
-        firstPersonController = GameObject.FindGameObjectWithTag("Player").GetComponent<FirstPersonController>();
+        firstPersonController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         OnPauseEnter += (object sender, EventArgs e) => 
         {
             firstPersonController.PlayerCanMove = false;

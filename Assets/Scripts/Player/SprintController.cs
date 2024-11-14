@@ -37,7 +37,7 @@ public class SprintController : MonoBehaviour
 
     private PlayerCameraController playerCameraController;
     private JumpController jumpController;
-    private FirstPersonController firstPersonController;
+    private PlayerController firstPersonController;
     private CrouchController crouchController;
 
     private void Awake()
@@ -51,7 +51,7 @@ public class SprintController : MonoBehaviour
 
     private void Start()
     {
-        firstPersonController = GetComponent<FirstPersonController>();
+        firstPersonController = GetComponent<PlayerController>();
         jumpController = GetComponent<JumpController>();
         playerCameraController = GetComponent<PlayerCameraController>();
         crouchController = GetComponent<CrouchController>();
