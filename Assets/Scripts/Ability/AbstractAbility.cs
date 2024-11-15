@@ -7,7 +7,6 @@ public abstract class Ability : MonoBehaviour
 
     [Range(0f, 15f)]
     public float CooldownInSeconds = 3f;
-    private int cooldownInFrames = 0;
     public float CooldownCountdown = 0f;
     public bool CooldownEnabled = true;
     public bool OnCooldown = false;
@@ -27,22 +26,17 @@ public abstract class Ability : MonoBehaviour
     public event EventHandler OnCooldownEnter;
     public event EventHandler OnCooldownLeave;
 
-    public void SetCooldownInFrames()
-    {
-        cooldownInFrames = (int)(CooldownInSeconds * 60f); //FPSManager.FrameRate
-    }
-
     public void GoOnCooldown()
     {
-        OnCooldown = true;
         OnCooldownEnter?.Invoke(this, EventArgs.Empty);
-
+        OnCooldown = true;
+        StartCoroutine(TimingController.Time(TimeType.SCALEDTIME, CooldownInSeconds, ExitOnCooldown));
     }
 
-    public void LeaveOnCooldown()
+    public void ExitOnCooldown()
     {
-        OnCooldown = false;
         OnCooldownLeave?.Invoke(this, EventArgs.Empty);
+        OnCooldown = false;
     }
 
 

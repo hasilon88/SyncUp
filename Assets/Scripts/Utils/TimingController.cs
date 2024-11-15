@@ -1,15 +1,17 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+public enum TimeType
+{
+    REALTIME,
+    SCALEDTIME
+}
 
 public class TimingController : MonoBehaviour
 {
 
-    public enum TimeType
-    {
-        REALTIME,
-        SCALEDTIME
-    }
 
     public float Target = 1f;
     public TimeType Type = TimeType.SCALEDTIME;
@@ -27,9 +29,24 @@ public class TimingController : MonoBehaviour
         OnTime += (object sender, EventArgs e) => 
         {
             IsOnTime = true;
-            if (Type == TimeType.SCALEDTIME) timeSnapshot = globalStates.ScaledTime;
-            else if (Type == TimeType.REALTIME) timeSnapshot = globalStates.RealTime;
+            SetSnapShot(Type, out timeSnapshot);
         };
+    }
+
+    private static void SetSnapShot(TimeType type, out float value)
+    {
+        switch(type)
+        {
+            case TimeType.REALTIME:
+                value = GlobalStates.Instance.RealTime;
+                break;
+            case TimeType.SCALEDTIME:
+                value = GlobalStates.Instance.ScaledTime;
+                break;
+            default:
+                value = GlobalStates.Instance.RealTime;
+                break;
+        }
     }
 
     private bool HasPassed(TimeType type)
@@ -48,5 +65,16 @@ public class TimingController : MonoBehaviour
         else IsOnTime = false;
     }
 
+    public static IEnumerator Time(TimeType type, float seconds, Action callback) //out CooldownCountdown <==
+    {
+        SetSnapShot(type, out float snapShot);        
+        if (type == TimeType.REALTIME)
+            while (GlobalStates.Instance.RealTime - snapShot <= seconds)
+                yield return null;
+        else if (type == TimeType.SCALEDTIME)
+            while (GlobalStates.Instance.ScaledTime - snapShot <= seconds)
+                yield return null;
+        callback();
+    }
 
 }

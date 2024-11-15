@@ -506,7 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 542d76c4dc152ac45b2f1cc50ea4ea71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CooldownInSeconds: 3
+  CooldownInSeconds: 6
   CooldownCountdown: 0
   CooldownEnabled: 1
   OnCooldown: 0

@@ -46,14 +46,9 @@ public class RewindAbility : Ability
     public event EventHandler OnRewindElementsAddStart;
     public event EventHandler OnRewindElementsAddStop;
 
-    private void Awake()
-    {
-        Debug.Log("REWIND ABILITY AWAKE");
-        SetRewindDurationInFrames();
-    }
-
     public void Start()
     {
+        SetRewindDurationInFrames();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         OnRewindStart += BeforeRewind;
         OnRewindStop += AfterRewind;
@@ -89,7 +84,7 @@ public class RewindAbility : Ability
         FirstPersonController.PlayerCanMove = true;
         IsLive = false;
         UnPrepareRigidBodies();
-        //GoOnCooldown()
+        GoOnCooldown();
     }
 
     /// <summary>
@@ -155,12 +150,7 @@ public class RewindAbility : Ability
                 } 
             }
             if (iterationIndex < rewindDurationInFrames)
-            {
-                //Debug.Log("Index: " + iterationIndex + " | " + "delay: " + iterationDelays[iterationIndex++].y * Time.deltaTime);
                 yield return new WaitForSeconds(iterationDelays[iterationIndex++].y * Time.deltaTime); //* (1 * Time.deltaTime)
-            }
-                
-
         }
         OnRewindStop?.Invoke(this, EventArgs.Empty);
     }

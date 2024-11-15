@@ -28,7 +28,7 @@ public class PauseController : MonoBehaviour
         {
             firstPersonController.PlayerCanMove = false;
             GameIsPaused = true;
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.None;
         };
 
         OnPauseLeave += (object sender, EventArgs e) =>
