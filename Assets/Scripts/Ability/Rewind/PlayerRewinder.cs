@@ -10,7 +10,6 @@ public class PlayerRewinder : IRewind
     public override void ResetRewindProperties()
     {
         rewindOffset = 0;
-        Debug.Log(" TEST : " + rewindAbility.GetRewindDurationInFrames());
         lastEulerAngles = new RewindArray<Vector3>(rewindAbility.GetRewindDurationInFrames());
         lastPositions = new RewindArray<Vector3>(rewindAbility.GetRewindDurationInFrames());
     }

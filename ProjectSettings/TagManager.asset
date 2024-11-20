@@ -9,6 +9,7 @@ TagManager:
   - FPSManager
   - RewindAbility
   - PlayerHealthSlider
+  - AbilitySource
   layers:
   - Default
   - TransparentFX

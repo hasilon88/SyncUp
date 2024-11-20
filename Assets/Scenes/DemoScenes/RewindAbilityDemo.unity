@@ -2008,6 +2008,8 @@ MonoBehaviour:
   CurrentLevel: 1
   ScaledTime: 0
   RealTime: 0
+  FirstAbility: {fileID: 0}
+  SecondAbility: {fileID: 0}
 --- !u!1 &1278632017
 GameObject:
   m_ObjectHideFlags: 0
