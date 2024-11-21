@@ -29,7 +29,7 @@ public class PlayerRewinder : IRewind
         RewindResponse cameraRes = lastEulerAngles.GetLast(rewindOffset);
         RewindResponse positionRes = lastPositions.GetLast(rewindOffset);
         RewindResponse healthRes = lastHealthStates.GetLast(rewindOffset);
-        positionRes.RewindingObject = gameObject;
+        positionRes.RewindingObject = playerController.gameObject;
         playerController.transform.localEulerAngles = (Vector3)cameraRes.Element;
         playerController.transform.position = (Vector3)positionRes.Element;
         healthController.AlterateHealthInstantly((float)healthRes.Element); //needs to be fixed
