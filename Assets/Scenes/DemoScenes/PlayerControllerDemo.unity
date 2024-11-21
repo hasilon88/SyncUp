@@ -4796,7 +4796,7 @@ MonoBehaviour:
   CurrentLevel: 1
   ScaledTime: 0
   RealTime: 0
-  FirstAbility: 1
+  FirstAbility: 0
   SecondAbility: 0
 --- !u!223 &432654945008575481
 Canvas:
