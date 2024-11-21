@@ -68,6 +68,12 @@ public class PlayerHealthController : MonoBehaviour
         StartCoroutine(AlterateHealth(by, HealthAlterationTypes.HEAL));
     }
 
+    public void AlterateHealthInstantly(float value)
+    {
+        CurrentHealth = value;
+        UpdateHealthSlider();
+    }
+
     //public void Regenerate()
     //{
 

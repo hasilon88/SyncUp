@@ -29,7 +29,7 @@ public abstract class Ability : MonoBehaviour
     public void GoOnCooldown()
     {
         OnCooldownEnter?.Invoke(this, EventArgs.Empty);
-        OnCooldown = true;
+        OnCooldown = true; //true every frame?
         StartCoroutine(TimingController.Time(TimeType.SCALEDTIME, CooldownInSeconds, ExitOnCooldown));
     }
 
