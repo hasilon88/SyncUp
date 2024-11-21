@@ -4,10 +4,14 @@ using UnityEngine;
 public class PauseController : MonoBehaviour
 {
 
-    public PauseController Instance;
+    public PauseController Instance { get; private set; }
     public bool GameIsPaused = false;
-    public KeyCode PauseKey;
-    private PlayerController firstPersonController;
+    public KeyCode PauseKey = KeyCode.None;
+    private PlayerController playerController;
+
+    public Canvas GameOverlay;
+    public Canvas PauseOverlay;
+
     public event EventHandler OnPauseEnter;
     public event EventHandler OnPauseLeave;
 
@@ -22,32 +26,40 @@ public class PauseController : MonoBehaviour
 
     private void Start()
     {
-        PauseKey = KeyCode.Escape;
-        firstPersonController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        if (PauseKey == KeyCode.None) PauseKey = KeyCode.Escape;
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        PauseOverlay.gameObject.SetActive(false);
+
         OnPauseEnter += (object sender, EventArgs e) => 
         {
-            firstPersonController.PlayerCanMove = false;
+            playerController.PlayerCanMove = false;
             GameIsPaused = true;
             Cursor.lockState = CursorLockMode.None;
+
+            PauseOverlay.gameObject.SetActive(true);
+            GameOverlay.gameObject.SetActive(false);
         };
 
         OnPauseLeave += (object sender, EventArgs e) =>
         {
-            firstPersonController.PlayerCanMove = true;
+            playerController.PlayerCanMove = true;
             GameIsPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
+
+            PauseOverlay.gameObject.SetActive(false);
+            GameOverlay.gameObject.SetActive(true);
         };
     }
 
     public void Pause() 
     {
-        Time.timeScale = 0;
+        Time.timeScale = 0f;
         OnPauseEnter?.Invoke(this, EventArgs.Empty);
     }
 
     public void UnPause()
     {
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
         OnPauseLeave?.Invoke(this, EventArgs.Empty);
     }
 

@@ -4,8 +4,14 @@ using UnityEngine;
 public class PlayerRewinder : IRewind
 {
 
+    private PlayerController playerController;
     private RewindArray<Vector3> lastEulerAngles; //(y, z, x)
     private RewindArray<Vector3> lastPositions;
+
+    private void Awake()
+    {
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+    }
 
     public override void ResetRewindProperties()
     {
@@ -19,15 +25,15 @@ public class PlayerRewinder : IRewind
         RewindResponse cameraRes = lastEulerAngles.GetLast(rewindOffset);
         RewindResponse positionRes = lastPositions.GetLast(rewindOffset);
         positionRes.RewindingObject = gameObject;
-        transform.localEulerAngles = (Vector3)cameraRes.Element;
-        transform.position = (Vector3)positionRes.Element;
+        playerController.transform.localEulerAngles = (Vector3)cameraRes.Element;
+        playerController.transform.position = (Vector3)positionRes.Element;
         return positionRes;
     }
 
     public override void UpdateRewindElements()
     {
-        lastEulerAngles.Add(transform.localEulerAngles);
-        lastPositions.Add(transform.position);
+        lastEulerAngles.Add(playerController.transform.localEulerAngles);
+        lastPositions.Add(playerController.transform.position);
     }
 
 }

@@ -11,7 +11,7 @@ public class FPSText : MonoBehaviour
 
     void Start()
     {
-        fpsManager = GetComponent<FPSManager>();
+        fpsManager = GameObject.FindGameObjectWithTag("FPSManager").GetComponent<FPSManager>();
         textMeshProUGUI = GetComponent<TextMeshProUGUI>();
     }
 

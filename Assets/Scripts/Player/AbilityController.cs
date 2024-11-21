@@ -1,20 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum Abilities
+{
+    NONE,
+    REWIND,
+    SOUND_WAVE
+}
+
 
 public class AbilityController : MonoBehaviour
 {
 
-    public Ability FirstAbility;
-    public Ability SecondAbility;
+    private GlobalStates globalStates;
+    private GameObject abilitySource;
+    //private PlayerController playerController;
+    public GameObject RewindPrefab;
 
-    void Start()
+    private void Start()
     {
-        
+        globalStates = GlobalStates.Instance;
+        abilitySource = GameObject.FindGameObjectWithTag("AbilitySource");
+        //playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        SetFirstEquippedAbilities();
     }
 
-    void Update()
+    private void SetFirstEquippedAbilities()
     {
-        
+        if (globalStates.FirstAbility == Abilities.REWIND) 
+        {
+            var ins = Instantiate(RewindPrefab, abilitySource.transform);
+        }
     }
+
+
+
 }

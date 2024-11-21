@@ -53,7 +53,7 @@ public class RewindAbility : Ability
         OnRewindStart += BeforeRewind;
         OnRewindStop += AfterRewind;
         //OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
-        //OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
+        OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
         addElementsTimingController = GetComponent<TimingController>();
         addElementsTimingController.OnTime += UpdateRewindElements;
     }

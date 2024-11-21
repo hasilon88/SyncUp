@@ -13,16 +13,18 @@ public class SpotifyController : MonoBehaviour
     public event EventHandler OnNext;
     public event EventHandler OnPrevious;
 
-    private async void Awake()
+    private void Awake()
     {
         if (Instance == null)
-        {
-            var auth = await Auth.CreateAsync(userId);
-            _spotify = new SpotifyClient(auth.AccessToken);
             Instance = this;
-        }
         else if (Instance != this) Destroy(this);
         DontDestroyOnLoad(this);
+    }
+
+    public async Task Init()
+    {
+        var auth = await Auth.CreateAsync(userId);
+        _spotify = new SpotifyClient(auth.AccessToken);
     }
 
     public async Task<bool> GetPlayPauseState()

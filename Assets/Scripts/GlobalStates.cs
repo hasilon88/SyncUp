@@ -12,8 +12,8 @@ public class GlobalStates : MonoBehaviour
     public int CurrentLevel = 1;
     public int ScaledTime = 0;
     public float RealTime = 0f;
-    public Ability FirstAbility;
-    public Ability SecondAbility;   
+    public Abilities FirstAbility;
+    public Abilities SecondAbility;   
 
     private void Awake()
     {
