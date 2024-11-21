@@ -20,9 +20,6 @@ public abstract class Ability : MonoBehaviour
     public KeyCode TriggerKey;
     protected PlayerController PlayerController;
 
-    public event EventHandler OnAbilityUnlock;
-    public event EventHandler OnAbilityEquip;
-    public event EventHandler OnAbilityUnequip;
     public event EventHandler OnCooldownEnter;
     public event EventHandler OnCooldownLeave;
 

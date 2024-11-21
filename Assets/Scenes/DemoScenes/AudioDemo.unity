@@ -281,9 +281,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3814149d695c7da458ebf80eeb2393ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Instance: {fileID: 0}
   GameIsPaused: 0
   PauseKey: 0
+  GameOverlay: {fileID: 0}
+  PauseOverlay: {fileID: 0}
 --- !u!4 &164706207
 Transform:
   m_ObjectHideFlags: 0
@@ -1444,7 +1445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ef54251a25b27459d29494339bce0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tempo: 140
+  Tempo: -1
   FrameWindow: 15
   CurrentlyOnBeat: 0
 --- !u!114 &1909218672

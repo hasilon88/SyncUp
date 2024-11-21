@@ -8,6 +8,7 @@ public class PauseController : MonoBehaviour
     public bool GameIsPaused = false;
     public KeyCode PauseKey = KeyCode.None;
     private PlayerController playerController;
+    private AudioManager audioManager;
 
     public Canvas GameOverlay;
     public Canvas PauseOverlay;
@@ -27,6 +28,7 @@ public class PauseController : MonoBehaviour
     private void Start()
     {
         if (PauseKey == KeyCode.None) PauseKey = KeyCode.Escape;
+        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         PauseOverlay.gameObject.SetActive(false);
 
@@ -35,9 +37,9 @@ public class PauseController : MonoBehaviour
             playerController.PlayerCanMove = false;
             GameIsPaused = true;
             Cursor.lockState = CursorLockMode.None;
-
             PauseOverlay.gameObject.SetActive(true);
             GameOverlay.gameObject.SetActive(false);
+            audioManager.StopCapture();
         };
 
         OnPauseLeave += (object sender, EventArgs e) =>
@@ -45,9 +47,9 @@ public class PauseController : MonoBehaviour
             playerController.PlayerCanMove = true;
             GameIsPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
-
             PauseOverlay.gameObject.SetActive(false);
             GameOverlay.gameObject.SetActive(true);
+            audioManager.StartCapture();
         };
     }
 

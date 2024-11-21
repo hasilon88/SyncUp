@@ -73,6 +73,7 @@ public class AudioManager : MonoBehaviour
 
     public void Start()
     {
+        if (FPSManager == null) FPSManager = GameObject.FindGameObjectWithTag("FPSManager").GetComponent<FPSManager>();
         this.devices = MMDeviceEnumerator.EnumerateDevices(this.DataFlow, this.deviceState);
         this.loopbackCapture.Device = this.devices[this.AudioEndpoint];
         this.lastLoudestSamples = new float[this.LastLoudestSamplesLength];
@@ -98,7 +99,23 @@ public class AudioManager : MonoBehaviour
             ProcessDefaultAudioStream(_event.Data);
             this.UpdateProperties();
         };
+        StartCapture(); 
+        loopbackCapture.Stopped += LoopbackCapture_Stopped;
+    }
+
+    public void StartCapture()
+    {
         loopbackCapture.Start();
+    }
+
+    public void StopCapture()
+    {
+        loopbackCapture.Stop();
+    }
+
+    private void LoopbackCapture_Stopped(object sender, RecordingStoppedEventArgs e)
+    {
+        Debug.Log("CSCore Capture Stopped");
     }
 
     private void ProcessDefaultAudioStream(byte[] data)
