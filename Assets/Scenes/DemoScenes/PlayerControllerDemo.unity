@@ -2050,7 +2050,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 733, y: 21.564}
+  m_AnchoredPosition: {x: 733, y: 21.564026}
   m_SizeDelta: {x: -1603.5, y: -725.1967}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &913996530
@@ -2154,7 +2154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &962063867
@@ -5476,7 +5476,7 @@ MonoBehaviour:
   SprintKey: 304
   SprintSpeed: 7
   SprintDuration: 5
-  SprintCooldown: 0.5
+  SprintCooldownInSeconds: 5
   SprintFOV: 80
   SprintFOVStepTime: 10
   MaxVelocityChange: 10
