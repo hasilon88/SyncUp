@@ -18,7 +18,7 @@ public abstract class Ability : MonoBehaviour
     public bool IsUnlocked = false;
     public int CreditsNeeded = 0; 
     public KeyCode TriggerKey;
-    public PlayerController FirstPersonController;
+    protected PlayerController PlayerController;
 
     public event EventHandler OnAbilityUnlock;
     public event EventHandler OnAbilityEquip;

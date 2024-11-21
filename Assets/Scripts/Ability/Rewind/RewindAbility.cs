@@ -49,11 +49,12 @@ public class RewindAbility : Ability
     public void Start()
     {
         SetRewindDurationInFrames();
+        PlayerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>(); //TEMP <===
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         OnRewindStart += BeforeRewind;
         OnRewindStop += AfterRewind;
         //OnRewindElementsAddStart += (object sender, EventArgs e) => lastTimeSnapshot = globalStates.ScaledTime;
-        OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
+        //OnRewindElementsAddStop += (object sender, EventArgs e) => { Debug.Log("Stop");  };
         addElementsTimingController = GetComponent<TimingController>();
         addElementsTimingController.OnTime += UpdateRewindElements;
     }
@@ -75,13 +76,13 @@ public class RewindAbility : Ability
         iterationDelays = ParabolicArray.GetArray(TargetRewindIterationDelay, rewindDurationInFrames);
         iterationFOVs = ParabolicArray.GetArray(TargetRewindIterationFOV, rewindDurationInFrames, mainCamera.fieldOfView);
         PrepareRigidBodies();
-        FirstPersonController.PlayerCanMove = false; //enemy can move?
+        PlayerController.PlayerCanMove = false; //enemy can move?
         IsLive = true;
     }
 
     private void AfterRewind(object sender, EventArgs e)
     {
-        FirstPersonController.PlayerCanMove = true;
+        PlayerController.PlayerCanMove = true;
         IsLive = false;
         UnPrepareRigidBodies();
         GoOnCooldown();
