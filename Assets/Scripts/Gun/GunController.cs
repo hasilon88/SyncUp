@@ -5,7 +5,7 @@ public class GunController : MonoBehaviour
 {
 
     //should be gun transform
-    private Camera mainCamera; 
+    public Camera mainCamera; //priavte
     public KeyCode TriggerKey;
     public int MaxAmmunitionCount = 5;
     public int CurrentAmmunitionCount;
@@ -15,7 +15,7 @@ public class GunController : MonoBehaviour
     public event EventHandler AfterFiring;  
     public bool CanFire = true;
 
-    private Vector3 bulletDirection;
+    private Ray trajectoryRay;
     public GameObject BaseBulletModelPrefab;
     public GameObject MultiBulletsPrefab;
 
@@ -28,7 +28,8 @@ public class GunController : MonoBehaviour
 
     private void UpdateBulletDirection()
     {
-        bulletDirection = mainCamera.ScreenPointToRay(Input.mousePosition).direction;
+        trajectoryRay = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Debug.Log(trajectoryRay.direction.normalized);
     }
 
     private void Fire()
@@ -42,8 +43,8 @@ public class GunController : MonoBehaviour
     {
         GameObject _gameObject = Instantiate(MultiBulletsPrefab, mainCamera.transform.position, Quaternion.Euler(Vector3.zero));
         SoundBullet soundBullet = _gameObject.GetComponent<SoundBullet>();
-        soundBullet.SetBaseBulletModel(BaseBulletModelPrefab);
-        soundBullet.SetDirection(bulletDirection);
+        soundBullet.BaseBulletModel = BaseBulletModelPrefab;
+        soundBullet.Ray = trajectoryRay;
         soundBullet.InstantiateElements();
         soundBullet.StartTravelling();
     }

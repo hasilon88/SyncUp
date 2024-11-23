@@ -7,25 +7,24 @@ public class SoundBullet : MonoBehaviour
 {
 
     public float InitialElementScale = 0.50f;
+    public float InitialElementsScaleExpansionRate = 1.2f;
     public int ElementCount = 3;
-    [Range(1f, 2f)]
-    public float SubsequentElementsSpacing = 1.2f;
-    [Range(0f, 1f)]
-    public float SubsequentElementsExpansionRate = 1f;
-    public float TemporalExpandingRateInSeconds = 1; // each x milliseconds
+    public float ElementsDistanceSpacing = 1.2f;
     private GameObject[] elements;
-
-    [Range(0f, 1f)]
-    public float SizeExpandingRate = 0.10f; //Normalized
-    public float TravelSpeed = 0.30f;
-    private Vector3 direction;
+    [Range(0f, 20f)]
+    public float ScaleExpandingRate = 0.1f; //during travel
+    public float TemporalExpandingRateInSeconds = 0.5f;  //during travel
+    private TimingController timingController;
+    public float TravelSpeed = 0.5f;
     public float LifespanInSeconds = 5f;
-
+    public Ray Ray;
+    public Vector3 Direction;
+    public GameObject BaseBulletModel;
     public bool CanTravel = false;
+    public bool Expands = true;
     public bool Dissipates = true;
-
     private Rigidbody _rigidbody;
-    private GameObject baseBulletModel;
+    private Vector3 originalScale;
 
     //public bool Bounces?
     //public bool Richochet?
@@ -33,32 +32,38 @@ public class SoundBullet : MonoBehaviour
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        timingController = GetComponent<TimingController>();
+        timingController.Target = TemporalExpandingRateInSeconds;
+        timingController.OnTime += (object sender, EventArgs e) => Expand();
         StartCoroutine(TimingController.Time(TimeType.SCALEDTIME, LifespanInSeconds, () => StartCoroutine(Dissipate())));
     }
 
-    public void SetBaseBulletModel(GameObject baseModel)
+    private Vector3 AdjustPosition(Vector3 originalPoint, Vector3 scale, Vector3 direction)
     {
-        baseBulletModel = baseModel;
-    }
+        if (direction.z >= 0 || direction.x >= 0) originalPoint.x -= scale.x;
+        else originalPoint.z -= scale.z;
 
-    public void SetDirection(Vector3 direction)
-    {
-        this.direction = direction;
+        if (direction.z >= 0 || direction.x < 0) originalPoint.y += scale.y;
+        else originalPoint.y -= scale.y;
+
+        return originalPoint;
     }
 
     public void InstantiateElements()
     {
-        Vector3 size = Vector3.one * InitialElementScale;
-        Vector3 position = gameObject.transform.position;
+        originalScale = new Vector3(0.3f, 0.1f, 0.3f) * InitialElementScale;
+        Vector3 scale = originalScale;
+        float positionX = 1.2f;
+        Vector3 point;
+        Direction = Ray.direction.normalized; //new Vector3(90f * Direction.z, 0, 90f * Direction.x)
         elements = new GameObject[ElementCount];
         for (int elem = 0; elem < ElementCount; elem++)
         {
-            Debug.Log(position);
-            GameObject segment = Instantiate(baseBulletModel, position, Quaternion.Euler(Vector3.zero), gameObject.transform);
-            //segment.transform.localScale = size;
-            //segment.transform.rotation = Quaternion.Euler(direction);
-            //size = size + (size * SubsequentElementsExpansionRate);
-            position = position * SubsequentElementsSpacing;
+            point = AdjustPosition(Ray.GetPoint(positionX), scale, Direction);
+            GameObject segment = Instantiate(BaseBulletModel, point, Quaternion.Euler(new Vector3(90f * Direction.z, 0, 90f * Direction.x)), gameObject.transform);
+            segment.transform.localScale = new Vector3(scale.x, originalScale.y, scale.z);
+            scale = scale + (Vector3.one * InitialElementsScaleExpansionRate);
+            positionX += ElementsDistanceSpacing;
             elements[elem] = segment;
         }
     }
@@ -71,10 +76,15 @@ public class SoundBullet : MonoBehaviour
     }
 
 
-    //private void Expand()
-    //{
-    //    throw new NotImplementedException();
-    //}
+    private void Expand()
+    {
+        if (Expands) Iterate((obj) => 
+        {
+            Debug.Log("Expand");
+            Vector3 oldScale = obj.transform.localScale;
+            obj.transform.localScale = new Vector3(oldScale.x + (originalScale.x * ScaleExpandingRate * Time.deltaTime), originalScale.y, oldScale.z + (originalScale.z * ScaleExpandingRate * Time.deltaTime));
+        });
+    }
 
     public void StartTravelling()
     {
@@ -84,10 +94,7 @@ public class SoundBullet : MonoBehaviour
     private void Travel()
     {
         if (CanTravel)
-        {
-            Debug.Log(direction.normalized + " || " + TravelSpeed * Time.deltaTime * direction);
-            _rigidbody.AddForce(TravelSpeed * Time.deltaTime * direction);
-        }
+            _rigidbody.AddForce(TravelSpeed * Time.deltaTime * Direction);
     }
 
     /// <summary>
@@ -97,7 +104,6 @@ public class SoundBullet : MonoBehaviour
     private IEnumerator Dissipate()
     {
         //fading
-        Debug.Log("DEATH?");
         Destroy(gameObject);
         yield return null;
     }
