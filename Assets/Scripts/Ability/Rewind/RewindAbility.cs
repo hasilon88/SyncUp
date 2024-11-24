@@ -116,7 +116,7 @@ public class RewindAbility : Ability
         foreach (Rigidbody body in rewindableRigidbodies)
         {
             body.useGravity = false;
-            body.velocity = Vector3.zero;
+            body.linearVelocity = Vector3.zero;
         }
     }
 

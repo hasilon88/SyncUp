@@ -25,17 +25,22 @@ public class DashController : MonoBehaviour
     public event EventHandler OnDashStart;
     public KeyCode TriggerKey;
     public DashTypes DashType;
+    public ParticleSystem dashForward;
+    public ParticleSystem dashBackward;
+    public ParticleSystem dashRightSide;
+    public ParticleSystem dashLeftSide;
     private PlayerController firstPersonController;
     private Vector3 playerVelocity;
 
+
     private void Start()
     {
-        if (TriggerKey == KeyCode.None) TriggerKey = KeyCode.F;
+        if (TriggerKey == KeyCode.None) TriggerKey = KeyCode.C;
         firstPersonController = GetComponent<PlayerController>();
         OnDashStart += (object sender, EventArgs e) =>
         {
             Debug.Log("Dash...");
-            playerVelocity = firstPersonController._rigidBody.velocity;
+            playerVelocity = firstPersonController._rigidBody.linearVelocity;
         };
     }
 
@@ -47,7 +52,10 @@ public class DashController : MonoBehaviour
             switch (DashType)
             {
                 case DashTypes.RESTRICTED:
-                    firstPersonController._rigidBody.AddForce(new Vector3(playerVelocity.x, 0, playerVelocity.z) * DashForce, ForceMode.VelocityChange);
+                    firstPersonController._rigidBody.AddForce(new Vector3(playerVelocity.x, 0, playerVelocity.z * DashForce), ForceMode.VelocityChange);
+                    Debug.Log(playerVelocity.z);
+                    if(playerVelocity.z !=0)
+                        (playerVelocity.z > 0 ? dashForward : dashBackward).Play();
                     break;
                 case DashTypes.OMNI_DIRECTIONAL:
                     firstPersonController._rigidBody.AddForce(playerVelocity * DashForce, ForceMode.VelocityChange);

@@ -12,7 +12,7 @@ public class MusicJamProjectile : MonoBehaviour
         if (!bounced)
         {
             Rigidbody body = GetComponent<Rigidbody>();
-            body.velocity = new(0f, 3f, 0f);
+            body.linearVelocity = new(0f, 3f, 0f);
             bounced = true;
             return;
         }
