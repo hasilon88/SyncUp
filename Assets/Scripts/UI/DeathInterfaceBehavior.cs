@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeathInterfaceBehavior : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    public Button QuitButton;
+    public Button RestartButton;
+    private PauseController pauseController;
+
     void Start()
     {
-        
+        pauseController = GameObject.Find("PauseController").GetComponent<PauseController>();
+        QuitButton.onClick.AddListener(Exit);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Exit()
     {
-        
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
     }
+
 }

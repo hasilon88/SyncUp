@@ -84,6 +84,8 @@ public class PauseController : MonoBehaviour
     public void ActuateDeathOverlay()
     {
         Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        playerController.PlayerCanMove = false;
         GameOverlay.gameObject.SetActive(false);
         PauseOverlay.gameObject.SetActive(false);
         DeathOverlay.gameObject.SetActive(true);
