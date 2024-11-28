@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
         headBobController = GetComponent<HeadBobController>();
         playerCameraController = GetComponent<PlayerCameraController>();
         dashController = GetComponent<DashController>();
+        dashController.enabled = false;
         gunController = GetComponent<GunController>();
         _rigidBody = GetComponent<Rigidbody>();
     }
@@ -36,9 +37,14 @@ public class PlayerController : MonoBehaviour
             jumpController.UpdateJumpState();
             crouchController.UpdateCrouchState();
             headBobController.UpdateHeadBobState();
-            dashController.UpdateDashState();
+            if (dashController.enabled) dashController.UpdateDashState();
             gunController?.UpdateShootingState();
         }
+    }
+
+    public void EnableDashState()
+    {
+        dashController.enabled = true;
     }
 
     private void FixedUpdate()
