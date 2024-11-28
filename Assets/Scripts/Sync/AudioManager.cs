@@ -94,6 +94,7 @@ public class AudioManager : MonoBehaviour
     {
         try
         {
+            Debug.Log("AUDIO MANAGER INIT");
             loopbackCapture.Initialize();
             loopbackCapture.DataAvailable += (sender, _event) =>
             {

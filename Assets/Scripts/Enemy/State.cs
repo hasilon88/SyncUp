@@ -168,7 +168,9 @@ public class Patrol : State
                 currentIndex++;
             }
             agent.SetDestination(GameEnvironment.Singleton.Checkpoints[currentIndex].transform.position);
-            agent.speed = 1 + audioManager.NormalizedCurrentLoudestSample_LastLoudestSamplesMax;
+            //+(audioManager.NormalizedCurrentLoudestSample_LastLoudestSamplesMax)
+            agent.speed = 1f;
+            //Debug.Log("OUI");
         }
 
         if (CanSeePlayer())
