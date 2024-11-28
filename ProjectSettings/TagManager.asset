@@ -11,6 +11,8 @@ TagManager:
   - PlayerHealthSlider
   - AbilitySource
   - PauseController
+  - Checkpoint
+  - Enemy
   layers:
   - Default
   - TransparentFX

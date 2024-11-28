@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DeathInterfaceBehavior : MonoBehaviour
@@ -12,6 +13,11 @@ public class DeathInterfaceBehavior : MonoBehaviour
 
     void Start()
     {
+        RestartButton.onClick.AddListener(() =>
+        {
+            var sceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(sceneName);
+        });
         pauseController = GameObject.Find("PauseController").GetComponent<PauseController>();
         QuitButton.onClick.AddListener(Exit);
     }

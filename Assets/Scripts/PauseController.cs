@@ -83,6 +83,11 @@ public class PauseController : MonoBehaviour
 
     public void ActuateDeathOverlay()
     {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); 
+        foreach (GameObject enemy in enemies) 
+        {
+            Destroy(enemy);
+        }
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         playerController.PlayerCanMove = false;
