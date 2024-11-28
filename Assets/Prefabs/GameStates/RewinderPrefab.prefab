@@ -57,7 +57,7 @@ MonoBehaviour:
   IsUnlocked: 0
   CreditsNeeded: 0
   TriggerKey: 114
-  RewindDurationInSeconds: 2
+  RewindDurationInSeconds: 0.5
   rewindDurationInFrames: 0
   TargetRewindIterationDelay: 0.7
   TargetRewindIterationFOV: 117
