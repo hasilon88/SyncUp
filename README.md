@@ -1,6 +1,6 @@
 # SyncUp
 
-## Changelog (from 2024/11/29)
+## Changelog (from 2024/11/29 | 15:14)
 - README init
 - Deleted Level1 Scene
 - Created directory -> Assets/Prefabs/GameStates/Singletons/
