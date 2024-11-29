@@ -17,17 +17,8 @@ public class PauseInterfaceBehavior : MonoBehaviour
         quitButton = GameObject.Find("QuitButton").GetComponent<Button>();
         resumeButton.onClick.AddListener(pauseController.UnPause);
         toMenuButton.onClick.AddListener(() => { Debug.Log("to menu..."); } );
-        quitButton.onClick.AddListener(Exit);
+        quitButton.onClick.AddListener(UIUtils.Exit);
 
-    }
-
-    private void Exit()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-                Application.Quit();
-#endif
     }
 
 }

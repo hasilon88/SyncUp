@@ -41,7 +41,7 @@ public class AbilityController : MonoBehaviour
 
     private void InitializeSecondEquippedAbilitiy()
     {
-        if (globalStates.FirstAbility == globalStates.SecondAbility)
+        if (globalStates.FirstAbility == globalStates.SecondAbility && globalStates.FirstAbility != Abilities.NONE)
         {
             Debug.Log("Can't have two of the same abilities at the same time...");
             return;

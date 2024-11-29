@@ -36,12 +36,12 @@ public class MenuBehavior : MonoBehaviour
 
     private void SetElements()
     {
-        levelSelectorButton = GameObject.Find("LevelSelectorButton").GetComponent<Button>();
+        levelSelectorButton = ComponentUtils.Find<Button>("LevelSelectorButton");
         storeButton = GameObject.Find("StoreButton").GetComponent<Button>();
         exitButton = GameObject.Find("ExitButton").GetComponent<Button>();
-        levelSelectorCanvas = GameObject.Find("TestLevelSelector").GetComponent<Canvas>();
-        storeCanvas = GameObject.Find("StoreCanvas").GetComponent<Canvas>();
-        menuCanvas = GetComponent<Canvas>();
+        levelSelectorCanvas = GameObject.Find("LevelSelectorOverlay").GetComponent<Canvas>();
+        storeCanvas = GameObject.Find("StoreOverlay").GetComponent<Canvas>();
+        menuCanvas = GameObject.Find("MenuOverlay").GetComponent<Canvas>();
         this.SetGoBackButtons();
     }
 
@@ -49,7 +49,7 @@ public class MenuBehavior : MonoBehaviour
     {
         levelSelectorButton.onClick.AddListener(() => Navigate(MenuUserInterface.LEVEL_SELECTOR));
         storeButton.onClick.AddListener(() => Navigate(MenuUserInterface.STORE));
-        exitButton.onClick.AddListener(Exit);
+        exitButton.onClick.AddListener(UIUtils.Exit);
     }
 
     private void SetGoBackButtons()
@@ -86,15 +86,6 @@ public class MenuBehavior : MonoBehaviour
                 NavigateMenu(true, false, false, MenuUserInterface.MENU);
                 break;
         }
-    }
-
-    private void Exit()
-    {
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #else
-                Application.Quit();
-        #endif
     }
 
 }

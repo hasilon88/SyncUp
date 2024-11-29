@@ -57,18 +57,32 @@ public class AudioManager : MonoBehaviour
     public float MinimumCapturableSample = 0.001f;
     public event EventHandler OnNormalizedValuesChange;
     public FPSManager FPSManager;
-    private readonly ArrayUtils<float> arrayUtils = new ArrayUtils<float>();
+    private ArrayUtils<float> arrayUtils;
     public int CaptureRate = 100;
-    //public bool FromSpotify = true;
+
+    public static AudioManager Instance;
+    public bool IsInitialized = false;
+    public bool AutoStart = true;
+    public int SampleRate = 44100;
+    public int BitsPerSample = 16;
+    public int Channels = 2;
 
     /// <summary>
     /// these values need to be set in Awake() to avoid /division by 0 exception
     /// </summary>
     private void Awake()
     {
-        loopbackCapture = new WasapiLoopbackCapture(CaptureRate, new WaveFormat(44100, 16, 2));
-        this.LastLoudestSamplesFrameTempo = 1;
-        this.CurrentLoudestSample = 0f;
+        if (Instance == null)
+        {
+            arrayUtils = new ArrayUtils<float>();
+            loopbackCapture = new WasapiLoopbackCapture(CaptureRate, new WaveFormat(SampleRate, BitsPerSample, Channels));
+            this.LastLoudestSamplesFrameTempo = 1;
+            this.CurrentLoudestSample = 0f;
+            Instance = this;
+        }
+        else if (Instance != this)
+            Destroy(this); 
+        DontDestroyOnLoad(this);
     }
 
     public void Start()

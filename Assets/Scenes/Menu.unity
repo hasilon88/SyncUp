@@ -1687,6 +1687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 1701089902}
+  Speed: 5
 --- !u!4 &137669082 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 760634872ac8e0545aea25d92fb64cf4, type: 3}
@@ -9234,7 +9235,7 @@ GameObject:
   - component: {fileID: 695595234}
   - component: {fileID: 695595233}
   m_Layer: 5
-  m_Name: TestLevelSelector
+  m_Name: LevelSelectorOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13996,8 +13997,9 @@ GameObject:
   - component: {fileID: 1026700196}
   - component: {fileID: 1026700195}
   - component: {fileID: 1026700194}
+  - component: {fileID: 1026700199}
   m_Layer: 5
-  m_Name: RootCanvas
+  m_Name: Overlays
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14100,6 +14102,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1026700199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026700193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adbd1b154c91bba4889425d2dc97d7a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1031194838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22522,9 +22536,8 @@ GameObject:
   - component: {fileID: 1583824947}
   - component: {fileID: 1583824946}
   - component: {fileID: 1583824945}
-  - component: {fileID: 1583824944}
   m_Layer: 5
-  m_Name: Menu
+  m_Name: MenuOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22552,18 +22565,6 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 452.53406}
   m_SizeDelta: {x: 1920, y: 905.0681}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1583824944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1583824942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adbd1b154c91bba4889425d2dc97d7a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1583824945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25927,7 +25928,7 @@ GameObject:
   - component: {fileID: 1782298153}
   - component: {fileID: 1782298152}
   m_Layer: 5
-  m_Name: StoreCanvas
+  m_Name: StoreOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
