@@ -1,17 +1,20 @@
 # SyncUp
 
 ## Changelog (from 2024/11/29 | 15:14)
-- README init
-- Deleted Level1 Scene
-- Created directory -> Assets/Prefabs/GameStates/Singletons/
-- GameObject/MenuBehavior : Canvas -> LevelSelector/Menu/Store Overlay
-- Created directory -> Assets/Scenes/CompletedScenes
-- Created directory -> Assets/Scenes/CompletedScenes/Levels
-- Created UIUtils
-- Created ComponentUtils
-- Added IsInitialized/AutoStart/SampleRate/BitsPerSample/Channels attribute 
-- Singleton AudioManager 
-- Added condition in AbilityController for [NONE] ability type
+
+> ### from 2024/11/29 | 15:14 | OlvrMns
+> - README init
+> - Deleted Level1 Scene
+> - Created directory -> Assets/Prefabs/GameStates/Singletons/
+> - GameObject/MenuBehavior : Canvas -> LevelSelector/Menu/Store Overlay
+> - Created directory -> Assets/Scenes/CompletedScenes
+> - Created directory -> Assets/Scenes/CompletedScenes/Levels
+> - Created UIUtils
+> - Created ComponentUtils
+> - Added IsInitialized/AutoStart/SampleRate/BitsPerSample/Channels attribute 
+> - Singleton AudioManager 
+> - Added condition in AbilityController for [NONE] ability type
+> ### to ...
 
 
 ## Prio
