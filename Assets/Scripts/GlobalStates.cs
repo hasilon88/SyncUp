@@ -19,7 +19,7 @@ public class GlobalStates : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        else Destroy(this);
+        else Destroy(this.gameObject);
         DontDestroyOnLoad(this);
     }
 

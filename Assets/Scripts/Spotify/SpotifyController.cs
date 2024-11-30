@@ -17,7 +17,7 @@ public class SpotifyController : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        else if (Instance != this) Destroy(this);
+        else if (Instance != this) Destroy(this.gameObject);
         DontDestroyOnLoad(this);
     }
 

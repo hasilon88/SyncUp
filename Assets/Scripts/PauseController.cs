@@ -4,7 +4,6 @@ using UnityEngine;
 public class PauseController : MonoBehaviour
 {
 
-    public PauseController Instance { get; private set; }
     public bool GameIsPaused = false;
     public KeyCode PauseKey = KeyCode.None;
     private PlayerController playerController;
@@ -16,19 +15,10 @@ public class PauseController : MonoBehaviour
     public event EventHandler OnPauseEnter;
     public event EventHandler OnPauseLeave;
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else 
-            Destroy(this);
-        DontDestroyOnLoad(this);
-    }
-
     private void Start()
     {
         if (PauseKey == KeyCode.None) PauseKey = KeyCode.Escape;
-        audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+        audioManager = AudioManager.Instance;
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         PauseOverlay.gameObject.SetActive(false);
 

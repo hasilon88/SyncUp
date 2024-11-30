@@ -80,8 +80,7 @@ public class AudioManager : MonoBehaviour
             this.CurrentLoudestSample = 0f;
             Instance = this;
         }
-        else if (Instance != this)
-            Destroy(this); 
+        else Destroy(this.gameObject); 
         DontDestroyOnLoad(this);
     }
 
@@ -222,6 +221,6 @@ public class AudioManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        loopbackCapture.Dispose();
+        loopbackCapture?.Dispose();
     }
 }

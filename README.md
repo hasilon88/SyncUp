@@ -34,6 +34,11 @@
 
 > ### from 2024/11/29 | 23:47 | OlvrMns
 > Removed some assets (AllSky)
+> Linked Menu -> Scene and Scene -> Menu
+> Made PauseController NOT a Singleton
+> Changed Singleton Destroy(this) -> Destroy(this.gameObject)
+> Changed AudioManager OnDestroy (only if not null)
+> Fixed Capture not starting after going to Menu from another scene + Time.timeScale
 
 > ### to ...
 

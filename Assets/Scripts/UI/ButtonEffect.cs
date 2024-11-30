@@ -17,6 +17,7 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public int ExpansionDurationInFrames = 60;
     private int currentFrameCount = 0;
     public float ExpansionRate = 1f;
+    public float Transparency = 0.70f;
 
     public Color DefaultImageColor = Color.black;
     public Color DefaultTextColor = Color.green;
@@ -32,16 +33,22 @@ public class ButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         ToDefaultColors();
     }
 
+    private Color GetTransparentColor(Color color)
+    {
+        color.a = Transparency;
+        return color;
+    }
+
     private void ToDefaultColors()
     {
-        button.image.color = DefaultImageColor;
-        text.color = DefaultTextColor;
+        button.image.color = GetTransparentColor(DefaultImageColor);
+        text.color = GetTransparentColor(DefaultTextColor);
     }
 
     private void ToClickedColors()
     {
-        button.image.color = ClickedImageColor;
-        text.color = ClickedTextColor;
+        button.image.color = GetTransparentColor(ClickedImageColor);
+        text.color = GetTransparentColor(ClickedTextColor);
     }
 
     private IEnumerator StartExpanding()

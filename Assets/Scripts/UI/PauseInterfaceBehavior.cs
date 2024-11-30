@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseInterfaceBehavior : MonoBehaviour
 {
@@ -16,9 +17,13 @@ public class PauseInterfaceBehavior : MonoBehaviour
         toMenuButton = GameObject.Find("ToMenuButton").GetComponent<Button>();
         quitButton = GameObject.Find("QuitButton").GetComponent<Button>();
         resumeButton.onClick.AddListener(pauseController.UnPause);
-        toMenuButton.onClick.AddListener(() => { Debug.Log("to menu..."); } );
+        toMenuButton.onClick.AddListener(() => 
+        {
+            AudioManager.Instance.StartCapture();
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("Menu"); 
+        });
         quitButton.onClick.AddListener(UIUtils.Exit);
-
     }
 
 }

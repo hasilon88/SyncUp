@@ -23,6 +23,8 @@ public class MenuBehavior : MonoBehaviour
     private Canvas levelSelectorCanvas;
     private Canvas storeCanvas;
 
+    public GameObject LevelSelectorButtonPrefab;
+
     //public GameObject LevelSelectButtonPrefab;
 
     private void Start()
@@ -52,11 +54,19 @@ public class MenuBehavior : MonoBehaviour
 
     private void SetLevelSelectorButtons() 
     {
+        string currentLevelName;
+        LevelSelectButtonBehavior behavior;
+        int tempHeightOffSet = 30;
         DirectoryInfo info = new DirectoryInfo(Application.dataPath + completedLevelsPath);
         foreach (FileInfo file in info.GetFiles("*.unity"))
         {
+            currentLevelName = file.Name.Split(".")[0];
+            GameObject button = Instantiate(LevelSelectorButtonPrefab, levelSelectorCanvas.transform);
+            behavior = button.GetComponent<LevelSelectButtonBehavior>();
+            behavior.LevelName = currentLevelName;
+            behavior.SceneName = currentLevelName;
+            behavior.Init();
             //levelSelectorCanvas.gameObject.GetComponent<RectTransform>()
-            Debug.Log(file.Name.Split(".")[0]);
         }
     }
 
