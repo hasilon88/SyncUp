@@ -587,6 +587,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5808496036336886867, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
+      propertyPath: userId
+      value: velozee
+      objectReference: {fileID: 0}
     - target: {fileID: 6687566224722834181, guid: f6315348f4e30a240a1b913aa21cdc1e, type: 3}
       propertyPath: m_Name
       value: SpotifyControllerSingleton

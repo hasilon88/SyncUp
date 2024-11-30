@@ -39,23 +39,26 @@
 > Changed Singleton Destroy(this) -> Destroy(this.gameObject)
 > Changed AudioManager OnDestroy (only if not null)
 > Fixed Capture not starting after going to Menu from another scene + Time.timeScale
-
-> ### to ...
+> ### to 2024/11/30 | 1:06 
 
 ## Prio
-- (1) LevelSelector [...](https://stackoverflow.com/questions/14877237/getting-all-file-names-from-a-folder-using-c-sharp)
-- (1) Fix Singleton (SpotifyController, AudioManager, GlobalStates, FPSManager)
+- (1) LevelSelector Position OffSet In UI for more than 1 scene
+- (1) Sync level 1 
+- (1) Settings tab
+- (2) PulseSyncer
 - (2) TimeFreeze
+- (2) Spotify Controller => .ContinueWith And Set UserName 
 - (2) Unlock abilities with credits
-- (2) SetActive vs Enabled
+- (2) SetActive vs Enabled (?)
+- (2) Ability UI for GameOverlay
 - (2) Make normal bullet
+- (2) Button to reset spotify user array
 - (3) Finish spotify interface
 - (3) Challenge/Level logic
 - (3) Add sounds
+- (3) Fix TempoSetter
 - (4) Perfect hit 
 - (4) Ricochet
 - (5) Main menu / Pause menu / Death menu style (Animate with music)
 - (3) AudioManager initialization retry interface
-- (1) Sync level 1 
 - (4) Custom FrameTempo
-- (2) PulseSyncer
