@@ -17,28 +17,28 @@
 > ### to ...
 
 > ### from 2024/11/29 | 18:55 | OlvrMns
-> Added Singleton gameObjects in Menu Scene
-> Changed Singleton execution order 
-> Changed InitializeLoopbackCapture() in AudioManager
-> Imported AllSky, Poly Angel - Mini Pirates Island, Lowpoly Cowboy RIO V1.1, AI Navigation
-> Changed FPSDisplayTextPrefab
-> Added TextColorSync
-> Added ColorSync to FPSText
-> Rearranged Menu Lab Objects for ColorSync
-> Added Assets/Animations/
-> Added Enemy scripts and Cow bow Animations [from Tommy](https://github.com/TommySpag/SyncUp-Level1)
-> Added ButtonEffect Script 
-> Changed Menu Inferface buttons
-> Added Sync Cubes to menu lab
+> - Added Singleton gameObjects in Menu Scene
+> - Changed Singleton execution order 
+> - Changed InitializeLoopbackCapture() in AudioManager
+> - Imported AllSky, Poly Angel - Mini Pirates Island, Lowpoly Cowboy RIO V1.1, AI Navigation
+> - Changed FPSDisplayTextPrefab
+> - Added TextColorSync
+> - Added ColorSync to FPSText
+> - Rearranged Menu Lab Objects for ColorSync
+> - Added Assets/Animations/
+> - Added Enemy scripts and Cow bow Animations [from Tommy](https://github.com/TommySpag/SyncUp-Level1)
+> - Added ButtonEffect Script 
+> - Changed Menu Inferface buttons
+> - Added Sync Cubes to menu lab
 > ### to 2024/11/29 | 23:42
 
 > ### from 2024/11/29 | 23:47 | OlvrMns
-> Removed some assets (AllSky)
-> Linked Menu -> Scene and Scene -> Menu
-> Made PauseController NOT a Singleton
-> Changed Singleton Destroy(this) -> Destroy(this.gameObject)
-> Changed AudioManager OnDestroy (only if not null)
-> Fixed Capture not starting after going to Menu from another scene + Time.timeScale
+> - Removed some assets (AllSky)
+> - Linked Menu -> Scene and Scene -> Menu
+> - Made PauseController NOT a Singleton
+> - Changed Singleton Destroy(this) -> Destroy(this.gameObject)
+> - Changed AudioManager OnDestroy (only if not null)
+> - Fixed Capture not starting after going to Menu from another scene + Time.timeScale
 > ### to 2024/11/30 | 1:06 
 
 ## Prio
