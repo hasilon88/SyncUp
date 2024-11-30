@@ -10,11 +10,21 @@ using UnityEngine;
 public class FPSManager : MonoBehaviour
 {
 
+    public static FPSManager Instance;
     public byte VSyncLevel = 0;
     public float FrameRate = 0f;
     public int FPSLock = 60;
     public int UpdateFrameCount = 0; //remove?
     public bool Locked = true; //remove?
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+            Destroy(this); 
+        DontDestroyOnLoad(this);
+    }
 
     private void Start()
     {

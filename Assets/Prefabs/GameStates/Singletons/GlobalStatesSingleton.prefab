@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5977710053941702601}
   - component: {fileID: 266515581347919490}
   m_Layer: 0
-  m_Name: GlobalStates
+  m_Name: GlobalStatesSingleton
   m_TagString: GlobalStates
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -11,6 +11,7 @@ TagManager:
   - PlayerHealthSlider
   - AbilitySource
   - PauseController
+  - SpotifyController
   layers:
   - Default
   - TransparentFX

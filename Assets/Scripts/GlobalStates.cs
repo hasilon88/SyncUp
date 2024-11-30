@@ -7,20 +7,19 @@ using UnityEngine;
 public class GlobalStates : MonoBehaviour
 {
 
-    public static GlobalStates Instance { get; private set; }
+    public static GlobalStates Instance;
     public int Credits = 0;
     public int CurrentLevel = 1;
     public int ScaledTime = 0;
     public float RealTime = 0f;
     public Abilities FirstAbility;
-    public Abilities SecondAbility;   
+    public Abilities SecondAbility;
 
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
-        else if (Instance != this)
-            Destroy(this); //on loading a new scene, object wont be destroyed
+        else Destroy(this);
         DontDestroyOnLoad(this);
     }
 

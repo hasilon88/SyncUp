@@ -16,6 +16,12 @@
 > - Added condition in AbilityController for [NONE] ability type
 > ### to ...
 
+> ### from 2024/11/29 | 18:55 | OlvrMns
+> Added Singleton gameObjects in Menu Scene
+> Changed Singleton execution order 
+> Changed InitializeLoopbackCapture() in AudioManager
+> ### to ...
+
 
 ## Prio
 - (1) LevelSelector [...](https://stackoverflow.com/questions/14877237/getting-all-file-names-from-a-folder-using-c-sharp)
@@ -30,5 +36,5 @@
 - (4) Perfect hit 
 - (4) Ricochet
 - (5) Main menu / Pause menu / Death menu style (Animate with music)
-- (3) AudioManager initialization retry
+- (3) AudioManager initialization retry interface
 - (1) Sync level 1 
