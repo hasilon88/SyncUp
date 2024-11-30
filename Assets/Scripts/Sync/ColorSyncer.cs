@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ColorSyncer : MonoBehaviour
 {
+
     private Renderer _renderer;
     public ColorSync ColorSync;
 

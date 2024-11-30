@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public enum MenuUserInterface
 public class MenuBehavior : MonoBehaviour
 {
 
+    private string completedLevelsPath = "/Scenes/CompletedScenes/Levels/";
     private MenuUserInterface lastInterface = MenuUserInterface.MENU;
     private MenuUserInterface currentInterface = MenuUserInterface.MENU;
     private Button levelSelectorButton;
@@ -21,10 +23,13 @@ public class MenuBehavior : MonoBehaviour
     private Canvas levelSelectorCanvas;
     private Canvas storeCanvas;
 
+    //public GameObject LevelSelectButtonPrefab;
+
     private void Start()
     {
         this.SetElements();
         this.SetButtonEventCallbacks();
+        SetLevelSelectorButtons();
         DisableInterface(levelSelectorCanvas);
         DisableInterface(storeCanvas);
     }
@@ -37,12 +42,22 @@ public class MenuBehavior : MonoBehaviour
     private void SetElements()
     {
         levelSelectorButton = ComponentUtils.Find<Button>("LevelSelectorButton");
-        storeButton = GameObject.Find("StoreButton").GetComponent<Button>();
-        exitButton = GameObject.Find("ExitButton").GetComponent<Button>();
-        levelSelectorCanvas = GameObject.Find("LevelSelectorOverlay").GetComponent<Canvas>();
-        storeCanvas = GameObject.Find("StoreOverlay").GetComponent<Canvas>();
-        menuCanvas = GameObject.Find("MenuOverlay").GetComponent<Canvas>();
+        storeButton = ComponentUtils.Find<Button>("StoreButton");
+        exitButton = ComponentUtils.Find<Button>("ExitButton");
+        levelSelectorCanvas = ComponentUtils.Find<Canvas>("LevelSelectorOverlay");
+        storeCanvas = ComponentUtils.Find<Canvas>("StoreOverlay");
+        menuCanvas = ComponentUtils.Find<Canvas>("MenuOverlay");
         this.SetGoBackButtons();
+    }
+
+    private void SetLevelSelectorButtons() 
+    {
+        DirectoryInfo info = new DirectoryInfo(Application.dataPath + completedLevelsPath);
+        foreach (FileInfo file in info.GetFiles("*.unity"))
+        {
+            //levelSelectorCanvas.gameObject.GetComponent<RectTransform>()
+            Debug.Log(file.Name.Split(".")[0]);
+        }
     }
 
     private void SetButtonEventCallbacks()

@@ -22,7 +22,15 @@
 > Changed InitializeLoopbackCapture() in AudioManager
 > Imported AllSky, Poly Angel - Mini Pirates Island, Lowpoly Cowboy RIO V1.1, AI Navigation
 > Changed FPSDisplayTextPrefab
-> ### to ...
+> Added TextColorSync
+> Added ColorSync to FPSText
+> Rearranged Menu Lab Objects for ColorSync
+> Added Assets/Animations/
+> Added Enemy scripts and Cow bow Animations [from Tommy](https://github.com/TommySpag/SyncUp-Level1)
+> Added ButtonEffect Script 
+> Changed Menu Inferface buttons
+> Added Sync Cubes to menu lab
+> ### to 2024/11/29 | 11:42
 
 
 ## Prio
@@ -40,3 +48,5 @@
 - (5) Main menu / Pause menu / Death menu style (Animate with music)
 - (3) AudioManager initialization retry interface
 - (1) Sync level 1 
+- (4) Custom FrameTempo
+- (2) PulseSyncer
