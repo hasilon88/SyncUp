@@ -11,12 +11,12 @@ public class FPSText : MonoBehaviour
 
     void Start()
     {
-        fpsManager = GameObject.FindGameObjectWithTag("FPSManager").GetComponent<FPSManager>();
+        fpsManager = FPSManager.Instance;
         textMeshProUGUI = GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
     {
-        textMeshProUGUI.text = "" + fpsManager.FrameRate;
+        textMeshProUGUI.text = "" + (int)fpsManager.FrameRate;
     }
 }

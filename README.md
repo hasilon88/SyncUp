@@ -20,6 +20,8 @@
 > Added Singleton gameObjects in Menu Scene
 > Changed Singleton execution order 
 > Changed InitializeLoopbackCapture() in AudioManager
+> Imported AllSky, Poly Angel - Mini Pirates Island, Lowpoly Cowboy RIO V1.1, AI Navigation
+> Changed FPSDisplayTextPrefab
 > ### to ...
 
 
