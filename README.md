@@ -30,8 +30,12 @@
 > Added ButtonEffect Script 
 > Changed Menu Inferface buttons
 > Added Sync Cubes to menu lab
-> ### to 2024/11/29 | 11:42
+> ### to 2024/11/29 | 23:42
 
+> ### from 2024/11/29 | 23:47 | OlvrMns
+> Removed some assets (AllSky)
+
+> ### to ...
 
 ## Prio
 - (1) LevelSelector [...](https://stackoverflow.com/questions/14877237/getting-all-file-names-from-a-folder-using-c-sharp)
