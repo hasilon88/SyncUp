@@ -188,20 +188,20 @@ public class Patrol : State
 public class Attack : State
 {
     float rotationSpeed = 2.0f;
-    AudioSource shoot;
+    //AudioSource shoot;
 
     public Attack(GameObject _npc, NavMeshAgent _agent, Animator _anim, Transform _player)
         : base(_npc, _agent, _anim, _player)
     {
         name = STATE.ATTACK;
-        shoot = _npc.GetComponent<AudioSource>();
+        //shoot = _npc.GetComponent<AudioSource>();
     }
 
     public override void Enter()
     {
         anim.SetTrigger("isShooting");
         agent.isStopped = true;
-        shoot.Play();
+        //shoot.Play();
         base.Enter();
     }
 
@@ -216,7 +216,7 @@ public class Attack : State
         if (!CanAttackPlayer())
         {
             nextState = new Idle(npc, agent, anim, player);
-            shoot.Stop();
+            //shoot.Stop();
             stage = EVENT.EXIT;
         }
     }

@@ -7,7 +7,8 @@ public enum MenuUserInterface
 {
     MENU,
     STORE,
-    LEVEL_SELECTOR
+    LEVEL_SELECTOR,
+    SETTINGS
 }
 
 public class MenuBehavior : MonoBehaviour
@@ -19,13 +20,13 @@ public class MenuBehavior : MonoBehaviour
     private Button levelSelectorButton;
     private Button storeButton;
     private Button exitButton;
+    private Button settingsButton;
     private Canvas menuCanvas;
     private Canvas levelSelectorCanvas;
     private Canvas storeCanvas;
+    private Canvas settingsCanvas;
 
     public GameObject LevelSelectorButtonPrefab;
-
-    //public GameObject LevelSelectButtonPrefab;
 
     private void Start()
     {
@@ -34,6 +35,7 @@ public class MenuBehavior : MonoBehaviour
         SetLevelSelectorButtons();
         DisableInterface(levelSelectorCanvas);
         DisableInterface(storeCanvas);
+        DisableInterface(settingsCanvas);
     }
 
     private void DisableInterface(Canvas canvas)
@@ -44,11 +46,13 @@ public class MenuBehavior : MonoBehaviour
     private void SetElements()
     {
         levelSelectorButton = ComponentUtils.Find<Button>("LevelSelectorButton");
+        settingsButton = ComponentUtils.Find<Button>("SettingsButton");
         storeButton = ComponentUtils.Find<Button>("StoreButton");
         exitButton = ComponentUtils.Find<Button>("ExitButton");
         levelSelectorCanvas = ComponentUtils.Find<Canvas>("LevelSelectorOverlay");
         storeCanvas = ComponentUtils.Find<Canvas>("StoreOverlay");
         menuCanvas = ComponentUtils.Find<Canvas>("MenuOverlay");
+        settingsCanvas = ComponentUtils.Find<Canvas>("SettingsOverlay");
         this.SetGoBackButtons();
     }
 
@@ -74,6 +78,7 @@ public class MenuBehavior : MonoBehaviour
     {
         levelSelectorButton.onClick.AddListener(() => Navigate(MenuUserInterface.LEVEL_SELECTOR));
         storeButton.onClick.AddListener(() => Navigate(MenuUserInterface.STORE));
+        settingsButton.onClick.AddListener(() => Navigate(MenuUserInterface.SETTINGS));
         exitButton.onClick.AddListener(UIUtils.Exit);
     }
 
@@ -85,11 +90,12 @@ public class MenuBehavior : MonoBehaviour
                 button.onClick.AddListener(() => Navigate(lastInterface));
     }
 
-    private void NavigateMenu(bool menuCanvas, bool storeCanvas, bool levelSelectorCanvas, MenuUserInterface nextInterface)
+    private void NavigateMenu(bool menuCanvas, bool storeCanvas, bool levelSelectorCanvas, bool settingsCanvas,MenuUserInterface nextInterface)
     {
         this.levelSelectorCanvas.gameObject.SetActive(levelSelectorCanvas);
         this.storeCanvas.gameObject.SetActive(storeCanvas);
         this.menuCanvas.gameObject.SetActive(menuCanvas);
+        this.settingsCanvas.gameObject.SetActive(settingsCanvas);
         lastInterface = currentInterface;
         currentInterface = nextInterface;
     }
@@ -99,16 +105,19 @@ public class MenuBehavior : MonoBehaviour
         switch (userInterface) 
         {
             case MenuUserInterface.STORE:
-                NavigateMenu(false, true, false, MenuUserInterface.STORE);
+                NavigateMenu(false, true, false, false, MenuUserInterface.STORE);
                 break;
             case MenuUserInterface.LEVEL_SELECTOR:
-                NavigateMenu(false, false, true, MenuUserInterface.LEVEL_SELECTOR);
+                NavigateMenu(false, false, true, false, MenuUserInterface.LEVEL_SELECTOR);
                 break;
             case MenuUserInterface.MENU:
-                NavigateMenu(true, false, false, MenuUserInterface.MENU);
+                NavigateMenu(true, false, false, false, MenuUserInterface.MENU);
+                break;
+            case MenuUserInterface.SETTINGS:
+                NavigateMenu(false, false, false, true, MenuUserInterface.SETTINGS);
                 break;
             default:
-                NavigateMenu(true, false, false, MenuUserInterface.MENU);
+                NavigateMenu(true, false, false, false, MenuUserInterface.MENU);
                 break;
         }
     }
