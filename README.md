@@ -41,10 +41,16 @@
 > - Fixed Capture not starting after going to Menu from another scene + Time.timeScale
 > ### to 2024/11/30 | 1:06 
 
-> ### from ... | ... | ...
+> ### from 2024/11/30 | 12:43 | OlvrMns
 > - Imported Level1 [from Tommy](https://github.com/TommySpag/SyncUp-Level1)
 > - Added Settings Menu Button And Settings Canvas
 > - Added Settings Canvas to menu navigation
+> - Added DebugMode boolean
+> - Changed GameEnvironment Script 
+> - Added Level Restart Button
+> - Changed Pause Interface buttons style
+> - Added OverlayController (Reformated InGame Overlay Control and Reformated Title Screen Navigation with Optional parameters)
+> - 
 > ### to ... | ...
 
 ## Prio

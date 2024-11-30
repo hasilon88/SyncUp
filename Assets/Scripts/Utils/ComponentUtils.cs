@@ -12,4 +12,14 @@ public static class ComponentUtils
         return GameObject.FindGameObjectWithTag(tag).GetComponent<T>();
     }
 
+    public static void Deactivate(Component component)
+    {
+        component.gameObject.SetActive(false);
+    }
+
+    public static void Activate(Component component)
+    {
+        component.gameObject.SetActive(false);
+    }
+
 }

@@ -60,7 +60,7 @@ public class MenuBehavior : MonoBehaviour
     {
         string currentLevelName;
         LevelSelectButtonBehavior behavior;
-        int tempHeightOffSet = 30;
+        //int tempHeightOffSet = 30;
         DirectoryInfo info = new DirectoryInfo(Application.dataPath + completedLevelsPath);
         foreach (FileInfo file in info.GetFiles("*.unity"))
         {
@@ -90,7 +90,7 @@ public class MenuBehavior : MonoBehaviour
                 button.onClick.AddListener(() => Navigate(lastInterface));
     }
 
-    private void NavigateMenu(bool menuCanvas, bool storeCanvas, bool levelSelectorCanvas, bool settingsCanvas,MenuUserInterface nextInterface)
+    private void NavigateMenu(MenuUserInterface nextInterface, bool menuCanvas = false, bool storeCanvas = false, bool levelSelectorCanvas = false, bool settingsCanvas = false)
     {
         this.levelSelectorCanvas.gameObject.SetActive(levelSelectorCanvas);
         this.storeCanvas.gameObject.SetActive(storeCanvas);
@@ -105,19 +105,16 @@ public class MenuBehavior : MonoBehaviour
         switch (userInterface) 
         {
             case MenuUserInterface.STORE:
-                NavigateMenu(false, true, false, false, MenuUserInterface.STORE);
+                NavigateMenu(MenuUserInterface.STORE, storeCanvas: true);
                 break;
             case MenuUserInterface.LEVEL_SELECTOR:
-                NavigateMenu(false, false, true, false, MenuUserInterface.LEVEL_SELECTOR);
+                NavigateMenu(MenuUserInterface.LEVEL_SELECTOR, levelSelectorCanvas: true);
                 break;
             case MenuUserInterface.MENU:
-                NavigateMenu(true, false, false, false, MenuUserInterface.MENU);
+                NavigateMenu(MenuUserInterface.MENU, menuCanvas: true);
                 break;
             case MenuUserInterface.SETTINGS:
-                NavigateMenu(false, false, false, true, MenuUserInterface.SETTINGS);
-                break;
-            default:
-                NavigateMenu(true, false, false, false, MenuUserInterface.MENU);
+                NavigateMenu(MenuUserInterface.SETTINGS, settingsCanvas: true);
                 break;
         }
     }

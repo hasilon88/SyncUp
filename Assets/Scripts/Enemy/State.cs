@@ -3,40 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-// Classe de base représentant un état pour le NPC (personnage non joueur)
 public class State
 {
 
-    // Différents états possibles pour le NPC
     public enum STATE
     {
-        IDLE,      // En attente
-        PATROL,    // En patrouille
-        ATTACK    // En attaque
+        IDLE,      
+        PATROL,    
+        ATTACK    
     };
 
-    // Événements d'état pour gérer les transitions
     public enum EVENT
     {
-        ENTER,     // Entrée dans un état
-        UPDATE,    // Mise à jour pendant un état
-        EXIT       // Sortie d'un état
+        ENTER,    
+        UPDATE,    
+        EXIT       
     };
 
-    public STATE name;                   // Nom de l'état actuel
-    protected EVENT stage;               // Événement actuel de l'état
-    protected GameObject npc;            // Référence au NPC
-    protected Animator anim;             // Contrôleur d'animation du NPC
-    protected Transform player;          // Référence au joueur
-    protected State nextState;           // Prochain état du NPC
-    protected NavMeshAgent agent;        // Agent de navigation pour les déplacements
+    public STATE name;                   
+    protected EVENT stage;            
+    protected GameObject npc;            
+    protected Animator anim;             
+    protected Transform player;          
+    protected State nextState;          
+    protected NavMeshAgent agent;  
 
-    // Variables de distance et d'angle pour détecter le joueur
-    float visDist = 10.0f;               // Distance de vision
-    float visAngle = 30.0f;              // Angle de vision
-    float shootDist = 7.0f;              // Distance de tir
+    float visDist = 10.0f;             
+    float visAngle = 30.0f;        
+    float shootDist = 7.0f;       
 
-    // Constructeur pour initialiser les paramètres de l'état
     public State(GameObject _npc, NavMeshAgent _agent, Animator _anim, Transform _player)
     {
         npc = _npc;
@@ -46,12 +41,10 @@ public class State
         stage = EVENT.ENTER;
     }
 
-    // Méthodes virtuelles pour gérer l'entrée, la mise à jour, et la sortie des états
     public virtual void Enter() { stage = EVENT.UPDATE; }
     public virtual void Update() { stage = EVENT.UPDATE; }
     public virtual void Exit() { stage = EVENT.EXIT; }
 
-    // Processus pour gérer le cycle de vie de chaque état
     public State Process()
     {
         if (stage == EVENT.ENTER) Enter();
@@ -59,36 +52,27 @@ public class State
         if (stage == EVENT.EXIT)
         {
             Exit();
-            return nextState; // Retourne le prochain état après la sortie
+            return nextState; 
         }
         return this;
     }
 
-    // Méthode pour vérifier si le NPC peut voir le joueur
     public bool CanSeePlayer()
     {
         Vector3 direction = player.position - npc.transform.position;
         float angle = Vector3.Angle(direction, npc.transform.forward);
-        if (direction.magnitude < visDist && angle < visAngle)
-        {
-            return true;
-        }
+        if (direction.magnitude < visDist && angle < visAngle) return true;
         return false;
     }
 
-    // Méthode pour vérifier si le NPC est à distance d'attaque du joueur
     public bool CanAttackPlayer()
     {
         Vector3 direction = player.position - npc.transform.position;
-        if (direction.magnitude < shootDist)
-        {
-            return true;
-        }
+        if (direction.magnitude < shootDist) return true;
         return false;
     }
 }
 
-// État "Idle" : NPC reste en attente
 public class Idle : State
 {
     public Idle(GameObject _npc, NavMeshAgent _agent, Animator _anim, Transform _player)
@@ -99,7 +83,7 @@ public class Idle : State
 
     public override void Enter()
     {
-        anim.SetTrigger("isIdle"); // Déclenche l'animation d'attente
+        anim.SetTrigger("isIdle"); 
         base.Enter();
     }
 
@@ -119,15 +103,15 @@ public class Idle : State
 
     public override void Exit()
     {
-        anim.ResetTrigger("isIdle"); // Réinitialise l'animation d'attente
+        anim.ResetTrigger("isIdle"); 
         base.Exit();
     }
 }
 
-// État "Patrol" : NPC patrouille autour des points de contrôle
 public class Patrol : State
 {
     int currentIndex = -1;
+    GameEnvironment env = GameEnvironment.GetInstance();
 
     public Patrol(GameObject _npc, NavMeshAgent _agent, Animator _anim, Transform _player)
         : base(_npc, _agent, _anim, _player)
@@ -139,11 +123,10 @@ public class Patrol : State
 
     public override void Enter()
     {
-        // Trouve le point de patrouille le plus proche pour commencer
         float lastDistance = Mathf.Infinity;
-        for (int i = 0; i < GameEnvironment.Singleton.Checkpoints.Count; ++i)
+        for (int i = 0; i < env.Checkpoints.Count; ++i)
         {
-            GameObject thisWP = GameEnvironment.Singleton.Checkpoints[i];
+            GameObject thisWP = env.Checkpoints[i];
             float distance = Vector3.Distance(npc.transform.position, thisWP.transform.position);
             if (distance < lastDistance)
             {
@@ -159,15 +142,9 @@ public class Patrol : State
     {
         if (agent.remainingDistance < 1)
         {
-            if (currentIndex >= GameEnvironment.Singleton.Checkpoints.Count - 1)
-            {
-                currentIndex = 0;
-            }
-            else
-            {
-                currentIndex++;
-            }
-            agent.SetDestination(GameEnvironment.Singleton.Checkpoints[currentIndex].transform.position);
+            if (currentIndex >= env.Checkpoints.Count - 1) currentIndex = 0;
+            else currentIndex++;
+            agent.SetDestination(env.Checkpoints[currentIndex].transform.position);
         }
 
         if (CanSeePlayer())

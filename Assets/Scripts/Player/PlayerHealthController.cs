@@ -31,6 +31,11 @@ public class PlayerHealthController : MonoBehaviour
     {
         CurrentHealth = MaxHealth;
         if (HealthSlider == null ) UseHealthSlider = false;
+        OnZero += (object sender, EventArgs e) =>
+        {
+
+            Debug.Log("YOU DIED");
+        };
     }
 
     private IEnumerator AlterateHealth(float by, HealthAlterationTypes alterationType)
@@ -68,23 +73,20 @@ public class PlayerHealthController : MonoBehaviour
         StartCoroutine(AlterateHealth(by, HealthAlterationTypes.HEAL));
     }
 
-    public void AlterateHealthInstantly(float value)
+    public void AlterateHealthInstantlyTo(float value)
     {
         CurrentHealth = value;
         UpdateHealthSlider();
     }
 
-    //public void Regenerate()
-    //{
-
-    //}
-
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H) && GlobalStates.Instance.DebugMode)
             RegainHealth(100);
-        else if (Input.GetKeyDown(KeyCode.J))
+        else if (Input.GetKeyDown(KeyCode.J) && GlobalStates.Instance.DebugMode)
             ReduceHealth(100);
+        else if (Input.GetKeyDown(KeyCode.K) && GlobalStates.Instance.DebugMode)
+            AlterateHealthInstantlyTo(100);
 
         if (CurrentHealth <= 0f) OnZero?.Invoke(this, EventArgs.Empty);
     }

@@ -32,7 +32,7 @@ public class PlayerRewinder : IRewind
         positionRes.RewindingObject = playerController.gameObject;
         playerController.transform.localEulerAngles = (Vector3)cameraRes.Element;
         playerController.transform.position = (Vector3)positionRes.Element;
-        healthController.AlterateHealthInstantly((float)healthRes.Element); //needs to be fixed
+        healthController.AlterateHealthInstantlyTo((float)healthRes.Element); //needs to be fixed
         return positionRes;
     }
 
