@@ -22,14 +22,13 @@ public class SprintController : MonoBehaviour
     public KeyCode SprintKey = KeyCode.LeftShift;
     public float SprintSpeed = 7f;
     public float SprintDuration = 5f;
-    public float SprintCooldown = .5f;
+    public float SprintCooldownInSeconds = 2f;
     public float SprintFOV = 80f;
     public float SprintFOVStepTime = 10f;
     public float MaxVelocityChange = 10f;
 
     private float sprintRemaining;
-    private bool isSprintCooldown = false;
-    private float sprintCooldownReset;
+    private bool OnCooldown = false;
 
     private Vector3 targetVelocity;
     private Vector3 velocity;
@@ -43,10 +42,7 @@ public class SprintController : MonoBehaviour
     private void Awake()
     {
         if (!UnlimitedSprint)
-        {
             sprintRemaining = SprintDuration;
-            sprintCooldownReset = SprintCooldown;
-        }
     }
 
     private void Start()
@@ -66,17 +62,13 @@ public class SprintController : MonoBehaviour
             SprintBarBG.gameObject.SetActive(true);
             SprintBar.gameObject.SetActive(true);
 
-            float screenWidth = Screen.width;
-            float screenHeight = Screen.height;
-
-            sprintBarWidth = screenWidth * SprintBarWidthPercent;
-            sprintBarHeight = screenHeight * SprintBarHeightPercent;
+            sprintBarWidth = Screen.width * SprintBarWidthPercent;
+            sprintBarHeight = Screen.height * SprintBarHeightPercent;
 
             SprintBarBG.rectTransform.sizeDelta = new Vector3(sprintBarWidth, sprintBarHeight, 0f);
             SprintBar.rectTransform.sizeDelta = new Vector3(sprintBarWidth - 2, sprintBarHeight - 2, 0f);
 
-            if (HideBarWhenFull)
-                sprintBarCG.alpha = 0;
+            if (HideBarWhenFull) sprintBarCG.alpha = 0;
         }
         else
         {
@@ -88,10 +80,7 @@ public class SprintController : MonoBehaviour
     private void UpdateSprintBar()
     {
         if (UseSprintBar && !UnlimitedSprint)
-        {
-            float sprintRemainingPercent = sprintRemaining / SprintDuration;
-            SprintBar.transform.localScale = new Vector3(sprintRemainingPercent, 1f, 1f);
-        }
+            SprintBar.transform.localScale = new Vector3(sprintRemaining / SprintDuration, 1f, 1f);
     }
 
     private void ToSprintFov()
@@ -108,25 +97,16 @@ public class SprintController : MonoBehaviour
             ToSprintFov();
             if (!UnlimitedSprint)
             {
-                sprintRemaining -= 1 * Time.deltaTime;
+                sprintRemaining -= 1f * Time.deltaTime;
                 if (sprintRemaining <= 0)
                 {
                     IsSprinting = false;
-                    isSprintCooldown = true;
+                    OnCooldown = true;
+                    StartCoroutine(TimingController.Time(TimeType.SCALEDTIME, SprintCooldownInSeconds, () => OnCooldown = false));
                 }
             }
         }
         else sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, SprintDuration);
-    }
-
-    private void UpdateSprintCooldown()
-    {
-        if (isSprintCooldown)
-        {
-            SprintCooldown -= 1 * Time.deltaTime;
-            if (SprintCooldown <= 0) isSprintCooldown = false;
-        }
-        else SprintCooldown = sprintCooldownReset;
     }
 
     private void SetIsWalking()
@@ -139,13 +119,13 @@ public class SprintController : MonoBehaviour
 
     private bool CanSprint()
     {
-        return EnableSprint && Input.GetKey(SprintKey) && sprintRemaining > 0f && !isSprintCooldown;
+        return EnableSprint && Input.GetKey(SprintKey) && sprintRemaining > 0f && !OnCooldown;
     }
 
     private void UpdateVelocityChange()
     {
         targetVelocity = transform.TransformDirection(targetVelocity) * SprintSpeed;
-        velocity = firstPersonController._rigidBody.linearVelocity;
+        velocity = firstPersonController._rigidBody.velocity;
         velocityChange = (targetVelocity - velocity);
         velocityChange.x = Mathf.Clamp(velocityChange.x, -MaxVelocityChange, MaxVelocityChange);
         velocityChange.z = Mathf.Clamp(velocityChange.z, -MaxVelocityChange, MaxVelocityChange);
@@ -159,8 +139,6 @@ public class SprintController : MonoBehaviour
         if (CanSprint())
         {
             UpdateVelocityChange();
-            // Player is only moving when valocity change != 0
-            // Makes sure fov change only happens during movement
             if (velocityChange.x != 0 || velocityChange.z != 0)
             {
                 IsSprinting = true;
@@ -175,13 +153,13 @@ public class SprintController : MonoBehaviour
         {
             IsSprinting = false;
 
-            if (HideBarWhenFull && sprintRemaining == SprintDuration)
-                sprintBarCG.alpha -= 3 * Time.deltaTime;
+            if (HideBarWhenFull && sprintRemaining == SprintDuration) sprintBarCG.alpha -= 3 * Time.deltaTime;
 
             targetVelocity = transform.TransformDirection(targetVelocity) * WalkSpeed;
 
             // Apply a force that attempts to reach our target velocity
-            Vector3 velocity = firstPersonController._rigidBody.linearVelocity;
+            Vector3 velocity = firstPersonController._rigidBody.velocity;
+            //Vector3 velocity = firstPersonController._rigidBody.velocity;
             Vector3 velocityChange = (targetVelocity - velocity);
             velocityChange.x = Mathf.Clamp(velocityChange.x, -MaxVelocityChange, MaxVelocityChange);
             velocityChange.z = Mathf.Clamp(velocityChange.z, -MaxVelocityChange, MaxVelocityChange);
@@ -195,7 +173,6 @@ public class SprintController : MonoBehaviour
         if (EnableSprint)
         {
             UpdateSprintRemaining();
-            UpdateSprintCooldown();
             UpdateSprintBar();
         }
     }

@@ -521,7 +521,7 @@ MonoBehaviour:
   RewindDurationInSeconds: 1.7
   rewindDurationInFrames: 0
   TargetRewindIterationDelay: 0.59
-  TargetRewindIterationFOV: 119
+  TargetRewindIterationFOV: 168
 --- !u!4 &222041661
 Transform:
   m_ObjectHideFlags: 0

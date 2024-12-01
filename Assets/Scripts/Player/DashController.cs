@@ -39,8 +39,7 @@ public class DashController : MonoBehaviour
         firstPersonController = GetComponent<PlayerController>();
         OnDashStart += (object sender, EventArgs e) =>
         {
-            Debug.Log("Dash...");
-            playerVelocity = firstPersonController._rigidBody.linearVelocity;
+            playerVelocity = firstPersonController._rigidBody.velocity;
         };
     }
 

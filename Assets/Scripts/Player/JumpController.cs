@@ -48,7 +48,7 @@ public class JumpController : MonoBehaviour
     {
         if (!IsGrounded && !hasDoubleJumped)
         {
-            firstPersonController._rigidBody.linearVelocity = new Vector3(firstPersonController._rigidBody.linearVelocity.x, 0f, firstPersonController._rigidBody.linearVelocity.z);
+            firstPersonController._rigidBody.velocity = new Vector3(firstPersonController._rigidBody.velocity.x, 0f, firstPersonController._rigidBody.velocity.z);
             firstPersonController._rigidBody.AddForce(0f, DoubleJumpPower, 0f, ForceMode.Impulse);
             hasDoubleJumped = true;
         }

@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1117757419443215874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4442874734131716171}
+  - component: {fileID: 1368313758998162958}
+  - component: {fileID: 4977280567104651871}
+  - component: {fileID: 7992973616105947626}
+  m_Layer: 0
+  m_Name: RewinderPrefab
+  m_TagString: RewindAbility
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4442874734131716171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117757419443215874}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.411394, y: 1, z: 5.663105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1368313758998162958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117757419443215874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 542d76c4dc152ac45b2f1cc50ea4ea71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CooldownInSeconds: 6
+  CooldownCountdown: 0
+  CooldownEnabled: 1
+  OnCooldown: 0
+  Name: Rewind
+  Icon: {fileID: 0}
+  IsLive: 0
+  IsEquipped: 0
+  IsUnlocked: 0
+  CreditsNeeded: 0
+  TriggerKey: 114
+  RewindDurationInSeconds: 2
+  rewindDurationInFrames: 0
+  TargetRewindIterationDelay: 0.7
+  TargetRewindIterationFOV: 117
+--- !u!114 &4977280567104651871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117757419443215874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd7138c6ca327fd47981b09df628b43a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: 0.15
+  Type: 0
+  IsOnTime: 0
+--- !u!114 &7992973616105947626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117757419443215874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed32610b34b326c428fa078919016c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

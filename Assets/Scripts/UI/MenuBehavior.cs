@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public enum MenuUserInterface
 public class MenuBehavior : MonoBehaviour
 {
 
+    private string completedLevelsPath = "/Scenes/CompletedScenes/Levels/";
     private MenuUserInterface lastInterface = MenuUserInterface.MENU;
     private MenuUserInterface currentInterface = MenuUserInterface.MENU;
     private Button levelSelectorButton;
@@ -21,10 +23,15 @@ public class MenuBehavior : MonoBehaviour
     private Canvas levelSelectorCanvas;
     private Canvas storeCanvas;
 
+    public GameObject LevelSelectorButtonPrefab;
+
+    //public GameObject LevelSelectButtonPrefab;
+
     private void Start()
     {
         this.SetElements();
         this.SetButtonEventCallbacks();
+        SetLevelSelectorButtons();
         DisableInterface(levelSelectorCanvas);
         DisableInterface(storeCanvas);
     }
@@ -36,20 +43,38 @@ public class MenuBehavior : MonoBehaviour
 
     private void SetElements()
     {
-        levelSelectorButton = GameObject.Find("LevelSelectorButton").GetComponent<Button>();
-        storeButton = GameObject.Find("StoreButton").GetComponent<Button>();
-        exitButton = GameObject.Find("ExitButton").GetComponent<Button>();
-        levelSelectorCanvas = GameObject.Find("TestLevelSelector").GetComponent<Canvas>();
-        storeCanvas = GameObject.Find("StoreCanvas").GetComponent<Canvas>();
-        menuCanvas = GetComponent<Canvas>();
+        levelSelectorButton = ComponentUtils.Find<Button>("LevelSelectorButton");
+        storeButton = ComponentUtils.Find<Button>("StoreButton");
+        exitButton = ComponentUtils.Find<Button>("ExitButton");
+        levelSelectorCanvas = ComponentUtils.Find<Canvas>("LevelSelectorOverlay");
+        storeCanvas = ComponentUtils.Find<Canvas>("StoreOverlay");
+        menuCanvas = ComponentUtils.Find<Canvas>("MenuOverlay");
         this.SetGoBackButtons();
+    }
+
+    private void SetLevelSelectorButtons() 
+    {
+        string currentLevelName;
+        LevelSelectButtonBehavior behavior;
+        int tempHeightOffSet = 30;
+        DirectoryInfo info = new DirectoryInfo(Application.dataPath + completedLevelsPath);
+        foreach (FileInfo file in info.GetFiles("*.unity"))
+        {
+            currentLevelName = file.Name.Split(".")[0];
+            GameObject button = Instantiate(LevelSelectorButtonPrefab, levelSelectorCanvas.transform);
+            behavior = button.GetComponent<LevelSelectButtonBehavior>();
+            behavior.LevelName = currentLevelName;
+            behavior.SceneName = currentLevelName;
+            behavior.Init();
+            //levelSelectorCanvas.gameObject.GetComponent<RectTransform>()
+        }
     }
 
     private void SetButtonEventCallbacks()
     {
         levelSelectorButton.onClick.AddListener(() => Navigate(MenuUserInterface.LEVEL_SELECTOR));
         storeButton.onClick.AddListener(() => Navigate(MenuUserInterface.STORE));
-        exitButton.onClick.AddListener(Exit);
+        exitButton.onClick.AddListener(UIUtils.Exit);
     }
 
     private void SetGoBackButtons()
@@ -58,6 +83,15 @@ public class MenuBehavior : MonoBehaviour
         foreach (Button button in array)
             if (button.name == "GoBackButton")
                 button.onClick.AddListener(() => Navigate(lastInterface));
+    }
+
+    private void NavigateMenu(bool menuCanvas, bool storeCanvas, bool levelSelectorCanvas, MenuUserInterface nextInterface)
+    {
+        this.levelSelectorCanvas.gameObject.SetActive(levelSelectorCanvas);
+        this.storeCanvas.gameObject.SetActive(storeCanvas);
+        this.menuCanvas.gameObject.SetActive(menuCanvas);
+        lastInterface = currentInterface;
+        currentInterface = nextInterface;
     }
 
     private void Navigate(MenuUserInterface userInterface)
@@ -77,24 +111,6 @@ public class MenuBehavior : MonoBehaviour
                 NavigateMenu(true, false, false, MenuUserInterface.MENU);
                 break;
         }
-    }
-
-    private void NavigateMenu(bool menuCanvas, bool storeCanvas, bool levelSelectorCanvas, MenuUserInterface nextInterface)
-    {
-        this.levelSelectorCanvas.gameObject.SetActive(levelSelectorCanvas);
-        this.storeCanvas.gameObject.SetActive(storeCanvas);
-        this.menuCanvas.gameObject.SetActive(menuCanvas);
-        lastInterface = currentInterface;
-        currentInterface = nextInterface;
-    }
-
-    private void Exit()
-    {
-        #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-        #else
-                Application.Quit();
-        #endif
     }
 
 }

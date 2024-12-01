@@ -15,7 +15,7 @@ public abstract class SyncObject : MonoBehaviour
     private void Start()
     {
         if (this.AudioManager == null) 
-            this.AudioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+            this.AudioManager = AudioManager.Instance;
 
         if (this.AudioManager != null && this.OptionalTempo_ == OptionalTempo.ON_CAPTURE_RATE)
             this.AudioManager.OnNormalizedValuesChange += SyncOnCaptureRate;

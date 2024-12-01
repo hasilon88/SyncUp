@@ -9,7 +9,7 @@ public class TempoSetter : MonoBehaviour
     private int frameCount = 0;
     private TimingController timingController;
     private SpotifyController spotifyController;
-    public float Tempo = 100f;
+    public float Tempo = -1f;
     public int FrameWindow = 15;
     public bool CurrentlyOnBeat = false;
     public event EventHandler OnBeat; //for abilities (perfect hit)
@@ -60,7 +60,7 @@ public class TempoSetter : MonoBehaviour
             CurrentlyOnBeat = false;
             OnBeatLeave?.Invoke(this, EventArgs.Empty);
         }
-        else if (timingController.IsOnTime)
+        else if (timingController.IsOnTime && Tempo > 0f)
         {
             CurrentlyOnBeat = true;
             inFrameWindow = true;

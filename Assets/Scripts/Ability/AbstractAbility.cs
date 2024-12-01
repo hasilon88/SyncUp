@@ -18,18 +18,15 @@ public abstract class Ability : MonoBehaviour
     public bool IsUnlocked = false;
     public int CreditsNeeded = 0; 
     public KeyCode TriggerKey;
-    public PlayerController FirstPersonController;
+    protected PlayerController PlayerController;
 
-    public event EventHandler OnAbilityUnlock;
-    public event EventHandler OnAbilityEquip;
-    public event EventHandler OnAbilityUnequip;
     public event EventHandler OnCooldownEnter;
     public event EventHandler OnCooldownLeave;
 
     public void GoOnCooldown()
     {
         OnCooldownEnter?.Invoke(this, EventArgs.Empty);
-        OnCooldown = true;
+        OnCooldown = true; //true every frame?
         StartCoroutine(TimingController.Time(TimeType.SCALEDTIME, CooldownInSeconds, ExitOnCooldown));
     }
 

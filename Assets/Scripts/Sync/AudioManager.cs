@@ -57,22 +57,36 @@ public class AudioManager : MonoBehaviour
     public float MinimumCapturableSample = 0.001f;
     public event EventHandler OnNormalizedValuesChange;
     public FPSManager FPSManager;
-    private readonly ArrayUtils<float> arrayUtils = new ArrayUtils<float>();
+    private ArrayUtils<float> arrayUtils;
     public int CaptureRate = 100;
-    //public bool FromSpotify = true;
+
+    public static AudioManager Instance;
+    public bool IsInitialized = false;
+    public bool AutoStart = true;
+    public int SampleRate = 44100;
+    public int BitsPerSample = 16;
+    public int Channels = 2;
 
     /// <summary>
     /// these values need to be set in Awake() to avoid /division by 0 exception
     /// </summary>
     private void Awake()
     {
-        loopbackCapture = new WasapiLoopbackCapture(CaptureRate, new WaveFormat(44100, 16, 2));
-        this.LastLoudestSamplesFrameTempo = 1;
-        this.CurrentLoudestSample = 0f;
+        if (Instance == null)
+        {
+            arrayUtils = new ArrayUtils<float>();
+            loopbackCapture = new WasapiLoopbackCapture(CaptureRate, new WaveFormat(SampleRate, BitsPerSample, Channels));
+            this.LastLoudestSamplesFrameTempo = 1;
+            this.CurrentLoudestSample = 0f;
+            Instance = this;
+        }
+        else Destroy(this.gameObject); 
+        DontDestroyOnLoad(this);
     }
 
     public void Start()
     {
+        FPSManager = FPSManager.Instance;
         this.devices = MMDeviceEnumerator.EnumerateDevices(this.DataFlow, this.deviceState);
         this.loopbackCapture.Device = this.devices[this.AudioEndpoint];
         this.lastLoudestSamples = new float[this.LastLoudestSamplesLength];
@@ -91,14 +105,41 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void InitializeLoopbackCapture()
     {
-        loopbackCapture.Initialize();
-        loopbackCapture.DataAvailable += (sender, _event) =>
+        try
         {
-            //Debug.Log("Capture : " + _event.Data.Length/2);
-            ProcessDefaultAudioStream(_event.Data);
-            this.UpdateProperties();
-        };
+            if (!IsInitialized)
+            {
+                loopbackCapture.Initialize();
+                loopbackCapture.DataAvailable += SampleCaptured;
+                if (AutoStart) StartCapture();
+                loopbackCapture.Stopped += LoopbackCapture_Stopped;
+                IsInitialized = true;
+            }
+        } catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+    }
+
+    public void SampleCaptured(object sender, DataAvailableEventArgs _event)
+    {
+        ProcessDefaultAudioStream(_event.Data);
+        this.UpdateProperties();
+    }
+
+    public void StartCapture()
+    {
         loopbackCapture.Start();
+    }
+
+    public void StopCapture()
+    {
+        loopbackCapture.Stop();
+    }
+
+    private void LoopbackCapture_Stopped(object sender, RecordingStoppedEventArgs e)
+    {
+        Debug.Log("CSCore Capture Stopped");
     }
 
     private void ProcessDefaultAudioStream(byte[] data)
@@ -180,6 +221,6 @@ public class AudioManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        loopbackCapture.Dispose();
+        loopbackCapture?.Dispose();
     }
 }

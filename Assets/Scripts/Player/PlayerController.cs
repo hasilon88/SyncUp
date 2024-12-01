@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private SprintController sprintController;
     private HeadBobController headBobController;
     private DashController dashController;
+    private GunController gunController;
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
         headBobController = GetComponent<HeadBobController>();
         playerCameraController = GetComponent<PlayerCameraController>();
         dashController = GetComponent<DashController>();
+        gunController = GetComponent<GunController>();
         _rigidBody = GetComponent<Rigidbody>();
     }
 
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
             crouchController.UpdateCrouchState();
             headBobController.UpdateHeadBobState();
             dashController.UpdateDashState();
+            gunController?.UpdateShootingState();
         }
     }
 
