@@ -8,7 +8,7 @@ public class SpotifyController : MonoBehaviour
 {
     public static SpotifyController Instance { get; private set; }
     private SpotifyClient _spotify;
-    public string userId="";
+    public string UserId="";
 
     public event EventHandler OnNext;
     public event EventHandler OnPrevious;
@@ -23,7 +23,7 @@ public class SpotifyController : MonoBehaviour
 
     public async Task Init()
     {
-        var auth = await Auth.CreateAsync(userId);
+        var auth = await Auth.CreateAsync(UserId);
         _spotify = new SpotifyClient(auth.AccessToken);
     }
 

@@ -27,6 +27,7 @@ public class DashController : MonoBehaviour
     public DashTypes DashType;
     private PlayerController firstPersonController;
     private Vector3 playerVelocity;
+    private GlobalStates globalStates = GlobalStates.Instance;
 
     private void Start()
     {
@@ -41,7 +42,7 @@ public class DashController : MonoBehaviour
 
     public void UpdateDashState()
     {
-        if (Input.GetKeyDown(TriggerKey) && CanDash && !OnCooldown)
+        if (Input.GetKeyDown(TriggerKey) && CanDash && !OnCooldown && globalStates.DashIsUnlocked)
         {
             OnDashStart?.Invoke(this, EventArgs.Empty);
             switch (DashType)
@@ -54,11 +55,6 @@ public class DashController : MonoBehaviour
                     break;
             }
         }
-    }
-
-    private void Update()
-    {
-        //Debug.Log(firstPersonController._rigidBody.velocity);
     }
 
 }

@@ -65,16 +65,20 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
     {
         await spotifyController.Init();
         artistTitleText = GameObject.Find("ArtistTitle").GetComponent<TextMeshProUGUI>();
-        spotifyController.OnNext += async (object sender, EventArgs e) =>
-        {
-            await UpdateArtistTitleText();
-        };
-        spotifyController.OnPrevious += async (object sender, EventArgs e) =>
-        {
-            await UpdateArtistTitleText();
-        };
+        spotifyController.OnNext += NextAction;
+        spotifyController.OnPrevious += PreviousAction;
         SetButtonsListenner();
         await ChangePauseButtonState();
+        await UpdateArtistTitleText();
+    }
+
+    private async void NextAction(object sender, EventArgs e)
+    {
+        await UpdateArtistTitleText();
+    }
+
+    private async void PreviousAction(object sender, EventArgs e)
+    {
         await UpdateArtistTitleText();
     }
 
@@ -91,6 +95,7 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
 
     private void SetButtonsListenner()
     {
+        Debug.Log("?????");
         nextButton.onClick.AddListener(async () => await spotifyController.Next());
         previousButton.onClick.AddListener(async () => await spotifyController.Previous());
         fastForwardButton.onClick.AddListener(async () => await spotifyController.FastForward(rewindDurationSeconds));
