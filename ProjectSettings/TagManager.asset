@@ -12,6 +12,8 @@ TagManager:
   - AbilitySource
   - PauseController
   - SpotifyController
+  - Checkpoint
+  - Arms
   layers:
   - Default
   - TransparentFX

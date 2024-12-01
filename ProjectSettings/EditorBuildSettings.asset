@@ -12,3 +12,4 @@ EditorBuildSettings:
     path: Assets/Scenes/CompletedScenes/Levels/PlayerControllerDemo.unity
     guid: 7d88d9056897c8345bdf33ba31435d37
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

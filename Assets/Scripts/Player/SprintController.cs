@@ -157,7 +157,9 @@ public class SprintController : MonoBehaviour
 
             targetVelocity = transform.TransformDirection(targetVelocity) * WalkSpeed;
 
+            // Apply a force that attempts to reach our target velocity
             Vector3 velocity = firstPersonController._rigidBody.velocity;
+            //Vector3 velocity = firstPersonController._rigidBody.velocity;
             Vector3 velocityChange = (targetVelocity - velocity);
             velocityChange.x = Mathf.Clamp(velocityChange.x, -MaxVelocityChange, MaxVelocityChange);
             velocityChange.z = Mathf.Clamp(velocityChange.z, -MaxVelocityChange, MaxVelocityChange);
