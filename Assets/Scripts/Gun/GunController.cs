@@ -14,6 +14,7 @@ public class GunController : MonoBehaviour
     public event EventHandler BeforeFiring;
     public event EventHandler AfterFiring;  
     public bool CanFire = true;
+    public bool GunWasFired = false;
 
     private Ray trajectoryRay;
     public GameObject BaseBulletModelPrefab;
@@ -24,12 +25,20 @@ public class GunController : MonoBehaviour
         if (TriggerKey == KeyCode.None) TriggerKey = KeyCode.Mouse0;  
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         CurrentAmmunitionCount = MaxAmmunitionCount;
+        BeforeFiring += (object sender, EventArgs e) =>
+        {
+            GunWasFired = true;
+        };
+
+        AfterFiring += (object sender, EventArgs e) => 
+        {
+            GunWasFired = false;
+        };
     }
 
     private void UpdateBulletDirection()
     {
         trajectoryRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Debug.Log(trajectoryRay.direction.normalized);
     }
 
     private void Fire()

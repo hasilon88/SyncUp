@@ -9,7 +9,8 @@ public class JumpController : MonoBehaviour
     public float DoubleJumpPower = 5f;
     public float JumpPower = 5f;
     public KeyCode JumpKey = KeyCode.Space;
-    public bool hasDoubleJumped = false;
+    public bool HasJumped = false;
+    public bool HasDoubleJumped = false;
     private PlayerController firstPersonController;
     private CrouchController crouchController;
 
@@ -25,9 +26,9 @@ public class JumpController : MonoBehaviour
         float distance = .75f;
         if (Physics.Raycast(origin, transform.TransformDirection(Vector3.down), out RaycastHit hit, distance))
         {
-            //Debug.DrawRay(origin, direction * distance, Color.red);
             IsGrounded = true;
-            hasDoubleJumped = false;
+            HasJumped = false;
+            HasDoubleJumped = false;
         }
         else IsGrounded = false;
     }
@@ -36,8 +37,9 @@ public class JumpController : MonoBehaviour
     {
         if (IsGrounded)
         {
-            firstPersonController._rigidBody.AddForce(0f, JumpPower, 0f, ForceMode.Impulse);
+            firstPersonController._rigidBody.AddForce(new Vector3(0f, JumpPower, 0f), ForceMode.Impulse);
             IsGrounded = false;
+            HasJumped = true;
         }
 
         if (crouchController.IsCrouched && !crouchController.HoldToCrouch)
@@ -46,11 +48,11 @@ public class JumpController : MonoBehaviour
 
     private void DoubleJump()
     {
-        if (!IsGrounded && !hasDoubleJumped)
+        if (!IsGrounded && !HasDoubleJumped)
         {
             firstPersonController._rigidBody.velocity = new Vector3(firstPersonController._rigidBody.velocity.x, 0f, firstPersonController._rigidBody.velocity.z);
             firstPersonController._rigidBody.AddForce(0f, DoubleJumpPower, 0f, ForceMode.Impulse);
-            hasDoubleJumped = true;
+            HasDoubleJumped = true;
         }
     }
 
