@@ -14,6 +14,9 @@ public class GlobalStates : MonoBehaviour
     public float RealTime = 0f;
     public Abilities FirstAbility;
     public Abilities SecondAbility;
+    public bool DebugMode = false;
+    public bool DashIsUnlocked = false;
+    //ability costs object ...
 
     private void Awake()
     {

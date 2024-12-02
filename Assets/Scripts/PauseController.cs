@@ -8,9 +8,7 @@ public class PauseController : MonoBehaviour
     public KeyCode PauseKey = KeyCode.None;
     private PlayerController playerController;
     private AudioManager audioManager;
-
-    public Canvas GameOverlay;
-    public Canvas PauseOverlay;
+    private OverlayController overlayController;
 
     public event EventHandler OnPauseEnter;
     public event EventHandler OnPauseLeave;
@@ -20,15 +18,14 @@ public class PauseController : MonoBehaviour
         if (PauseKey == KeyCode.None) PauseKey = KeyCode.Escape;
         audioManager = AudioManager.Instance;
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        PauseOverlay.gameObject.SetActive(false);
+        overlayController = ComponentUtils.Find<Canvas>("Overlays").GetComponent<OverlayController>();
 
-        OnPauseEnter += (object sender, EventArgs e) => 
+        OnPauseEnter += (object sender, EventArgs e) =>
         {
             playerController.PlayerCanMove = false;
             GameIsPaused = true;
             Cursor.lockState = CursorLockMode.None;
-            PauseOverlay.gameObject.SetActive(true);
-            GameOverlay.gameObject.SetActive(false);
+            overlayController.ChangeOverlay(OverlayType.PAUSE);
             audioManager.StopCapture();
         };
 
@@ -37,13 +34,12 @@ public class PauseController : MonoBehaviour
             playerController.PlayerCanMove = true;
             GameIsPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
-            PauseOverlay.gameObject.SetActive(false);
-            GameOverlay.gameObject.SetActive(true);
+            overlayController.ChangeOverlay(OverlayType.GAME);
             audioManager.StartCapture();
         };
     }
 
-    public void Pause() 
+    public void Pause()
     {
         Time.timeScale = 0f;
         OnPauseEnter?.Invoke(this, EventArgs.Empty);

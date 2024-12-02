@@ -41,24 +41,41 @@
 > - Fixed Capture not starting after going to Menu from another scene + Time.timeScale
 > ### to 2024/11/30 | 1:06 
 
+> ### from 2024/11/30 | 12:43 | OlvrMns
+> - Imported Level1 [from Tommy](https://github.com/TommySpag/SyncUp-Level1)
+> - Added Settings Menu Button And Settings Canvas
+> - Added Settings Canvas to menu navigation
+> - Added DebugMode boolean
+> - Fixed GameEnvironment Script (bug where Checkpoint objects are destroyed, but not singleton with null references)
+> - Added Level Restart Button
+> - Changed Pause Interface buttons style
+> - Added OverlayController (Reformated InGame Overlay Control and Reformated Title Screen Navigation with Optional parameters)
+> - Added SyncColorGrading + Assets/PostProcessingProfiles
+> - Added Duration in AbstractAbility, removed IsEquipped and IsUnlocked
+> - Added Dash Unlocked GlobalStates/DashController
+> ### to ... | ...
+
+> ## from 2024/12/2 | 6:30 | OlvrMns
+> - Branch Dev CleanUp && Merging TEMP/dev -> dev
+> - Fixed wierd bug with duplicate ennemies
+> ### to ... | ...
+
 ## Prio
 - (1) LevelSelector Position OffSet In UI for more than 1 scene
 - (1) Sync level 1 
-- (1) Settings tab
 - (2) PulseSyncer
 - (2) TimeFreeze
 - (2) Spotify Controller => .ContinueWith And Set UserName 
 - (2) Unlock abilities with credits
-- (2) SetActive vs Enabled (?)
 - (2) Ability UI for GameOverlay
 - (2) Make normal bullet
 - (2) Button to reset spotify user array
 - (3) Finish spotify interface
 - (3) Challenge/Level logic
 - (3) Add sounds
+- (3) AudioManager initialization retry interface
 - (3) Fix TempoSetter
+- (4) Custom FrameTempo
 - (4) Perfect hit 
 - (4) Ricochet
 - (5) Main menu / Pause menu / Death menu style (Animate with music)
-- (3) AudioManager initialization retry interface
-- (4) Custom FrameTempo

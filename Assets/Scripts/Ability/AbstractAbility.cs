@@ -10,12 +10,11 @@ public abstract class Ability : MonoBehaviour
     public float CooldownCountdown = 0f;
     public bool CooldownEnabled = true;
     public bool OnCooldown = false;
+    public float Duration = 0.8f;
 
     public string Name; 
     public Image Icon; 
     public bool IsLive = false;
-    public bool IsEquipped = false;
-    public bool IsUnlocked = false;
     public int CreditsNeeded = 0; 
     public KeyCode TriggerKey;
     protected PlayerController PlayerController;

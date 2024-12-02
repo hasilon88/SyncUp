@@ -48,7 +48,7 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
 
     private async Task HandleControllerInterface()
     {
-        if (ControllerEnabled) 
+        if (ControllerEnabled)
         {
             controllerCanvas.gameObject.SetActive(true);
             activationCanvas.gameObject.SetActive(false);
@@ -65,16 +65,20 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
     {
         await spotifyController.Init();
         artistTitleText = GameObject.Find("ArtistTitle").GetComponent<TextMeshProUGUI>();
-        spotifyController.OnNext += async (object sender, EventArgs e) =>
-        {
-            await UpdateArtistTitleText();
-        };
-        spotifyController.OnPrevious += async (object sender, EventArgs e) =>
-        {
-            await UpdateArtistTitleText();
-        };
+        spotifyController.OnNext += NextAction;
+        spotifyController.OnPrevious += PreviousAction;
         SetButtonsListenner();
         await ChangePauseButtonState();
+        await UpdateArtistTitleText();
+    }
+
+    private async void NextAction(object sender, EventArgs e)
+    {
+        await UpdateArtistTitleText();
+    }
+
+    private async void PreviousAction(object sender, EventArgs e)
+    {
         await UpdateArtistTitleText();
     }
 
@@ -84,13 +88,14 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
         previousButton = GameObject.Find("PreviousButton").GetComponent<Button>();
         fastForwardButton = GameObject.Find("FastForwardButton").GetComponent<Button>();
         rewindButton = GameObject.Find("RewindButton").GetComponent<Button>();
-        playPauseButton = GameObject.Find("PlayPauseButton").GetComponent <Button>();
+        playPauseButton = GameObject.Find("PlayPauseButton").GetComponent<Button>();
         activationButton = GameObject.Find("ActivationButton").GetComponent<Button>();
 
     }
 
     private void SetButtonsListenner()
     {
+        Debug.Log("?????");
         nextButton.onClick.AddListener(async () => await spotifyController.Next());
         previousButton.onClick.AddListener(async () => await spotifyController.Previous());
         fastForwardButton.onClick.AddListener(async () => await spotifyController.FastForward(rewindDurationSeconds));
@@ -98,7 +103,7 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
         playPauseButton.onClick.AddListener(async () => await HandlePlayPause());
     }
 
-    private async Task HandlePlayPause() 
+    private async Task HandlePlayPause()
     {
         await spotifyController.TogglePlayPause();
         await ChangePauseButtonState();
@@ -119,7 +124,7 @@ public class SpotifyInterfaceBehavior : MonoBehaviour
 
     private async void Update()
     {
-        if (UseKeys) 
+        if (UseKeys)
         {
             if (Input.GetKeyDown(NextKey))
             {

@@ -32,6 +32,7 @@ public class PlayerArmsController : MonoBehaviour
         SetJogAnimation(isSprinting);
 
     }
+
     private void SetWalkAnimation(bool isWalk)
     {
         if (isWalk)
@@ -44,6 +45,7 @@ public class PlayerArmsController : MonoBehaviour
             animator.SetTrigger("idle");
         }
     }
+
     private void SetShootAnimation(bool isShooting)
     {
         if (isShooting)
@@ -56,6 +58,7 @@ public class PlayerArmsController : MonoBehaviour
             animator.SetTrigger("idle");
         }
     }
+
     private void SetJumpAnimation(bool isJumping)
     {
         if (isJumping)
@@ -80,6 +83,7 @@ public class PlayerArmsController : MonoBehaviour
             animator.SetTrigger("idle");
         }
     }
+
     private void SetEmptyGunAnimation(bool isEmptyGun)
     {
         if (isEmptyGun)
@@ -93,6 +97,7 @@ public class PlayerArmsController : MonoBehaviour
             animator.SetTrigger("idle");
         }
     }
+
     private void SetComeAnimation(bool isComing)
     {
         if (isComing)
@@ -105,6 +110,7 @@ public class PlayerArmsController : MonoBehaviour
             animator.SetTrigger("idle");
         }
     }
+
     private void SetJogAnimation(bool isJogging)
     {
         if (isJogging)

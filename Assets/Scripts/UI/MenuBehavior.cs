@@ -7,7 +7,8 @@ public enum MenuUserInterface
 {
     MENU,
     STORE,
-    LEVEL_SELECTOR
+    LEVEL_SELECTOR,
+    SETTINGS
 }
 
 public class MenuBehavior : MonoBehaviour
@@ -19,13 +20,13 @@ public class MenuBehavior : MonoBehaviour
     private Button levelSelectorButton;
     private Button storeButton;
     private Button exitButton;
+    private Button settingsButton;
     private Canvas menuCanvas;
     private Canvas levelSelectorCanvas;
     private Canvas storeCanvas;
+    private Canvas settingsCanvas;
 
     public GameObject LevelSelectorButtonPrefab;
-
-    //public GameObject LevelSelectButtonPrefab;
 
     private void Start()
     {
@@ -34,6 +35,7 @@ public class MenuBehavior : MonoBehaviour
         SetLevelSelectorButtons();
         DisableInterface(levelSelectorCanvas);
         DisableInterface(storeCanvas);
+        DisableInterface(settingsCanvas);
     }
 
     private void DisableInterface(Canvas canvas)
@@ -44,19 +46,21 @@ public class MenuBehavior : MonoBehaviour
     private void SetElements()
     {
         levelSelectorButton = ComponentUtils.Find<Button>("LevelSelectorButton");
+        settingsButton = ComponentUtils.Find<Button>("SettingsButton");
         storeButton = ComponentUtils.Find<Button>("StoreButton");
         exitButton = ComponentUtils.Find<Button>("ExitButton");
         levelSelectorCanvas = ComponentUtils.Find<Canvas>("LevelSelectorOverlay");
         storeCanvas = ComponentUtils.Find<Canvas>("StoreOverlay");
         menuCanvas = ComponentUtils.Find<Canvas>("MenuOverlay");
+        settingsCanvas = ComponentUtils.Find<Canvas>("SettingsOverlay");
         this.SetGoBackButtons();
     }
 
-    private void SetLevelSelectorButtons() 
+    private void SetLevelSelectorButtons()
     {
         string currentLevelName;
         LevelSelectButtonBehavior behavior;
-        int tempHeightOffSet = 30;
+        //int tempHeightOffSet = 30;
         DirectoryInfo info = new DirectoryInfo(Application.dataPath + completedLevelsPath);
         foreach (FileInfo file in info.GetFiles("*.unity"))
         {
@@ -74,6 +78,7 @@ public class MenuBehavior : MonoBehaviour
     {
         levelSelectorButton.onClick.AddListener(() => Navigate(MenuUserInterface.LEVEL_SELECTOR));
         storeButton.onClick.AddListener(() => Navigate(MenuUserInterface.STORE));
+        settingsButton.onClick.AddListener(() => Navigate(MenuUserInterface.SETTINGS));
         exitButton.onClick.AddListener(UIUtils.Exit);
     }
 
@@ -85,32 +90,34 @@ public class MenuBehavior : MonoBehaviour
                 button.onClick.AddListener(() => Navigate(lastInterface));
     }
 
-    private void NavigateMenu(bool menuCanvas, bool storeCanvas, bool levelSelectorCanvas, MenuUserInterface nextInterface)
+    private void NavigateMenu(MenuUserInterface nextInterface, bool menuCanvas = false, bool storeCanvas = false, bool levelSelectorCanvas = false, bool settingsCanvas = false)
     {
         this.levelSelectorCanvas.gameObject.SetActive(levelSelectorCanvas);
         this.storeCanvas.gameObject.SetActive(storeCanvas);
         this.menuCanvas.gameObject.SetActive(menuCanvas);
+        this.settingsCanvas.gameObject.SetActive(settingsCanvas);
         lastInterface = currentInterface;
         currentInterface = nextInterface;
     }
 
     private void Navigate(MenuUserInterface userInterface)
     {
-        switch (userInterface) 
+        switch (userInterface)
         {
             case MenuUserInterface.STORE:
-                NavigateMenu(false, true, false, MenuUserInterface.STORE);
+                NavigateMenu(MenuUserInterface.STORE, storeCanvas: true);
                 break;
             case MenuUserInterface.LEVEL_SELECTOR:
-                NavigateMenu(false, false, true, MenuUserInterface.LEVEL_SELECTOR);
+                NavigateMenu(MenuUserInterface.LEVEL_SELECTOR, levelSelectorCanvas: true);
                 break;
             case MenuUserInterface.MENU:
-                NavigateMenu(true, false, false, MenuUserInterface.MENU);
+                NavigateMenu(MenuUserInterface.MENU, menuCanvas: true);
                 break;
-            default:
-                NavigateMenu(true, false, false, MenuUserInterface.MENU);
+            case MenuUserInterface.SETTINGS:
+                NavigateMenu(MenuUserInterface.SETTINGS, settingsCanvas: true);
                 break;
         }
     }
 
 }
+
