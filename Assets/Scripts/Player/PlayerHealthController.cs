@@ -25,12 +25,20 @@ public class PlayerHealthController : MonoBehaviour
     public Slider HealthSlider;
     public bool UseHealthSlider = true;
 
+    private PlayerController playerController;
+
     public event EventHandler OnZero;
 
     void Start()
     {
+        playerController = GetComponent<PlayerController>();
         CurrentHealth = MaxHealth;
         if (HealthSlider == null ) UseHealthSlider = false;
+
+        OnZero += (object sender, EventArgs e) =>
+        {
+                playerController.Die();
+        };
     }
 
     private IEnumerator AlterateHealth(float by, HealthAlterationTypes alterationType)
@@ -73,11 +81,6 @@ public class PlayerHealthController : MonoBehaviour
         CurrentHealth = value;
         UpdateHealthSlider();
     }
-
-    //public void Regenerate()
-    //{
-
-    //}
 
     private void Update()
     {

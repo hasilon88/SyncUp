@@ -14,6 +14,7 @@ TagManager:
   - SpotifyController
   - Checkpoint
   - Arms
+  - QuickSubscriptionButton
   layers:
   - Default
   - TransparentFX

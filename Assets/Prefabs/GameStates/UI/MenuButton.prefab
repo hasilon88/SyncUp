@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6298290629797872547}
   m_Layer: 5
   m_Name: MenuButton
-  m_TagString: Untagged
+  m_TagString: QuickSubscriptionButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,6 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ExpansionDurationInFrames: 60
   ExpansionRate: 0.5
+  Transparency: 0.7
   DefaultImageColor: {r: 0, g: 0, b: 0, a: 1}
   DefaultTextColor: {r: 0.110137045, g: 0.9339623, b: 0.11546736, a: 1}
   ClickedImageColor: {r: 0.24619699, g: 1, b: 0, a: 1}
