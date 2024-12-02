@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
             PlayerCanMove = false;
             Cursor.lockState = CursorLockMode.None;
             PlayerIsDead = true;
-            overlayController.ChangeOverlay(OverlayType.DEATH);
+            overlayController?.ChangeOverlay(OverlayType.DEATH);
         }
     }
 

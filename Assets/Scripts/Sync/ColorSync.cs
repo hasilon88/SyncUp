@@ -5,6 +5,7 @@ public class ColorSync : SyncObject
 
     public Color CurrentColor;
     public Color[] ColorSpectrum;
+    public float Alpha = 1f;
 
     private Color GetAdaptivePercentageBasedSampleColor()
     {
@@ -21,7 +22,7 @@ public class ColorSync : SyncObject
             if (nextPercentageDifference < percentageDifference && nextPercentageDifference > 0) nColor = this.ColorSpectrum[elem + 1];
             else if (nextPercentageDifference < 0) break; //if difference is negative, then the actual closest percentage has already passed
         }
-        return nColor;
+        return new Color(nColor.r, nColor.g, nColor.b, Alpha);
     }
 
     public override void Sync()
