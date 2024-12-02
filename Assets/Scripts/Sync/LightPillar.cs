@@ -24,8 +24,8 @@ public class LightPillar : MonoBehaviour
 
     void Update()
     {
+        //module.startColor = new ParticleSystem.MinMaxGradient(ColorSync.CurrentColor);
         transform.Rotate(Time.deltaTime * Speed);
         trailModule.colorOverLifetime = ColorSync.CurrentColor;
-        trailModule.colorOverTrail = ColorSync.CurrentColor;
     }
 }
