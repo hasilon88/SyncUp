@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AnimatorScript : MonoBehaviour
+public class PlayerArmsController : MonoBehaviour
 {
     private SprintController sprintcontroller;
     private Animator animator;
