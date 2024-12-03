@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CompletedScenes/Levels/Level1.unity
     guid: 179ebc1bc2cd60046b707c5b027b2782
+  - enabled: 1
+    path: Assets/Scenes/CompletedScenes/Levels/PracticeRange.unity
+    guid: 81870539465b57c4fbb4ffe0b4195c8a
   m_configObjects: {}

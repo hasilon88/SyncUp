@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class StructureSpin : MonoBehaviour
 {
-
     public Camera Camera;
     public float Speed = 5f;
-
 
     void Update()
     {

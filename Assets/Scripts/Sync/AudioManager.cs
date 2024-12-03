@@ -59,6 +59,7 @@ public class AudioManager : MonoBehaviour
     public FPSManager FPSManager;
     private ArrayUtils<float> arrayUtils;
     public int CaptureRate = 100;
+    public bool Frozen = false;
 
     public static AudioManager Instance;
     public bool IsInitialized = false;
@@ -88,6 +89,12 @@ public class AudioManager : MonoBehaviour
     {
         FPSManager = FPSManager.Instance;
         this.devices = MMDeviceEnumerator.EnumerateDevices(this.DataFlow, this.deviceState);
+
+        foreach (var device in this.devices)
+        {
+            Debug.Log(device);
+        }
+
         this.loopbackCapture.Device = this.devices[this.AudioEndpoint];
         this.lastLoudestSamples = new float[this.LastLoudestSamplesLength];
         this.InitializeLoopbackCapture();
@@ -182,17 +189,17 @@ public class AudioManager : MonoBehaviour
 
     private void UpdateNormalizedValues()
     {
-        if (this.LastLoudestSamplesMax > 0f) 
+        if (this.LastLoudestSamplesMax > 0f && !Frozen) 
             this.NormalizedCurrentLoudestSample_LastLoudestSamplesMax = this.CurrentLoudestSample/this.LastLoudestSamplesMax;
         else
             this.NormalizedCurrentLoudestSample_LastLoudestSamplesMax = 0f;
 
-        if (this.SessionLoudestSample > 0f)
+        if (this.SessionLoudestSample > 0f && !Frozen)
             this.NormalizedCurrentLoudestSample_SessionLoudestSample = this.CurrentLoudestSample/this.SessionLoudestSample;
         else
             this.NormalizedCurrentLoudestSample_SessionLoudestSample = 0f;
 
-        if (this.OnNormalizedValuesChange != null) this.OnNormalizedValuesChange(this, EventArgs.Empty);
+        if (this.OnNormalizedValuesChange != null) OnNormalizedValuesChange(this, EventArgs.Empty);
     }
 
     private void UpdateSessionLoudestSample()
